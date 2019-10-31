@@ -7,10 +7,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface ApplicantRepository extends JpaRepository<Applicant, Integer> {
+public interface ApplicantRepository extends JpaRepository<Applicant, Long> {
     Optional<Applicant> findByAccount(Account account);
 
-    Optional<Applicant> findById(Integer id);
+    Optional<Applicant> findById(Long id);
 
 
 }

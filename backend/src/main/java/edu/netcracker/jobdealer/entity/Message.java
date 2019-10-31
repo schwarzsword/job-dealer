@@ -11,7 +11,7 @@ public class Message {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
     @Basic
     @Column(name = "text")
     private String text;

@@ -10,15 +10,16 @@ import java.util.List;
 @Entity
 @Table
 public class Skills {
-    @OneToMany(mappedBy = "skill")
-    List<SkillToOwner> owners;
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
     @Basic
     @Column(name = "skill", unique = true)
     private String name;
+
+    @OneToMany(mappedBy = "skill")
+    List<SkillToOwner> owners;
 
     protected Skills() {
     }

@@ -12,7 +12,7 @@ public class SkillToOwner {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
     @Basic
     @Column(name = "level")
     private int level;

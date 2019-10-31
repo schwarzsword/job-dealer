@@ -7,13 +7,15 @@ import java.util.List;
 
 @Data
 public class ResumeDto {
-    String firstName;
-    String middleName;
-    String lastName;
-    Integer salary;
-    String photoLink;
-    String about;
-    List<SkillToOwner> skills;
+
+    private Long id;
+    private String firstName;
+    private String middleName;
+    private String lastName;
+    private Integer salary;
+    private String photoLink;
+    private String about;
+    private List<SkillToOwner> skills;
 
 
     private ResumeDto() {

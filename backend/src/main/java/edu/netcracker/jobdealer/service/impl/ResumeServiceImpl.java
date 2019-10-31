@@ -59,8 +59,8 @@ public class ResumeServiceImpl implements ResumeService {
         if (resume.getAvatarUrl() != null) {
             resumeToUpdate.setAvatarUrl(resume.getAvatarUrl());
         }
-        if (resume.getMoney() != null) {
-            resumeToUpdate.setMoney(resume.getMoney());
+        if (resume.getSalary() != null) {
+            resumeToUpdate.setSalary(resume.getSalary());
         }
         if (resume.getSkills() != null) {
             resume.setSkills(resume.getSkills());

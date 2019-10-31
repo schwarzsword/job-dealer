@@ -43,7 +43,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Review getReviewById(int reviewId) throws ReviewNotFountException {
+    public Review getReviewById(Long reviewId) throws ReviewNotFountException {
         Optional<Review> byId = reviewRepository.findById(reviewId);
         if (byId.isPresent()) {
             return byId.get();

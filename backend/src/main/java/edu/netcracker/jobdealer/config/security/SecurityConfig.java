@@ -30,11 +30,9 @@ import java.util.ArrayList;
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    public final DataSource dataSource;
     private final
     MyUserDetailsService userDetailsService;
-
-    public final DataSource dataSource;
-
     private final
     CustomEntryPoint entryPoint;
 

@@ -15,7 +15,7 @@ public class Company {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private long id;
 
     @Basic
     @Column(name = "name")
@@ -51,7 +51,7 @@ public class Company {
         this.avatarUrl = avatarUrl;
     }
 
-    public Integer getAccountId() {
+    public long getAccountId() {
         return this.account.getId();
     }
 }

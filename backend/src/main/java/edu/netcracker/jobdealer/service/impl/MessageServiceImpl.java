@@ -49,7 +49,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Message getMessage(int mesId) throws MessageNotFoundException {
+    public Message getMessage(Long mesId) throws MessageNotFoundException {
         Optional<Message> byId = messageRepository.findById(mesId);
         if (byId.isPresent()) {
             return byId.get();

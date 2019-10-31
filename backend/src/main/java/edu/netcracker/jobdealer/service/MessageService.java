@@ -13,5 +13,5 @@ public interface MessageService {
 
     void deleteMessage(Message message);
 
-    Message getMessage(int mesId) throws MessageNotFoundException;
+    Message getMessage(Long mesId) throws MessageNotFoundException;
 }

@@ -9,18 +9,10 @@ import java.util.List;
 @Entity
 @Table
 public class Vacancy {
-    @OneToMany(mappedBy = "id")
-    List<Skills> requestedSkills;
-    @ManyToMany
-    @JoinTable(
-            name = "vacancyUser",
-            joinColumns = @JoinColumn(name = "vacancyId"),
-            inverseJoinColumns = @JoinColumn(name = "applicantId"))
-    List<Applicant> respondents;
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
     @Basic
     @Column(name = "name")
     private String name;
@@ -35,6 +27,15 @@ public class Vacancy {
     private Company owner;
     @OneToOne(mappedBy = "vacancy")
     private Task task;
+
+    @OneToMany(mappedBy = "id")
+    List<Skills> requestedSkills;
+    @ManyToMany
+    @JoinTable(
+            name = "vacancyUser",
+            joinColumns = @JoinColumn(name = "vacancyId"),
+            inverseJoinColumns = @JoinColumn(name = "applicantId"))
+    List<Applicant> respondents;
 
     protected Vacancy() {
     }

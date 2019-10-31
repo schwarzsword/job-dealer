@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class CompanyDto {
 
-    private Integer id;
+    private Long id;
     private String name;
     private Boolean verified;
     private String description;

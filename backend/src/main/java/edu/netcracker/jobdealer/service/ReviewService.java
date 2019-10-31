@@ -11,7 +11,7 @@ public interface ReviewService {
 
     List<Review> getReviews(Account user);
 
-    Review getReviewById(int reviewId) throws ReviewNotFountException;
+    Review getReviewById(Long reviewId) throws ReviewNotFountException;
 
     Review changeRating(Review review, boolean raise);
 }

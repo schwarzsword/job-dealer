@@ -8,7 +8,9 @@ import java.util.List;
 
 @Data
 public class VacancyDto {
-    List<Skills> requestedSkills;
+
+    private Long id;
+    private List<Skills> requestedSkills;
     private String name;
     private String description;
     private Integer money;

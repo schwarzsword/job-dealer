@@ -11,8 +11,8 @@ public interface CompanyService {
 
     List<CompanyDto> getAllCompanies();
 
-    CompanyDto getCompanyById(Integer id);
+    CompanyDto getCompanyById(Long id);
 
-    Company getByAccount(Account account)  throws CompanyNotFoundException;
+    Company getByAccount(Account account) throws CompanyNotFoundException;
 
 }
