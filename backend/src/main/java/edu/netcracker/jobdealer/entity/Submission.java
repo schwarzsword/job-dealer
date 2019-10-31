@@ -11,7 +11,7 @@ import java.util.UUID;
 public class Submission {
     @Id
     @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private UUID id;
     @Basic
     @Column

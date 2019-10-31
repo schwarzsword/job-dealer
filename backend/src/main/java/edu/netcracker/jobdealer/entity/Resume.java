@@ -15,7 +15,7 @@ public class Resume {
     List<SkillToOwner> skills;
     @Id
     @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private UUID id;
     @Basic
     @Column(name = "resumeName")

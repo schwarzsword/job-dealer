@@ -12,7 +12,7 @@ import java.util.UUID;
 public class SkillToOwner {
     @Id
     @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private UUID id;
     @Basic
     @Column(name = "level")

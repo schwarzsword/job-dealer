@@ -19,7 +19,7 @@ public interface ResumeRepository extends JpaRepository<Resume, UUID> {
     Resume findByResumeName(String resumeName);
 
     @Override
-    Optional<Resume> findById(UUID integer);
+    Optional<Resume> findById(UUID uuid);
 
     List<Resume> findAllByOwner(Applicant applicant);
 

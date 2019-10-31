@@ -9,6 +9,7 @@ spring:
     initialization-mode: always
     hikari:
       catalog: netcracker
+      schema: public
   jpa:
     properties:
       hibernate:
