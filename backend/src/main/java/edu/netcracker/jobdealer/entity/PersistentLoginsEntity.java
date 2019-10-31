@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 
 @Data
 @Entity
-@Table(name = "persistent_logins", schema = "public", catalog = "netcracker")
+@Table(name = "persistent_logins")
 public class PersistentLoginsEntity {
     @Basic
     @Column(name = "username", nullable = false, length = 100)

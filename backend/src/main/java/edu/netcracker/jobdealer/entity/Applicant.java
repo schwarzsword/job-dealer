@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "applicant", schema = "public", catalog = "netcracker")
+@Table
 public class Applicant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +22,7 @@ public class Applicant {
 
     @ManyToMany(mappedBy = "respondents")
     List<Vacancy> responsedVacancies;
+
     @ManyToMany(mappedBy = "submiter")
     List<Submission> ownedSubmissions;
 

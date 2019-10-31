@@ -9,7 +9,7 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "test_task", schema = "public", catalog = "netcracker")
+@Table
 public class Task {
     @Id
     @Column(name = "id", nullable = false)
