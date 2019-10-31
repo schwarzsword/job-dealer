@@ -11,7 +11,7 @@ import java.util.UUID;
 public class Message {
     @Id
     @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private UUID id;
     @Basic
     @Column(name = "text")

@@ -12,7 +12,7 @@ import java.util.UUID;
 @Table
 public class Applicant {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "id")
     private UUID id;
     @OneToOne
