@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service("vacancyService")
 @Transactional
@@ -50,7 +51,7 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
-    public void remove(Long vacancyId) throws VacancyNotFoundException{
+    public void remove(UUID vacancyId) throws VacancyNotFoundException{
         Optional<Vacancy> byId = vacancyRepository.findById(vacancyId);
         if (byId.isPresent()) {
             vacancyRepository.delete(byId.get());

@@ -5,6 +5,7 @@ import edu.netcracker.jobdealer.entity.Message;
 import edu.netcracker.jobdealer.exceptions.MessageNotFoundException;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface MessageService {
     Message sendMessage(String text, Account src, Account dest);
@@ -13,5 +14,5 @@ public interface MessageService {
 
     void deleteMessage(Message message);
 
-    Message getMessage(Long mesId) throws MessageNotFoundException;
+    Message getMessage(UUID mesId) throws MessageNotFoundException;
 }

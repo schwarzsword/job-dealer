@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
 
 @Data
@@ -14,7 +15,7 @@ public class Task {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private UUID id;
     @Basic
     @Column(name = "name")
     private String name;

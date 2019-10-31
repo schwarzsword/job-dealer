@@ -6,6 +6,7 @@ import edu.netcracker.jobdealer.entity.Vacancy;
 import edu.netcracker.jobdealer.exceptions.VacancyNotFoundException;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface VacancyService {
 
@@ -15,7 +16,7 @@ public interface VacancyService {
 
     Vacancy addVacancy(Vacancy vacancy);
 
-    void remove(Long vacancyId) throws VacancyNotFoundException;
+    void remove(UUID vacancyId) throws VacancyNotFoundException;
 
     Vacancy updateVacancy(VacancyDto vacancyDTO);
 }

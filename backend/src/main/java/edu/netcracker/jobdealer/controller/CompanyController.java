@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 public class CompanyController {
@@ -28,7 +29,7 @@ public class CompanyController {
     }
 
     @GetMapping(value = "/companies/{id}")
-    public ResponseEntity<?> getCompanyById(@PathVariable("id") long id) {
+    public ResponseEntity<?> getCompanyById(@PathVariable("id") UUID id) {
         CompanyDto company = companyService.getCompanyById(id);
         return new ResponseEntity<>(company, HttpStatus.OK);
     }

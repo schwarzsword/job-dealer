@@ -4,6 +4,8 @@ import edu.netcracker.jobdealer.entity.Task;
 import edu.netcracker.jobdealer.entity.Vacancy;
 import edu.netcracker.jobdealer.exceptions.TaskNotFoundException;
 
+import java.util.UUID;
+
 public interface TaskService {
     Task createTask(Vacancy vacancy, String name, String description);
 
@@ -13,5 +15,5 @@ public interface TaskService {
 
     Task getTaskByVacancy(Vacancy vacancy) throws TaskNotFoundException;
 
-    Task getTaskById(Long taskId) throws TaskNotFoundException;
+    Task getTaskById(UUID taskId) throws TaskNotFoundException;
 }

@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
 
 @Data
@@ -13,7 +14,7 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private long id;
+    private UUID id;
     @Basic
     @Column(name = "username", unique = true, nullable = false)
     private String username;

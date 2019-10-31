@@ -7,8 +7,9 @@ import edu.netcracker.jobdealer.entity.Skills;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.UUID;
 
-public interface SkillToOwnerRepository extends JpaRepository<SkillToOwner, Long> {
+public interface SkillToOwnerRepository extends JpaRepository<SkillToOwner, UUID> {
     List<SkillToOwner> findAllByOwner(Resume owner);
 
     List<SkillToOwner> findAllBySkill(Skills skill);

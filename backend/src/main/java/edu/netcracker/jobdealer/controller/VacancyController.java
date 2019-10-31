@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("api/user")
@@ -49,7 +50,7 @@ public class VacancyController {
 
     @RequestMapping(value = "/{email}/vacancies/{vacancyId}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteVacancy(@PathVariable("email") @NotBlank @Valid String email,
-                                           @PathVariable("vacancyId") @NotBlank @Valid long vacancyId) {
+                                           @PathVariable("vacancyId") @NotBlank @Valid UUID vacancyId) {
         vacancyService.remove(vacancyId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

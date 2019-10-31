@@ -8,9 +8,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
-public interface VacancyRepository extends JpaRepository<Vacancy, Long> {
-    Optional<Vacancy> findById(Long vacancyId);
+public interface VacancyRepository extends JpaRepository<Vacancy, UUID> {
+    Optional<Vacancy> findById(UUID vacancyId);
 
     List<Vacancy> findAllByMoneyIsGreaterThanEqual(int money);
 

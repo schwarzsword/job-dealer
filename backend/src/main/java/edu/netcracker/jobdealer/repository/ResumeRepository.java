@@ -7,8 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
-public interface ResumeRepository extends JpaRepository<Resume, Long> {
+public interface ResumeRepository extends JpaRepository<Resume, UUID> {
     List<Resume> findAllBySalaryIsGreaterThanEqual(int money);
 
     List<Resume> findAllBySalary(int money);
@@ -18,7 +19,7 @@ public interface ResumeRepository extends JpaRepository<Resume, Long> {
     Resume findByResumeName(String resumeName);
 
     @Override
-    Optional<Resume> findById(Long integer);
+    Optional<Resume> findById(UUID integer);
 
     List<Resume> findAllByOwner(Applicant applicant);
 
