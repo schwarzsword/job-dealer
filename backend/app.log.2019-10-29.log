@@ -1,0 +1,43 @@
+2019-10-29 15:03:54,385 INFO edu.netcracker.jobdealer.JobDealerApplication [main] Starting JobDealerApplication on schwarzkv with PID 8146 (/home/schwarzkv/nc.task/backend/target/classes started by schwarzkv in /home/schwarzkv/nc.task/backend)
+2019-10-29 15:03:54,387 INFO edu.netcracker.jobdealer.JobDealerApplication [main] No active profile set, falling back to default profiles: default
+2019-10-29 15:03:56,195 INFO org.apache.catalina.core.StandardService [main] Starting service [Tomcat]
+2019-10-29 15:03:56,195 INFO org.apache.catalina.core.StandardEngine [main] Starting Servlet engine: [Apache Tomcat/9.0.26]
+2019-10-29 15:03:56,278 INFO org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] [main] Initializing Spring embedded WebApplicationContext
+2019-10-29 15:03:56,404 INFO com.zaxxer.hikari.HikariDataSource [main] HikariPool-1 - Starting...
+2019-10-29 15:03:56,581 INFO com.zaxxer.hikari.HikariDataSource [main] HikariPool-1 - Start completed.
+2019-10-29 15:03:56,630 INFO org.hibernate.jpa.internal.util.LogHelper [main] HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2019-10-29 15:03:56,667 INFO org.hibernate.Version [main] HHH000412: Hibernate Core {5.3.12.Final}
+2019-10-29 15:03:56,668 INFO org.hibernate.cfg.Environment [main] HHH000206: hibernate.properties not found
+2019-10-29 15:03:56,783 INFO org.hibernate.annotations.common.Version [main] HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+2019-10-29 15:03:56,882 INFO org.hibernate.dialect.Dialect [main] HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
+2019-10-29 15:03:56,956 INFO org.hibernate.engine.jdbc.env.internal.LobCreatorBuilderImpl [main] HHH000421: Disabling contextual LOB creation as hibernate.jdbc.lob.non_contextual_creation is true
+2019-10-29 15:03:56,961 INFO org.hibernate.type.BasicTypeRegistry [main] HHH000270: Type registration [java.util.UUID] overrides previous : org.hibernate.type.UUIDBinaryType@4abbe41c
+2019-10-29 15:03:58,585 INFO edu.netcracker.jobdealer.JobDealerApplication [main] Started JobDealerApplication in 4.872 seconds (JVM running for 5.537)
+2019-10-29 15:06:17,325 INFO com.zaxxer.hikari.HikariDataSource [Thread-3] HikariPool-1 - Shutdown initiated...
+2019-10-29 15:06:17,350 INFO com.zaxxer.hikari.HikariDataSource [Thread-3] HikariPool-1 - Shutdown completed.
+2019-10-29 15:06:19,819 INFO edu.netcracker.jobdealer.JobDealerApplication [main] Starting JobDealerApplication on schwarzkv with PID 8416 (/home/schwarzkv/nc.task/backend/target/classes started by schwarzkv in /home/schwarzkv/nc.task/backend)
+2019-10-29 15:06:19,821 INFO edu.netcracker.jobdealer.JobDealerApplication [main] The following profiles are active: dev
+2019-10-29 15:06:20,876 INFO org.apache.catalina.core.StandardService [main] Starting service [Tomcat]
+2019-10-29 15:06:20,876 INFO org.apache.catalina.core.StandardEngine [main] Starting Servlet engine: [Apache Tomcat/9.0.26]
+2019-10-29 15:06:20,933 INFO org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] [main] Initializing Spring embedded WebApplicationContext
+2019-10-29 15:06:21,031 INFO com.zaxxer.hikari.HikariDataSource [main] HikariPool-1 - Starting...
+2019-10-29 15:06:21,199 INFO com.zaxxer.hikari.HikariDataSource [main] HikariPool-1 - Start completed.
+2019-10-29 15:06:21,231 INFO org.hibernate.jpa.internal.util.LogHelper [main] HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2019-10-29 15:06:21,268 INFO org.hibernate.Version [main] HHH000412: Hibernate Core {5.3.12.Final}
+2019-10-29 15:06:21,269 INFO org.hibernate.cfg.Environment [main] HHH000206: hibernate.properties not found
+2019-10-29 15:06:21,331 INFO org.hibernate.annotations.common.Version [main] HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+2019-10-29 15:06:21,405 INFO org.hibernate.dialect.Dialect [main] HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
+2019-10-29 15:06:21,496 INFO org.hibernate.engine.jdbc.env.internal.LobCreatorBuilderImpl [main] HHH000421: Disabling contextual LOB creation as hibernate.jdbc.lob.non_contextual_creation is true
+2019-10-29 15:06:21,499 INFO org.hibernate.type.BasicTypeRegistry [main] HHH000270: Type registration [java.util.UUID] overrides previous : org.hibernate.type.UUIDBinaryType@49631cfb
+2019-10-29 15:06:22,821 INFO edu.netcracker.jobdealer.JobDealerApplication [main] Started JobDealerApplication in 3.438 seconds (JVM running for 4.032)
+2019-10-29 15:06:53,114 INFO org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] [http-nio-10880-exec-2] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2019-10-29 15:06:53,270 INFO org.hibernate.hql.internal.QueryTranslatorFactoryInitiator [http-nio-10880-exec-2] HHH000397: Using ASTQueryTranslatorFactory
+2019-10-29 15:07:17,268 INFO edu.netcracker.jobdealer.config.security.MyUserDetailsService [http-nio-10880-exec-5] Auth attempt
+ User: 5
+ Role:ROLE_COMPANY
+2019-10-29 15:07:31,188 INFO com.zaxxer.hikari.HikariDataSource [Thread-3] HikariPool-1 - Shutdown initiated...
+2019-10-29 15:07:31,200 INFO com.zaxxer.hikari.HikariDataSource [Thread-3] HikariPool-1 - Shutdown completed.
