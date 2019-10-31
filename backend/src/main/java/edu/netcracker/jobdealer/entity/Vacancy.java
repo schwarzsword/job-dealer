@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "vacancy", schema = "public", catalog = "netcracker")
+@Table
 public class Vacancy {
     @OneToMany(mappedBy = "id")
     List<Skills> requestedSkills;

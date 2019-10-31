@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "skillOwner", schema = "public", catalog = "netcracker")
+@Table
 public class SkillToOwner {
     @Id
     @Column(name = "id", nullable = false)

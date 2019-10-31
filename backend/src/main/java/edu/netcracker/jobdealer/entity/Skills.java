@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "skills", schema = "public", catalog = "netcracker")
+@Table
 public class Skills {
     @OneToMany(mappedBy = "skill")
     List<SkillToOwner> owners;

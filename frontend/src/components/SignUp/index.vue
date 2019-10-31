@@ -50,7 +50,6 @@
             },
             register: function () {
                 const {email, password, isCompany} = this;
-                console.log({email, password, isCompany});
                 this.$store.dispatch(REG_REQUEST, {email, password, isCompany}).then(() => {
                     this.$router.push('/login')
                 }).catch(err => {
