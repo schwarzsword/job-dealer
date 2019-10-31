@@ -13,5 +13,5 @@ public interface TaskService {
 
     Task getTaskByVacancy(Vacancy vacancy) throws TaskNotFoundException;
 
-    Task getTaskById(int taskId) throws TaskNotFoundException;
+    Task getTaskById(Long taskId) throws TaskNotFoundException;
 }

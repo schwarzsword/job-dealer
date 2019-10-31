@@ -55,7 +55,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task getTaskById(int taskId) throws TaskNotFoundException {
+    public Task getTaskById(Long taskId) throws TaskNotFoundException {
         Optional<Task> byVacancy = testTaskRepository.findById(taskId);
         if (byVacancy.isPresent()) {
             return byVacancy.get();

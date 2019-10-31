@@ -3,6 +3,7 @@ package edu.netcracker.jobdealer.service.impl;
 import edu.netcracker.jobdealer.dto.VacancyDto;
 import edu.netcracker.jobdealer.entity.Company;
 import edu.netcracker.jobdealer.entity.Vacancy;
+import edu.netcracker.jobdealer.exceptions.VacancyNotFoundException;
 import edu.netcracker.jobdealer.repository.VacancyRepository;
 import edu.netcracker.jobdealer.service.VacancyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service("vacancyService")
 @Transactional
@@ -48,9 +50,11 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
-    public void remove(int vacancyId) {
-        Vacancy vacancyToRemove = vacancyRepository.findById(vacancyId);
-        vacancyRepository.delete(vacancyToRemove);
+    public void remove(Long vacancyId) throws VacancyNotFoundException{
+        Optional<Vacancy> byId = vacancyRepository.findById(vacancyId);
+        if (byId.isPresent()) {
+            vacancyRepository.delete(byId.get());
+        } else throw new VacancyNotFoundException("Vacancy not found");
     }
 
 

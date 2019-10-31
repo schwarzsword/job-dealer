@@ -11,7 +11,7 @@ public class Submission {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
     @Basic
     @Column
     private String filename;

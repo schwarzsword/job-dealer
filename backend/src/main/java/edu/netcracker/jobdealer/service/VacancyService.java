@@ -3,6 +3,7 @@ package edu.netcracker.jobdealer.service;
 import edu.netcracker.jobdealer.dto.VacancyDto;
 import edu.netcracker.jobdealer.entity.Company;
 import edu.netcracker.jobdealer.entity.Vacancy;
+import edu.netcracker.jobdealer.exceptions.VacancyNotFoundException;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public interface VacancyService {
 
     Vacancy addVacancy(Vacancy vacancy);
 
-    void remove(int vacancyId);
+    void remove(Long vacancyId) throws VacancyNotFoundException;
 
     Vacancy updateVacancy(VacancyDto vacancyDTO);
 }

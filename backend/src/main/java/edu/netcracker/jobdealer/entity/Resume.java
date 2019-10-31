@@ -15,7 +15,7 @@ public class Resume {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
     @Basic
     @Column(name = "resumeName")
     private String resumeName;
@@ -32,8 +32,8 @@ public class Resume {
     @Column(name = "vacancy")
     private String vacancy;
     @Basic
-    @Column(name = "money")
-    private Integer money;
+    @Column(name = "salary")
+    private Integer salary;
     @Basic
     @Column(name = "avatarUrl")
     private String avatarUrl;

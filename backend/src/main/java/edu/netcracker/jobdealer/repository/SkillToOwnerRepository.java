@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface SkillToOwnerRepository extends JpaRepository<SkillToOwner, Integer> {
+public interface SkillToOwnerRepository extends JpaRepository<SkillToOwner, Long> {
     List<SkillToOwner> findAllByOwner(Resume owner);
 
     List<SkillToOwner> findAllBySkill(Skills skill);

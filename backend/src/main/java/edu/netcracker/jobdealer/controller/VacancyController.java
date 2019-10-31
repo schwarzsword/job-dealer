@@ -49,7 +49,7 @@ public class VacancyController {
 
     @RequestMapping(value = "/{email}/vacancies/{vacancyId}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteVacancy(@PathVariable("email") @NotBlank @Valid String email,
-                                           @PathVariable("vacancyId") @NotBlank @Valid int vacancyId) {
+                                           @PathVariable("vacancyId") @NotBlank @Valid long vacancyId) {
         vacancyService.remove(vacancyId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

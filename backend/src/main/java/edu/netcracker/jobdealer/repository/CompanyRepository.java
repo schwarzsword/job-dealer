@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface CompanyRepository extends JpaRepository<Company, Integer> {
+public interface CompanyRepository extends JpaRepository<Company, Long> {
     Optional<Company> findByAccount(Account account);
 
-    Optional<Company> findById(Integer id);
+    Optional<Company> findById(Long id);
 }
