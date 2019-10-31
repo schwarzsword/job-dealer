@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,7 +35,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public CompanyDto getCompanyById(Long id) {
+    public CompanyDto getCompanyById(UUID id) {
         Company companyEntity = companyRepository.getOne(id);
         CompanyDto companyDto = mapper.map(companyEntity, CompanyDto.class);
         return mapper.map(companyDto, CompanyDto.class);

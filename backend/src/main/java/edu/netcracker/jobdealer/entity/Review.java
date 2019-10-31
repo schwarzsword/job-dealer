@@ -3,6 +3,7 @@ package edu.netcracker.jobdealer.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -11,7 +12,7 @@ public class Review {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private UUID id;
     @Basic
     @Column(name = "description")
     private String text;

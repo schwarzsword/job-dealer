@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
 @Transactional
@@ -49,7 +50,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Message getMessage(Long mesId) throws MessageNotFoundException {
+    public Message getMessage(UUID mesId) throws MessageNotFoundException {
         Optional<Message> byId = messageRepository.findById(mesId);
         if (byId.isPresent()) {
             return byId.get();

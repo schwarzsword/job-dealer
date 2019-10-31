@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Transactional
 @Service("submissionService")
@@ -55,7 +56,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task getTaskById(Long taskId) throws TaskNotFoundException {
+    public Task getTaskById(UUID taskId) throws TaskNotFoundException {
         Optional<Task> byVacancy = testTaskRepository.findById(taskId);
         if (byVacancy.isPresent()) {
             return byVacancy.get();

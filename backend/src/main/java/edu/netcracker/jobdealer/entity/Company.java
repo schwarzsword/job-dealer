@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table
@@ -15,7 +16,7 @@ public class Company {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private UUID id;
 
     @Basic
     @Column(name = "name")
@@ -51,7 +52,7 @@ public class Company {
         this.avatarUrl = avatarUrl;
     }
 
-    public long getAccountId() {
+    public UUID getAccountId() {
         return this.account.getId();
     }
 }

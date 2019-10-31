@@ -6,12 +6,13 @@ import edu.netcracker.jobdealer.entity.Company;
 import edu.netcracker.jobdealer.exceptions.CompanyNotFoundException;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface CompanyService {
 
     List<CompanyDto> getAllCompanies();
 
-    CompanyDto getCompanyById(Long id);
+    CompanyDto getCompanyById(UUID id);
 
     Company getByAccount(Account account) throws CompanyNotFoundException;
 

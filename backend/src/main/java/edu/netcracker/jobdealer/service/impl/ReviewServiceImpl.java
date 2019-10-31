@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
 @Transactional
@@ -43,7 +44,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Review getReviewById(Long reviewId) throws ReviewNotFountException {
+    public Review getReviewById(UUID reviewId) throws ReviewNotFountException {
         Optional<Review> byId = reviewRepository.findById(reviewId);
         if (byId.isPresent()) {
             return byId.get();
