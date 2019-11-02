@@ -3,9 +3,11 @@ package edu.netcracker.jobdealer.service.impl;
 import edu.netcracker.jobdealer.entity.Account;
 import edu.netcracker.jobdealer.entity.Message;
 import edu.netcracker.jobdealer.exceptions.MessageNotFoundException;
+import edu.netcracker.jobdealer.exceptions.UserNotFoundException;
 import edu.netcracker.jobdealer.repository.AccountRepository;
 import edu.netcracker.jobdealer.repository.MessageRepository;
 import edu.netcracker.jobdealer.service.MessageService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,8 +41,11 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<Message> getUserMessages(Account user) {
-        return user.getMessagesAsDest();
+    public List<Message> getUserMessages(UUID userId) throws UsernameNotFoundException{
+        Optional<Account> byId = accountRepository.findById(userId);
+        if(byId.isPresent()){
+            return byId.get().getMessagesAsDest();
+        }else throw new UserNotFoundException("User not found");
     }
 
 
