@@ -7,6 +7,10 @@
 
     <configuration>
         <date-format>MM/dd/yyyy</date-format>
+
+        <copy-by-references>
+            <copy-by-reference>java.util.UUID</copy-by-reference>
+        </copy-by-references>
     </configuration>
 
 </mappings>
