@@ -28,23 +28,23 @@ public class Account {
     @Column(name = "role", nullable = false)
     private String role;
 
-    //comments made by user
+    /* comments made by user */
     @OneToMany(mappedBy = "messageSource")
     private List<Message> messagesAsSource;
 
-    //comments on user
+    /* comments on user */
     @OneToMany(mappedBy = "messageDest")
     private List<Message> messagesAsDest;
 
-    //comments made by user
+    /* comments made by user */
     @OneToMany(mappedBy = "reviewSource")
     private List<Review> reviewsAsSource;
 
-    //comments on user
+    /* comments on user */
     @OneToMany(mappedBy = "reviewDest")
     private List<Review> reviewsAsDest;
 
-    protected Account() {
+    public Account() {
     }
 
     public Account(String password, String mail, String role) {
