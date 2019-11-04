@@ -36,7 +36,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public CompanyDto getCompanyById(UUID id) {
-        return mapper.map(companyRepository.getOne(id), CompanyDto.class);
+        return mapper.map(companyRepository.getById(id), CompanyDto.class);
     }
 
     @Override
