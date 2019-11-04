@@ -14,4 +14,6 @@ public interface TestTaskRepository extends JpaRepository<Task, UUID> {
     List<Task> findAllByName(String keyword);
 
     Optional<Task> findByVacancy(Vacancy vacancy);
+
+    void deleteByVacancy(Vacancy vacancy);
 }

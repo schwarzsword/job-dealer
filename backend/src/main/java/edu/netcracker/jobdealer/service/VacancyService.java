@@ -19,4 +19,6 @@ public interface VacancyService {
     void remove(UUID vacancyId) throws VacancyNotFoundException;
 
     Vacancy updateVacancy(VacancyDto vacancyDTO);
+
+    List<Vacancy> getVacanciesByCompanyEmail(String email);
 }

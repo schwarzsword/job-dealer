@@ -15,6 +15,7 @@ public class Applicant {
     @GeneratedValue
     @Column(name = "id")
     private UUID id;
+
     @OneToOne
     @JoinColumn(name = "account", referencedColumnName = "id", nullable = false)
     private Account account;
@@ -22,9 +23,10 @@ public class Applicant {
     private List<Resume> ownedResumes;
 
     @ManyToMany(mappedBy = "respondents")
-    List<Vacancy> responsedVacancies;
+    private List<Vacancy> responsedVacancies;
+
     @ManyToMany(mappedBy = "submiter")
-    List<Submission> ownedSubmissions;
+    private List<Submission> ownedSubmissions;
 
     protected Applicant() {
     }

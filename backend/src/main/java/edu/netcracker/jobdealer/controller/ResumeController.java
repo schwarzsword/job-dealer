@@ -38,7 +38,7 @@ public class ResumeController {
 
     @RequestMapping(value = "/{email}/{resumeName}", method = RequestMethod.DELETE)
     public ResponseEntity<?> getAllResumes(@PathVariable("email") @NotBlank @Valid String email, @PathVariable("resumeName") @NotBlank @Valid String resumeName) {
-        resumeService.remove(resumeName);
+        resumeService.remove(resumeName, email);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -46,7 +46,7 @@ public class ResumeController {
     public ResponseEntity<?> updateResume(@PathVariable("email") @NotBlank @Valid String email,
                                           @PathVariable("resumeName") @NotBlank @Valid String resumeName,
                                           @RequestBody Resume resume) {
-        resumeService.update(resumeName, resume);
+        resumeService.update(resumeName, resume, email);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

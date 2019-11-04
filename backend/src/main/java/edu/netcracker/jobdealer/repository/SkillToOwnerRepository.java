@@ -15,4 +15,6 @@ public interface SkillToOwnerRepository extends JpaRepository<SkillToOwner, UUID
     List<SkillToOwner> findAllBySkill(Skills skill);
 
     List<SkillToOwner> findAllBySkillAndLevelGreaterThanEqual(Skills skill, int level);
+
+    void deleteAllByOwner(Resume owner);
 }

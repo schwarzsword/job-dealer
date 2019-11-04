@@ -11,8 +11,6 @@ import java.util.UUID;
 @Entity
 @Table
 public class Resume {
-    @OneToMany(mappedBy = "owner")
-    List<SkillToOwner> skills;
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue
@@ -44,6 +42,8 @@ public class Resume {
     @ManyToOne
     @JoinColumn(name = "ownedResumes", referencedColumnName = "id")
     private Applicant owner;
+    @OneToMany(mappedBy = "owner")
+    List<SkillToOwner> skills;
 
     protected Resume() {
     }

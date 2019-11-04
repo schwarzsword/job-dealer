@@ -33,8 +33,14 @@ public class VacancyServiceImpl implements VacancyService {
 
     @Override
     public List<Vacancy> getVacanciesByCompany(Company company) {
-        return vacancyRepository.findByOwner(company);
+        return vacancyRepository.findAllByOwner(company);
     }
+
+    @Override
+    public List<Vacancy> getVacanciesByCompanyEmail(String email) {
+        return vacancyRepository.findAllByOwner_Account_Email(email);
+    }
+
 
     @Override
     public Vacancy addVacancy(Vacancy vacancy) {

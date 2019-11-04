@@ -41,8 +41,8 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
-    public Resume update(String resumeName, Resume resume) {
-        Resume resumeToUpdate = resumeRepository.findByResumeName(resumeName);
+    public Resume update(String resumeName, Resume resume, String ownerEmail) {
+        Resume resumeToUpdate = resumeRepository.findByResumeNameAndOwner_Account_Email(resumeName, ownerEmail);
 
         if (resume.getAbout() != null) {
             resumeToUpdate.setAbout(resume.getAbout());
@@ -70,8 +70,8 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
-    public void remove(String resumeName) {
-        Resume resumeToDelete = resumeRepository.findByResumeName(resumeName);
+    public void remove(String resumeName, String ownerEmail) {
+        Resume resumeToDelete = resumeRepository.findByResumeNameAndOwner_Account_Email(resumeName, ownerEmail);
         resumeRepository.delete(resumeToDelete);
     }
 

@@ -19,9 +19,21 @@ public interface VacancyRepository extends JpaRepository<Vacancy, UUID> {
 
     List<Vacancy> findAllByOwner(Company company);
 
+    List<Vacancy> findAllByOwner_Account_Email(String email);
+
     List<Vacancy> findAllByRequestedSkillsContains(Skills skill);
 
     Vacancy findByNameAndOwner(String name, Company owner);
 
-    List<Vacancy> findByOwner(Company company);
+    List<Vacancy> findAllByNameContainingAndOwner(String name, Company owner);
+
+    List<Vacancy> findAllByNameContaining(String name);
+
+    void deleteByNameAndOwner(String name, Company owner);
+
+    Vacancy findByNameAndOwner_Account_Email(String name, String email);
+
+    List<Vacancy> findAllByNameContainingAndOwner_Account_Email(String name, String email);
+
+    void deleteByNameAndOwner_Account_Email(String name, String email);
 }

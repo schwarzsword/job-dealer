@@ -9,7 +9,19 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ReviewRepository extends JpaRepository<Review, UUID> {
+    List<Review> findAllByReviewDest_Email(String email);
+
+    List<Review> findAllByReviewSource_Email(String email);
+
     List<Review> findAllByReviewDest(Account account);
 
     List<Review> findAllByReviewSource(Account account);
+
+    void deleteAllByReviewDest(Account account);
+
+    void deleteAllByReviewSource(Account account);
+
+    void deleteAllByReviewDest_Email(String email);
+
+    void deleteAllByReviewSource_Email(String email);
 }

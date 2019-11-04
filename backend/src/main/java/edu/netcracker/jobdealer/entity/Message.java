@@ -3,6 +3,7 @@ package edu.netcracker.jobdealer.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.UUID;
 
 @Data
@@ -16,6 +17,9 @@ public class Message {
     @Basic
     @Column(name = "text")
     private String text;
+    @Basic
+    @Column(name = "date")
+    private Date date;
 
 
     @ManyToOne
@@ -34,5 +38,6 @@ public class Message {
         this.text = text;
         this.messageSource = source;
         this.messageDest = dest;
+        this.date = new Date();
     }
 }

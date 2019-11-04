@@ -28,7 +28,9 @@ public class SkillToOwner {
     protected SkillToOwner() {
     }
 
-    public SkillToOwner(Resume owner) {
+    public SkillToOwner(Resume owner, Skills skill, int level) {
         this.owner = owner;
+        this.level = level;
+        this.skill = skill;
     }
 }

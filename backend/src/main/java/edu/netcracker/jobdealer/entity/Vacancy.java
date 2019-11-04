@@ -29,8 +29,13 @@ public class Vacancy {
     @OneToOne(mappedBy = "vacancy")
     private Task task;
 
-    @OneToMany(mappedBy = "id")
+    @ManyToMany
+    @JoinTable(
+            name = "vacancySkills",
+            joinColumns = @JoinColumn(name = "vacancyId"),
+            inverseJoinColumns = @JoinColumn(name = "skillId"))
     List<Skills> requestedSkills;
+
     @ManyToMany
     @JoinTable(
             name = "vacancyUser",
