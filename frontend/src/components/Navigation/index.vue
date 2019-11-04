@@ -10,7 +10,10 @@
         <div class="menu">
             <ul>
                 <li>
-                    <router-link class="nav-link" to="/rules">Resumes</router-link>
+                    <router-link class="nav-link" to="/rules">Rules</router-link>
+                </li>
+                <li>
+                    <router-link class="nav-link" to="/resumes">Resumes</router-link>
                 </li>
                 <li v-if="isProfileLoaded">
                     <router-link to="/profile">MyProfile</router-link>

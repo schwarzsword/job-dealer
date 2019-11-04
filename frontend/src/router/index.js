@@ -6,6 +6,7 @@ import About from "../components/About/index";
 import Login from "../components/Login/index";
 import SignUp from "../components/SignUp/index";
 import store from '../store'
+import Resume from "../components/Resume/index";
 
 Vue.use(Router);
 
@@ -56,6 +57,12 @@ export default new Router({
             component: SignUp,
             beforeEnter: ifNotAuthenticated
         },
+        {
+            path: '/resumes',
+            name: 'resume',
+            component: Resume,
+            //beforeEnter: ifAuthenticated
+        }
         // {
         //     path: '/profile',
         //     name: 'profile',
