@@ -12,9 +12,7 @@ public interface CompanyRepository extends JpaRepository<Company, UUID> {
 
     List<Company> findAll();
 
-    Company getOne(UUID id);
+    Company getById(UUID id);
 
     Optional<Company> findByAccount(Account account);
-
-    Optional<Company> findById(UUID id);
 }
