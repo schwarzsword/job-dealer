@@ -77,9 +77,7 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Override
     public List<Resume> getAllResumeOfUser(String login) {
-        Account account = accountService.getByLogin(login);
-        Applicant applicant = applicantService.getByAccount(account);
-        return resumeRepository.findAllByOwner(applicant);
+        return resumeRepository.findAllByOwner_Account_Email(login);
     }
 
 

@@ -182,22 +182,6 @@ public class JobDealerApplicationTests {
         assertEquals("txt.txt", java_dev.getFilename());
     }
 
-    @Test
-    public void changeRating() {
-        Review review = reviewRepository.findByReviewDest_EmailAndReviewSource_Email("5", "4").get();
-        Account account = accountRepository.findByEmail("4").get();
-        boolean raise = true;
-        int rating = review.getRating();
-        if (raise) {
-            review.setRating(--rating);
-        } else {
-            review.setRating(++rating);
-        }
-        List<Account> increased = review.getIncreased();
-        increased.add(account);
-        review.setIncreased(increased);
-        reviewRepository.save(review);
-    }
 
 
     @After

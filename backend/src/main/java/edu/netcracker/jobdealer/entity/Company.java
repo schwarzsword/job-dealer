@@ -38,7 +38,17 @@ public class Company {
     @OneToMany
     private List<Vacancy> vacancies;
 
-    @Mapping("accountId")
+    public Company(Account account) {
+        this.account = account;
+    }
+
+    public Company(String name, Boolean verified, String description, String avatarUrl) {
+        this.name = name;
+        this.verified = verified;
+        this.description = description;
+        this.avatarUrl = avatarUrl;
+    }
+
     public UUID getAccountId() {
         return this.account.getId();
     }

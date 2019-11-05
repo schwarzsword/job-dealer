@@ -45,4 +45,8 @@ public class Applicant {
     public UUID getAccountId() {
         return account.getId();
     }
+
+    public Applicant(Account account) {
+        this.account = account;
+    }
 }
