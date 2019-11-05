@@ -7,30 +7,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-
 @Data
 @Entity
 @Table
 public class Account {
+
     @Id
     @GeneratedValue
     @Column(name = "id")
     private UUID id;
-    @Basic
+
     @Column(name = "username", unique = true, nullable = false)
     private String username;
-    @Basic
+
     @Column(name = "email", unique = true, nullable = false)
     private String email;
-    @Basic
+
     @Column(name = "password", nullable = false)
     private String password;
-    @Basic
+
     @Column(name = "role", nullable = false)
     private String role;
 
 
+
     protected Account() {
+
     }
 
     public Account(String password, String mail, String role) {
@@ -39,5 +41,4 @@ public class Account {
         this.role = role;
         this.username = email;
     }
-
 }

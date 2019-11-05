@@ -9,12 +9,11 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CompanyDto {
+public class ApplicantDto {
 
     private UUID id;
-    private String name;
-    private Boolean isVerified;
-    private String description;
-    private String avatarUrl;
+    private String firstName;
+    private String lastName;
+    private String middleName;
     private UUID accountId;
 }

@@ -36,16 +36,17 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public CompanyDto getCompanyById(UUID id) {
-        Company companyEntity = companyRepository.getOne(id);
-        CompanyDto companyDto = mapper.map(companyEntity, CompanyDto.class);
-        return mapper.map(companyDto, CompanyDto.class);
+        return mapper.map(companyRepository.getById(id), CompanyDto.class);
     }
 
     @Override
     public Company getByAccount(Account account) throws CompanyNotFoundException {
         Optional<Company> byAccount = companyRepository.findByAccount(account);
+
         if (byAccount.isPresent()) {
             return byAccount.get();
-        } else throw new CompanyNotFoundException("Company not found");
+        } else {
+            throw new CompanyNotFoundException("Company not found");
+        }
     }
 }
