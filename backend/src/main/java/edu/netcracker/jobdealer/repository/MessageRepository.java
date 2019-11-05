@@ -11,7 +11,11 @@ import java.util.UUID;
 public interface MessageRepository extends JpaRepository<Message, UUID> {
     List<Message> findAllByMessageDest_Email(String email);
 
+    List<Message> findAllByMessageDest_Id(UUID id);
+
     List<Message> findAllByMessageSource_Email(String email);
+
+    List<Message> findAllByMessageSource_Id(UUID id);
 
     List<Message> findAllByMessageDest(Account account);
 
@@ -23,5 +27,9 @@ public interface MessageRepository extends JpaRepository<Message, UUID> {
 
     void deleteAllByMessageDest_Email(String email);
 
+    void deleteAllByMessageDest_Id(UUID id);
+
     void deleteAllByMessageSource_Email(String email);
+
+    void deleteAllByMessageSource_Id(UUID id);
 }

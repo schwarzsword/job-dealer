@@ -3,6 +3,7 @@ package edu.netcracker.jobdealer.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,22 +29,6 @@ public class Account {
     @Column(name = "role", nullable = false)
     private String role;
 
-    //comments made by user
-    @OneToMany(mappedBy = "messageSource")
-    private List<Message> messagesAsSource;
-
-    //comments on user
-    @OneToMany(mappedBy = "messageDest")
-    private List<Message> messagesAsDest;
-
-    //comments made by user
-    @OneToMany(mappedBy = "reviewSource")
-    private List<Review> reviewsAsSource;
-
-    //comments on user
-    @OneToMany(mappedBy = "reviewDest")
-    private List<Review> reviewsAsDest;
-
 
     protected Account() {
     }
@@ -54,4 +39,5 @@ public class Account {
         this.role = role;
         this.username = email;
     }
+
 }

@@ -3,14 +3,18 @@ package edu.netcracker.jobdealer.service.impl;
 import edu.netcracker.jobdealer.entity.Account;
 import edu.netcracker.jobdealer.entity.Message;
 import edu.netcracker.jobdealer.exceptions.MessageNotFoundException;
+import edu.netcracker.jobdealer.exceptions.NoRightsException;
 import edu.netcracker.jobdealer.exceptions.UserNotFoundException;
 import edu.netcracker.jobdealer.repository.AccountRepository;
 import edu.netcracker.jobdealer.repository.MessageRepository;
+import edu.netcracker.jobdealer.service.AccountService;
 import edu.netcracker.jobdealer.service.MessageService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.naming.NoPermissionException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -20,38 +24,46 @@ import java.util.UUID;
 @Service("messageService")
 public class MessageServiceImpl implements MessageService {
 
+
+    private final AccountService accountService;
+
     private final MessageRepository messageRepository;
 
     private final AccountRepository accountRepository;
 
-    public MessageServiceImpl(MessageRepository messageRepository, AccountRepository accountRepository) {
+    public MessageServiceImpl(MessageRepository messageRepository, AccountRepository accountRepository, AccountService accountService) {
         this.messageRepository = messageRepository;
         this.accountRepository = accountRepository;
+        this.accountService = accountService;
     }
 
+
     @Override
-    public Message sendMessage(String text, Account src, Account dest) {
+    public Message sendMessage(String text, String srcEmail, String destEmail) throws UserNotFoundException {
+        Account src = accountService.getByEmail(srcEmail);
+        Account dest = accountService.getByEmail(destEmail);
         Message message = new Message(text, src, dest);
-        src.getMessagesAsSource().add(message);
-        dest.getMessagesAsDest().add(message);
         messageRepository.save(message);
-        accountRepository.save(src);
-        accountRepository.save(dest);
         return message;
     }
 
     @Override
-    public List<Message> getUserMessages(UUID userId) throws UsernameNotFoundException{
-        Optional<Account> byId = accountRepository.findById(userId);
-        if(byId.isPresent()){
-            return byId.get().getMessagesAsDest();
-        }else throw new UserNotFoundException("User not found");
+    public List<Message> getUserMessages(UUID userId) {
+        return messageRepository.findAllByMessageDest_Id(userId);
+    }
+
+    @Override
+    public List<Message> getUserMessages(String email) {
+        return messageRepository.findAllByMessageDest_Email(email);
     }
 
 
     @Override
-    public void deleteMessage(Message message) {
-        messageRepository.delete(message);
+    public void deleteMessage(UUID mesId, String ownerEmail) throws MessageNotFoundException, NoRightsException {
+        Message message = getMessage(mesId);
+        if (message.getMessageDest().getEmail().equals(ownerEmail)) {
+            messageRepository.delete(message);
+        } else throw new NoRightsException("You can delete only owned messages");
     }
 
     @Override

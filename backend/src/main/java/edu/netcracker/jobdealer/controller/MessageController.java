@@ -1,23 +1,72 @@
-//package edu.netcracker.jobdealer.controller;
-//
-//import edu.netcracker.jobdealer.dto.CompanyDto;
-//import edu.netcracker.jobdealer.service.CompanyService;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.http.HttpStatus;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.PathVariable;
-//import org.springframework.web.bind.annotation.RestController;
-//
-//import java.util.List;
-//import java.util.UUID;
-//
-//@RestController
-//public class MessageController {
-//
-//    @GetMapping(value = "{userId}/messages")
-//    public ResponseEntity get(@PathVariable("userId") UUID userId) {
-//
-//    }
-//
-//}
+package edu.netcracker.jobdealer.controller;
+
+import edu.netcracker.jobdealer.dto.MessageDTO;
+import edu.netcracker.jobdealer.entity.Message;
+import edu.netcracker.jobdealer.exceptions.MessageNotFoundException;
+import edu.netcracker.jobdealer.exceptions.NoRightsException;
+import edu.netcracker.jobdealer.service.MessageService;
+import org.dozer.DozerBeanMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+@RestController
+public class MessageController {
+
+    private final DozerBeanMapper mapper;
+
+    private final MessageService messageService;
+
+    public MessageController(MessageService messageService, DozerBeanMapper mapper) {
+        this.messageService = messageService;
+        this.mapper = mapper;
+    }
+
+    @Secured({"ROLE_USER", "ROLE_COMPANY", "ROLE_ADMIN"})
+    @GetMapping(value = "{email}/messages")
+    public ResponseEntity getUserMessages(@PathVariable("email") String email) {
+        List<Message> userMessages = messageService.getUserMessages(email);
+        //TODO make mappings
+//        List<MessageDTO> dtos = userMessages.stream().map(e -> mapper.map(e, MessageDTO.class)).collect(Collectors.toList());
+        return ResponseEntity.ok(userMessages);
+    }
+
+    @Secured({"ROLE_USER", "ROLE_COMPANY", "ROLE_ADMIN"})
+    @GetMapping(value = "{email}/messages/{mesId}")
+    public ResponseEntity getMessage(@PathVariable("email") String email, @PathVariable("mesId") UUID mesId) {
+        Message message = messageService.getMessage(mesId);
+        MessageDTO messageDTO = mapper.map(message, MessageDTO.class);
+        try {
+            if (message.getMessageDest().getEmail().equals(email)) {
+                return ResponseEntity.ok(messageDTO);
+            } else return ResponseEntity.badRequest().body("You have no permission to read this message");
+        } catch (MessageNotFoundException e) {
+            return ResponseEntity.badRequest().body("No message found");
+        }
+    }
+
+    @Secured({"ROLE_USER", "ROLE_COMPANY", "ROLE_ADMIN"})
+    @PostMapping(value = "{email}/messages")
+    public ResponseEntity sendMessage(@PathVariable("email") String from, @RequestParam String who, @RequestParam String text) {
+        messageService.sendMessage(text, from, who);
+        return ResponseEntity.ok().build();
+    }
+
+    @Secured({"ROLE_USER", "ROLE_COMPANY", "ROLE_ADMIN"})
+    @DeleteMapping(value = "{email}/messages/{mesId}")
+    public ResponseEntity deleteMessage(@PathVariable("email") String email, @PathVariable("mesId") UUID mesId) {
+        try {
+            messageService.deleteMessage(mesId, email);
+        } catch (NoRightsException ex) {
+            return ResponseEntity.badRequest().body("You have no permission to delete this message");
+        } catch (MessageNotFoundException e) {
+            return ResponseEntity.badRequest().body("No message found");
+        }
+        return ResponseEntity.ok().build();
+    }
+}

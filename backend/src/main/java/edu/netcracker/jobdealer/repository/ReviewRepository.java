@@ -13,6 +13,10 @@ public interface ReviewRepository extends JpaRepository<Review, UUID> {
 
     List<Review> findAllByReviewSource_Email(String email);
 
+    List<Review> findAllByReviewDest_Id(UUID id);
+
+    List<Review> findAllByReviewSource_Id(UUID id);
+
     List<Review> findAllByReviewDest(Account account);
 
     List<Review> findAllByReviewSource(Account account);
@@ -24,4 +28,8 @@ public interface ReviewRepository extends JpaRepository<Review, UUID> {
     void deleteAllByReviewDest_Email(String email);
 
     void deleteAllByReviewSource_Email(String email);
+
+    void deleteAllByReviewDest_Id(UUID id);
+
+    void deleteAllByReviewSource_Id(UUID id);
 }

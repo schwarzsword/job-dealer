@@ -1,6 +1,7 @@
 package edu.netcracker.jobdealer.service.impl;
 
 import edu.netcracker.jobdealer.entity.Account;
+import edu.netcracker.jobdealer.entity.Message;
 import edu.netcracker.jobdealer.entity.Review;
 import edu.netcracker.jobdealer.exceptions.ReviewNotFountException;
 import edu.netcracker.jobdealer.repository.AccountRepository;
@@ -30,17 +31,18 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Review sendReview(String text, Account src, Account dest) {
         Review review = new Review(text, src, dest);
-        src.getReviewsAsSource().add(review);
-        dest.getReviewsAsDest().add(review);
         reviewRepository.save(review);
-        accountRepository.save(src);
-        accountRepository.save(dest);
         return review;
     }
 
     @Override
-    public List<Review> getReviews(Account user) {
-        return user.getReviewsAsDest();
+    public List<Review> getUserReviews(UUID userId) {
+        return reviewRepository.findAllByReviewDest_Id(userId);
+    }
+
+    @Override
+    public List<Review> getUserReviews(String email) {
+        return reviewRepository.findAllByReviewDest_Email(email);
     }
 
     @Override

@@ -10,7 +10,9 @@ import java.util.UUID;
 public interface ReviewService {
     Review sendReview(String text, Account src, Account dest);
 
-    List<Review> getReviews(Account user);
+    public List<Review> getUserReviews(UUID userId);
+
+    public List<Review> getUserReviews(String email);
 
     Review getReviewById(UUID reviewId) throws ReviewNotFountException;
 
