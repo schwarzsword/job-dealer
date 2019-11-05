@@ -3,6 +3,8 @@ package edu.netcracker.jobdealer.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -28,6 +30,13 @@ public class Review {
     @JoinColumn(name = "reviewsAsDest", referencedColumnName = "id")
     private Account reviewDest;
 
+    @ManyToMany
+    @JoinTable(
+            name = "reviewAccount",
+            joinColumns = @JoinColumn(name = "reviewId"),
+            inverseJoinColumns = @JoinColumn(name = "accountId"))
+    private List<Account> increased;
+
 
     protected Review() {
     }
@@ -37,5 +46,6 @@ public class Review {
         this.reviewSource = source;
         this.reviewDest = dest;
         this.rating = 0;
+        this.increased = new ArrayList<>();
     }
 }

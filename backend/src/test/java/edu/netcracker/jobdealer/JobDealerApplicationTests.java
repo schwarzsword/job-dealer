@@ -62,8 +62,6 @@ public class JobDealerApplicationTests {
         companyRepository.save(company);
         Message message = new Message("hello world", userAccount, companyAccount);
         messageRepository.save(message);
-        Message message2 = new Message("hello world2", userAccount, companyAccount);
-        messageRepository.save(message2);
         Resume resume = new Resume(applicant);
         resume.setFirstName("schwarz");
         resume.setResumeName("qwe");
@@ -71,9 +69,6 @@ public class JobDealerApplicationTests {
         Review review1 = new Review("good", userAccount, companyAccount);
         review1.setRating(10);
         reviewRepository.save(review1);
-        Review review2 = new Review("bad", userAccount, companyAccount);
-        review2.setRating(1);
-        reviewRepository.save(review2);
         Skills skill1 = new Skills("java");
         Skills skill2 = new Skills("javascript");
         skillsRepository.save(skill1);
@@ -114,9 +109,7 @@ public class JobDealerApplicationTests {
         List<Message> allByMessageDest = messageRepository.findAllByMessageDest_Email("5");
         allByMessageDest.forEach(e -> log.info("message: " + e.getText()));
         log.info("total messages: " + allByMessageDest.size());
-//        assertEquals(2, allByMessageDest.size());
-        Account account = accountRepository.findByUsername("5").get();
-        log.info("test");
+        assertEquals(1, allByMessageDest.size());
     }
 
     @Test
@@ -132,7 +125,7 @@ public class JobDealerApplicationTests {
         List<Review> reviews = reviewRepository.findAllByReviewDest_Email("5");
         reviews.forEach(e -> log.info("review: " + e.getText() + "; rating: " + e.getRating()));
         log.info("total reviews: " + reviews.size());
-        assertEquals(2, reviews.size());
+        assertEquals(1, reviews.size());
     }
 
     @Test
@@ -187,6 +180,23 @@ public class JobDealerApplicationTests {
         Submission java_dev = submissionRepository.findByTaskAndSubmiter_Account_Email(testTaskRepository.findByVacancy(vacancyRepository.findByNameAndOwner_Account_Email("java dev", "5")).get(), "4");
         log.info("submission: " + java_dev.getFilename());
         assertEquals("txt.txt", java_dev.getFilename());
+    }
+
+    @Test
+    public void changeRating() {
+        Review review = reviewRepository.findByReviewDest_EmailAndReviewSource_Email("5", "4").get();
+        Account account = accountRepository.findByEmail("4").get();
+        boolean raise = true;
+        int rating = review.getRating();
+        if (raise) {
+            review.setRating(--rating);
+        } else {
+            review.setRating(++rating);
+        }
+        List<Account> increased = review.getIncreased();
+        increased.add(account);
+        review.setIncreased(increased);
+        reviewRepository.save(review);
     }
 
 

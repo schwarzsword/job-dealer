@@ -6,14 +6,14 @@ import edu.netcracker.jobdealer.exceptions.MessageNotFoundException;
 import edu.netcracker.jobdealer.exceptions.NoRightsException;
 import edu.netcracker.jobdealer.service.MessageService;
 import org.dozer.DozerBeanMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 public class MessageController {
@@ -29,21 +29,23 @@ public class MessageController {
 
     @Secured({"ROLE_USER", "ROLE_COMPANY", "ROLE_ADMIN"})
     @GetMapping(value = "{email}/messages")
-    public ResponseEntity getUserMessages(@PathVariable("email") String email) {
-        List<Message> userMessages = messageService.getUserMessages(email);
-        //TODO make mappings
+    public ResponseEntity getUserMessages(@PathVariable("email") String email, @AuthenticationPrincipal User user) {
+        if (user.getUsername().equals(email)) {
+            List<Message> userMessages = messageService.getUserMessages(email);
+            //TODO make mappings
 //        List<MessageDTO> dtos = userMessages.stream().map(e -> mapper.map(e, MessageDTO.class)).collect(Collectors.toList());
-        return ResponseEntity.ok(userMessages);
+            return ResponseEntity.ok(userMessages);
+        } else return ResponseEntity.badRequest().body("You have no permission to read this message");
     }
 
     @Secured({"ROLE_USER", "ROLE_COMPANY", "ROLE_ADMIN"})
     @GetMapping(value = "{email}/messages/{mesId}")
-    public ResponseEntity getMessage(@PathVariable("email") String email, @PathVariable("mesId") UUID mesId) {
+    public ResponseEntity getMessage(@PathVariable("email") String email, @PathVariable("mesId") UUID mesId, @AuthenticationPrincipal User user) {
         Message message = messageService.getMessage(mesId);
-        MessageDTO messageDTO = mapper.map(message, MessageDTO.class);
+//        MessageDTO messageDTO = mapper.map(message, MessageDTO.class);
         try {
-            if (message.getMessageDest().getEmail().equals(email)) {
-                return ResponseEntity.ok(messageDTO);
+            if (message.getMessageDest().getEmail().equals(user.getUsername())) {
+                return ResponseEntity.ok(message);
             } else return ResponseEntity.badRequest().body("You have no permission to read this message");
         } catch (MessageNotFoundException e) {
             return ResponseEntity.badRequest().body("No message found");
@@ -52,16 +54,16 @@ public class MessageController {
 
     @Secured({"ROLE_USER", "ROLE_COMPANY", "ROLE_ADMIN"})
     @PostMapping(value = "{email}/messages")
-    public ResponseEntity sendMessage(@PathVariable("email") String from, @RequestParam String who, @RequestParam String text) {
-        messageService.sendMessage(text, from, who);
+    public ResponseEntity sendMessage(@PathVariable("email") String from, @RequestParam String who, @RequestParam String text, @AuthenticationPrincipal User user) {
+        messageService.sendMessage(text, user.getUsername(), who);
         return ResponseEntity.ok().build();
     }
 
     @Secured({"ROLE_USER", "ROLE_COMPANY", "ROLE_ADMIN"})
     @DeleteMapping(value = "{email}/messages/{mesId}")
-    public ResponseEntity deleteMessage(@PathVariable("email") String email, @PathVariable("mesId") UUID mesId) {
+    public ResponseEntity deleteMessage(@PathVariable("email") String email, @PathVariable("mesId") UUID mesId, @AuthenticationPrincipal User user) {
         try {
-            messageService.deleteMessage(mesId, email);
+            messageService.deleteMessage(mesId, user.getUsername());
         } catch (NoRightsException ex) {
             return ResponseEntity.badRequest().body("You have no permission to delete this message");
         } catch (MessageNotFoundException e) {

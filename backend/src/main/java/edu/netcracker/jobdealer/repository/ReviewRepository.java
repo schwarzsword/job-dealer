@@ -2,10 +2,12 @@ package edu.netcracker.jobdealer.repository;
 
 
 import edu.netcracker.jobdealer.entity.Account;
+import edu.netcracker.jobdealer.entity.Message;
 import edu.netcracker.jobdealer.entity.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface ReviewRepository extends JpaRepository<Review, UUID> {
@@ -32,4 +34,8 @@ public interface ReviewRepository extends JpaRepository<Review, UUID> {
     void deleteAllByReviewDest_Id(UUID id);
 
     void deleteAllByReviewSource_Id(UUID id);
+
+    Optional<Review> findByReviewDest_EmailAndReviewSource_Email(String dest, String source);
+
+    Optional<Review> findByReviewDest_IdAndReviewSource_Id(UUID dest, UUID source);
 }

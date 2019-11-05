@@ -6,6 +6,7 @@ import edu.netcracker.jobdealer.entity.Message;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface MessageRepository extends JpaRepository<Message, UUID> {
@@ -32,4 +33,8 @@ public interface MessageRepository extends JpaRepository<Message, UUID> {
     void deleteAllByMessageSource_Email(String email);
 
     void deleteAllByMessageSource_Id(UUID id);
+
+    Optional<Message> findByMessageDest_EmailAndMessageSource_Email(String dest, String source);
+
+    Optional<Message> findByMessageDest_IdAndMessageSource_Id(UUID dest, UUID source);
 }
