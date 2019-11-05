@@ -32,6 +32,6 @@ public class ApplicantServiceImpl implements ApplicantService {
 
     @Override
     public ApplicantDto getApplicantById(UUID id) {
-        return mapper.map(applicantRepository.getById(id), ApplicantDto.class);
+        return mapper.map(applicantRepository.getOne(id), ApplicantDto.class);
     }
 }

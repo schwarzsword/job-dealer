@@ -1,86 +1,37 @@
 package edu.netcracker.jobdealer.service.impl;
 
-import edu.netcracker.jobdealer.entity.Account;
-import edu.netcracker.jobdealer.entity.Applicant;
-import edu.netcracker.jobdealer.entity.Resume;
+import edu.netcracker.jobdealer.dto.ResumeDto;
 import edu.netcracker.jobdealer.repository.ResumeRepository;
-import edu.netcracker.jobdealer.service.AccountService;
-import edu.netcracker.jobdealer.service.ApplicantService;
 import edu.netcracker.jobdealer.service.ResumeService;
+import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
-@Service("resumeService")
-@Transactional
+@Service
 public class ResumeServiceImpl implements ResumeService {
 
     private final ResumeRepository resumeRepository;
-    private final AccountService accountService;
-    private final ApplicantService applicantService;
+    private Mapper mapper;
 
     @Autowired
-    public ResumeServiceImpl(final ResumeRepository resumeRepository,
-                             final AccountService accountService,
-                             final ApplicantService applicantService) {
+    public ResumeServiceImpl(ResumeRepository resumeRepository, Mapper mapper) {
         this.resumeRepository = resumeRepository;
-        this.accountService = accountService;
-        this.applicantService = applicantService;
+        this.mapper = mapper;
     }
 
     @Override
-    public List<Resume> getAll() {
-        return resumeRepository.findAll();
+    public List<ResumeDto> getAllResumes() {
+        return resumeRepository.findAll().stream()
+                .map(resume -> mapper.map(resume, ResumeDto.class))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Resume add(Resume resume) {
-        return resumeRepository.saveAndFlush(resume);
+    public ResumeDto getResumeById(UUID id) {
+        return mapper.map(resumeRepository.getOne(id), ResumeDto.class);
     }
-
-    @Override
-    public Resume update(String resumeName, Resume resume) {
-        Resume resumeToUpdate = resumeRepository.findByResumeName(resumeName);
-
-        if (resume.getAbout() != null) {
-            resumeToUpdate.setAbout(resume.getAbout());
-        }
-        if (resume.getFirstName() != null) {
-            resumeToUpdate.setFirstName(resume.getFirstName());
-        }
-        if (resume.getLastName() != null) {
-            resumeToUpdate.setLastName(resume.getLastName());
-        }
-        if (resume.getMiddleName() != null) {
-            resumeToUpdate.setMiddleName(resume.getMiddleName());
-        }
-        if (resume.getAvatarUrl() != null) {
-            resumeToUpdate.setAvatarUrl(resume.getAvatarUrl());
-        }
-        if (resume.getSalary() != null) {
-            resumeToUpdate.setSalary(resume.getSalary());
-        }
-        if (resume.getSkills() != null) {
-            resume.setSkills(resume.getSkills());
-        }
-
-        return resumeRepository.saveAndFlush(resumeToUpdate);
-    }
-
-    @Override
-    public void remove(String resumeName) {
-        Resume resumeToDelete = resumeRepository.findByResumeName(resumeName);
-        resumeRepository.delete(resumeToDelete);
-    }
-
-    @Override
-    public List<Resume> getAllResumeOfUser(String login) {
-        Account account = accountService.getByLogin(login);
-        Applicant applicant = applicantService.getByAccount(account);
-        return resumeRepository.findAllByOwner(applicant);
-    }
-
-
 }

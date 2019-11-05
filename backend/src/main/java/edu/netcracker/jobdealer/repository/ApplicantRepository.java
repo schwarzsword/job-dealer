@@ -11,5 +11,5 @@ import java.util.UUID;
 public interface ApplicantRepository extends JpaRepository<Applicant, UUID> {
 
     List<Applicant> findAll();
-    Applicant getById(UUID id);
+    Applicant getOne(UUID id);
 }

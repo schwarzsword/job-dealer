@@ -28,7 +28,11 @@ public class Applicant {
     @Column(name = "middleName")
     private String middleName;
 
-    @OneToMany(mappedBy = "owner")
+    @OneToOne
+    @JoinColumn(name = "accountId", referencedColumnName = "id", nullable = false)
+    private Account account;
+
+    @OneToMany(mappedBy = "applicant")
     private List<Resume> ownedResumes;
 
     @ManyToMany(mappedBy = "respondents")
@@ -36,10 +40,6 @@ public class Applicant {
 
     @ManyToMany(mappedBy = "submiter")
     List<Submission> ownedSubmissions;
-
-    @OneToOne
-    @JoinColumn(name = "account", referencedColumnName = "id", nullable = false)
-    private Account account;
 
     @Mapping("accountId")
     public UUID getAccountId() {
