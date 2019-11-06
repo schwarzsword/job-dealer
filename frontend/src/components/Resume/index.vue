@@ -1,10 +1,10 @@
 <template>
     <div>
         <button>
-            Create resume
+            <router-link to="/resumeForm">Create resume</router-link>
         </button>
             
-            <ResumeShortDescription></ResumeShortDescription>
+        <ResumeShortDescription></ResumeShortDescription>
     </div>
     
 </template>
