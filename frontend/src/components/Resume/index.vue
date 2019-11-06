@@ -10,8 +10,6 @@
 </template>
 
 <script>
-    import ResumeShortDescription from './'
-
     export default {
         name: 'Resume'
     }
