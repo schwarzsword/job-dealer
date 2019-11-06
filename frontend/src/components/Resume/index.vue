@@ -1,10 +1,10 @@
 <template>
     <div>
-        <button>Create resume</button>
-        <ol>
+        <button>
+            Create resume
+        </button>
+            
             <ResumeShortDescription></ResumeShortDescription>
-        </ol>
-        
     </div>
     
 </template>
