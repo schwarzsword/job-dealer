@@ -43,10 +43,27 @@ public class Account {
     public Account() {
     }
 
+    // delete it
     public Account(String password, String mail, String role) {
         this.email = mail;
         this.password = password;
         this.role = role;
         this.username = email;
     }
+
+    public Account(String username, String email, String password, String role) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
+
+    public Account(UUID id, String username, String email, String password) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+
+
 }
