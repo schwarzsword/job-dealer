@@ -37,7 +37,7 @@ public class ResumeController {
     }
 
     @RequestMapping(value = "/{email}/{resumeName}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> getAllResumes(@PathVariable("email") @NotBlank @Valid String email, @PathVariable("resumeName") @NotBlank @Valid String resumeName) {
+    public ResponseEntity<?> removeResume(@PathVariable("email") @NotBlank @Valid String email, @PathVariable("resumeName") @NotBlank @Valid String resumeName) {
         resumeService.remove(resumeName);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
