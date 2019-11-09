@@ -22,27 +22,27 @@ public class ResumeController {
         this.resumeService = resumeService;
     }
 
-    @RequestMapping(value = "/{login}/resumes/", method = RequestMethod.GET)
+    @GetMapping(value = "/{login}/resumes/")
     public ResponseEntity<?> getAllResumes(@PathVariable("login") @NotBlank @Valid String login) {
 
         List<Resume> resumes = resumeService.getAllResumeOfUser(login);
         return new ResponseEntity<>(resumes, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/{email}/resume", method = RequestMethod.POST)
+    @PostMapping(value = "/{email}/resume")
     public ResponseEntity<?> createResume(@PathVariable("email") @NotBlank @Valid String email,
                                           @RequestBody Resume resume) {
         Resume createdResume = resumeService.add(resume);
         return new ResponseEntity<>(createdResume, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/{email}/{resumeName}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/{email}/{resumeName}")
     public ResponseEntity<?> removeResume(@PathVariable("email") @NotBlank @Valid String email, @PathVariable("resumeName") @NotBlank @Valid String resumeName) {
         resumeService.remove(resumeName);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @RequestMapping(value = "/{email}/{resumeName}", method = RequestMethod.PATCH)
+    @PatchMapping(value = "/{email}/{resumeName}")
     public ResponseEntity<?> updateResume(@PathVariable("email") @NotBlank @Valid String email,
                                           @PathVariable("resumeName") @NotBlank @Valid String resumeName,
                                           @RequestBody Resume resume) {
