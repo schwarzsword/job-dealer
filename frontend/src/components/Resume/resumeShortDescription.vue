@@ -20,22 +20,24 @@
 </template>
 
 <script>
-export default {
-    name: 'ResumeShortDescription',
-    data(){
-        return {
-            resumes : [],
+    import axios from 'axios';
+
+    export default {
+        name: 'ResumeShortDescription',
+        data(){
+            return {
+                resumes : [],
+            }
+        },
+        created() {
+            axios.get(`http://localhost:8080/api/user/${login}/resumes/`)
+            .then(response => {
+                // JSON responses are automatically parsed.
+                this.resumes = response.data;
+            })
+            .catch(e => {
+                this.errors.push(e)
+            })
         }
-    },
-    created() {
-        axios.get(`http://localhost:8080/api/user/${login}/resumes/`)
-        .then(response => {
-            // JSON responses are automatically parsed.
-            this.resumes = response.data;
-        })
-        .catch(e => {
-            this.errors.push(e)
-        })
     }
-}
 </script>
