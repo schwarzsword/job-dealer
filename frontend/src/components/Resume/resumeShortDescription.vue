@@ -24,12 +24,18 @@ export default {
     name: 'ResumeShortDescription',
     data(){
         return {
-            resumes : [
-                       {name : "resume1", vacancy : "vacancy 1", salary : "70000", description : "description1"}, 
-                       {name : "resume2", vacancy : "vacancy 2", salary : "80000", description : "description2"}, 
-                       {name : "resume3", vacancy : "vacancy 3", salary : "90000", description : "description3"}
-                      ]
+            resumes : [],
         }
+    },
+    created() {
+        axios.get(`http://localhost:8080/api/user/${login}/resumes/`)
+        .then(response => {
+            // JSON responses are automatically parsed.
+            this.resumes = response.data;
+        })
+        .catch(e => {
+            this.errors.push(e)
+        })
     }
 }
 </script>

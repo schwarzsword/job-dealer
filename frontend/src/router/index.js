@@ -62,7 +62,7 @@ export default new Router({
             path: '/resumes',
             name: 'resume',
             component: Resume,
-            //beforeEnter: ifAuthenticated
+            beforeEnter: ifAuthenticated
         },
         {
             path: '/resumeForm',
