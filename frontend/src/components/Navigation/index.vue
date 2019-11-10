@@ -23,7 +23,7 @@
                     <router-link class="sign_in" to="/logout">Logout</router-link>
                 </div>
                 <div v-if="!isAuthenticated && !authLoading">
-                    <router-link class="sign_in" to="/sign_in">Sign in</router-link>
+                    <router-link class="sign_in" to="/account">Sign in</router-link>
                 </div>
             </div>
         </div>
