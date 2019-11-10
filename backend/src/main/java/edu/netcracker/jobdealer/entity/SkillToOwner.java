@@ -2,6 +2,7 @@ package edu.netcracker.jobdealer.entity;
 
 
 import lombok.Data;
+import org.dozer.Mapping;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -32,5 +33,10 @@ public class SkillToOwner {
         this.owner = owner;
         this.level = level;
         this.skill = skill;
+    }
+
+    @Mapping("skill")
+    public String getSkills() {
+        return skill.getName();
     }
 }

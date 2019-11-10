@@ -2,7 +2,6 @@ package edu.netcracker.jobdealer.controller;
 
 import edu.netcracker.jobdealer.entity.Review;
 import edu.netcracker.jobdealer.exceptions.DoubleVotingException;
-import edu.netcracker.jobdealer.exceptions.MessageNotFoundException;
 import edu.netcracker.jobdealer.exceptions.NoRightsException;
 import edu.netcracker.jobdealer.exceptions.ReviewNotFountException;
 import edu.netcracker.jobdealer.service.ReviewService;

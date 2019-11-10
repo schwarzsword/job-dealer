@@ -1,6 +1,7 @@
 package edu.netcracker.jobdealer.entity;
 
 import lombok.Data;
+import org.dozer.Mapping;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -40,4 +41,10 @@ public class Message {
         this.messageDest = dest;
         this.date = new Date();
     }
+
+    @Mapping("sender")
+    public String getSender() {
+        return messageDest.getUsername();
+    }
+
 }

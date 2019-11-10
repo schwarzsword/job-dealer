@@ -6,9 +6,9 @@ import java.util.Date;
 import java.util.UUID;
 
 @Data
-public class ReviewDTO {
+public class MessageDto {
     private UUID id;
     private String text;
-    private Integer rating;
+    private Date date;
     private String sender;
 }

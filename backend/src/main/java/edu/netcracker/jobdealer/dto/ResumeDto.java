@@ -1,6 +1,7 @@
 package edu.netcracker.jobdealer.dto;
 
-import edu.netcracker.jobdealer.entity.SkillToOwner;
+
+import edu.netcracker.jobdealer.config.Pair;
 import lombok.Data;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public class ResumeDto {
     private Integer salary;
     private String photoLink;
     private String about;
-    private List<SkillToOwner> skills;
+    private List<Pair<String, Integer>> skills;
 
 
     private ResumeDto() {

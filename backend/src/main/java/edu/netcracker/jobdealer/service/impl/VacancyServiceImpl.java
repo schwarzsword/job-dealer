@@ -1,9 +1,11 @@
 package edu.netcracker.jobdealer.service.impl;
 
-import edu.netcracker.jobdealer.dto.VacancyDto;
 import edu.netcracker.jobdealer.entity.Company;
+import edu.netcracker.jobdealer.entity.Skills;
 import edu.netcracker.jobdealer.entity.Vacancy;
+import edu.netcracker.jobdealer.exceptions.CompanyNotFoundException;
 import edu.netcracker.jobdealer.exceptions.VacancyNotFoundException;
+import edu.netcracker.jobdealer.repository.SkillsRepository;
 import edu.netcracker.jobdealer.repository.VacancyRepository;
 import edu.netcracker.jobdealer.service.VacancyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,17 +15,20 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
-@Service("vacancyService")
+@Service
 @Transactional
 public class VacancyServiceImpl implements VacancyService {
 
     private final VacancyRepository vacancyRepository;
+    private final SkillsRepository skillsRepository;
 
 
     @Autowired
-    public VacancyServiceImpl(final VacancyRepository vacancyRepository) {
+    public VacancyServiceImpl(final VacancyRepository vacancyRepository, SkillsRepository skillsRepository) {
         this.vacancyRepository = vacancyRepository;
+        this.skillsRepository = skillsRepository;
     }
 
     @Override
@@ -43,49 +48,18 @@ public class VacancyServiceImpl implements VacancyService {
 
 
     @Override
-    public Vacancy addVacancy(Vacancy vacancy) {
-
-        Vacancy vacancyToAdd = new Vacancy(
-                vacancy.getName(),
-                vacancy.getDescription(),
-                vacancy.getMoney(),
-                vacancy.getRequestedSkills(),
-                vacancy.getOwner()
-        );
-
-        return vacancyRepository.saveAndFlush(vacancyToAdd);
+    public void addVacancy(String name, String description, Integer money, List<String> skills, Company company) throws CompanyNotFoundException {
+        List<Skills> requestedSkills = skills.stream().map(e -> skillsRepository.findByName(e).orElseGet(() -> skillsRepository.save(new Skills(e)))).collect(Collectors.toList());
+        vacancyRepository.save(new Vacancy(name, description, money, requestedSkills, company));
     }
 
     @Override
-    public void remove(UUID vacancyId) throws VacancyNotFoundException{
+    public void remove(UUID vacancyId) throws VacancyNotFoundException {
         Optional<Vacancy> byId = vacancyRepository.findById(vacancyId);
         if (byId.isPresent()) {
             vacancyRepository.delete(byId.get());
         } else throw new VacancyNotFoundException("Vacancy not found");
     }
 
-
-    @Override
-    public Vacancy updateVacancy(VacancyDto vacancyDTO) {
-        Vacancy vacancyToUpdate = vacancyRepository.findByNameAndOwner(vacancyDTO.getName(), vacancyDTO.getOwner());
-
-        if (vacancyDTO.getDescription() != null) {
-            vacancyToUpdate.setDescription(vacancyDTO.getDescription());
-        }
-        if (vacancyDTO.getMoney() != null) {
-            vacancyToUpdate.setMoney(vacancyDTO.getMoney());
-        }
-        if (vacancyDTO.getName() != null) {
-            vacancyToUpdate.setName(vacancyDTO.getName());
-        }
-        if (vacancyDTO.getOwner() != null) {
-            vacancyToUpdate.setOwner(vacancyDTO.getOwner());
-        }
-        if (vacancyDTO.getRequestedSkills() != null) {
-            vacancyToUpdate.setRequestedSkills(vacancyDTO.getRequestedSkills());
-        }
-
-        return vacancyRepository.saveAndFlush(vacancyToUpdate);
-    }
 
 }

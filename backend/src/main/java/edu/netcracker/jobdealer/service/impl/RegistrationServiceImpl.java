@@ -1,7 +1,11 @@
 package edu.netcracker.jobdealer.service.impl;
 
 import edu.netcracker.jobdealer.entity.Account;
+import edu.netcracker.jobdealer.entity.Applicant;
+import edu.netcracker.jobdealer.entity.Company;
 import edu.netcracker.jobdealer.repository.AccountRepository;
+import edu.netcracker.jobdealer.repository.ApplicantRepository;
+import edu.netcracker.jobdealer.repository.CompanyRepository;
 import edu.netcracker.jobdealer.service.RegistrationService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -11,12 +15,17 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Transactional
-@Service("registrationService")
+@Service
 public class RegistrationServiceImpl implements RegistrationService {
+
+    private final ApplicantRepository applicantRepository;
+    private final CompanyRepository companyRepository;
     private final AccountRepository accountRepository;
     private String salt = BCrypt.gensalt();
 
-    public RegistrationServiceImpl(AccountRepository accountRepository) {
+    public RegistrationServiceImpl(ApplicantRepository applicantRepository, CompanyRepository companyRepository, AccountRepository accountRepository) {
+        this.applicantRepository = applicantRepository;
+        this.companyRepository = companyRepository;
         this.accountRepository = accountRepository;
     }
 
@@ -36,6 +45,14 @@ public class RegistrationServiceImpl implements RegistrationService {
             String pwd = BCrypt.hashpw(password, salt);
             Account user = new Account(pwd, mail, role);
             accountRepository.save(user);
+            if (role.equals("ROLE_USER")) {
+                Applicant applicant = new Applicant(user);
+                applicantRepository.save(applicant);
+            } else {
+                Company company = new Company(user);
+                companyRepository.save(company);
+            }
+
             return user;
         } else throw new UsernameNotFoundException("User is already exists");
     }

@@ -14,4 +14,6 @@ public interface SkillsRepository extends JpaRepository<Skills, UUID> {
     List<Skills> findAllByNameContaining(String st);
 
     void deleteAllByNameContaining(String st);
+
+    boolean existsByName(String name);
 }

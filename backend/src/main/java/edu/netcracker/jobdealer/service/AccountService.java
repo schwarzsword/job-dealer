@@ -2,6 +2,7 @@ package edu.netcracker.jobdealer.service;
 
 import edu.netcracker.jobdealer.dto.AccountDto;
 import edu.netcracker.jobdealer.entity.Account;
+import edu.netcracker.jobdealer.exceptions.AccountNotFoundException;
 
 import java.util.List;
 import java.util.UUID;
@@ -9,6 +10,8 @@ import java.util.UUID;
 public interface AccountService {
 
     List<AccountDto> getAllAccounts();
+
     AccountDto getAccountById(UUID id);
-    Account getByEmail(String email);
+
+    Account getByEmail(String email) throws AccountNotFoundException;
 }

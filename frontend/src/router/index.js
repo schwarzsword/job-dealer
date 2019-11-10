@@ -6,6 +6,7 @@ import About from "../components/About/index";
 import Login from "../components/Login/index";
 import SignUp from "../components/SignUp/index";
 import store from '../store'
+import Vacancies from "../components/Vacancies"
 
 Vue.use(Router);
 
@@ -62,5 +63,10 @@ export default new Router({
         //     component: Profile,
         //     beforeEnter: ifAuthenticated
         // },
+        {
+            path: '/vacancies',
+            name: 'vacancies',
+            component: Vacancies,
+        }
     ]
 })

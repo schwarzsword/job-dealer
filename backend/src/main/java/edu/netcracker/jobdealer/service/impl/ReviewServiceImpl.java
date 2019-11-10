@@ -1,13 +1,11 @@
 package edu.netcracker.jobdealer.service.impl;
 
 import edu.netcracker.jobdealer.entity.Account;
-import edu.netcracker.jobdealer.entity.Message;
 import edu.netcracker.jobdealer.entity.Review;
 import edu.netcracker.jobdealer.exceptions.DoubleVotingException;
 import edu.netcracker.jobdealer.exceptions.NoRightsException;
 import edu.netcracker.jobdealer.exceptions.ReviewNotFountException;
-import edu.netcracker.jobdealer.exceptions.UserNotFoundException;
-import edu.netcracker.jobdealer.repository.AccountRepository;
+import edu.netcracker.jobdealer.exceptions.AccountNotFoundException;
 import edu.netcracker.jobdealer.repository.ReviewRepository;
 import edu.netcracker.jobdealer.service.AccountService;
 import edu.netcracker.jobdealer.service.ReviewService;
@@ -20,7 +18,7 @@ import java.util.UUID;
 
 
 @Transactional
-@Service("reviewService")
+@Service
 public class ReviewServiceImpl implements ReviewService {
 
     private final AccountService accountService;
@@ -33,7 +31,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Review sendReview(String text, String srcEmail, String destEmail) throws UserNotFoundException {
+    public Review sendReview(String text, String srcEmail, String destEmail) throws AccountNotFoundException {
         Account src = accountService.getByEmail(srcEmail);
         Account dest = accountService.getByEmail(destEmail);
         Review review = new Review(text, src, dest);

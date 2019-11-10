@@ -4,24 +4,21 @@ import edu.netcracker.jobdealer.entity.Account;
 import edu.netcracker.jobdealer.entity.Message;
 import edu.netcracker.jobdealer.exceptions.MessageNotFoundException;
 import edu.netcracker.jobdealer.exceptions.NoRightsException;
-import edu.netcracker.jobdealer.exceptions.UserNotFoundException;
+import edu.netcracker.jobdealer.exceptions.AccountNotFoundException;
 import edu.netcracker.jobdealer.repository.AccountRepository;
 import edu.netcracker.jobdealer.repository.MessageRepository;
 import edu.netcracker.jobdealer.service.AccountService;
 import edu.netcracker.jobdealer.service.MessageService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.naming.NoPermissionException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 
 @Transactional
-@Service("messageService")
+@Service
 public class MessageServiceImpl implements MessageService {
 
 
@@ -39,7 +36,7 @@ public class MessageServiceImpl implements MessageService {
 
 
     @Override
-    public Message sendMessage(String text, String srcEmail, String destEmail) throws UserNotFoundException {
+    public Message sendMessage(String text, String srcEmail, String destEmail) throws AccountNotFoundException {
         Account src = accountService.getByEmail(srcEmail);
         Account dest = accountService.getByEmail(destEmail);
         Message message = new Message(text, src, dest);

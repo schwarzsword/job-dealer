@@ -10,6 +10,9 @@
         <div class="menu">
             <ul>
                 <li>
+                    <router-link class="nav-link" to="/vacancies">Vacancies</router-link>
+                </li>
+                <li>
                     <router-link class="nav-link" to="/rules">Resumes</router-link>
                 </li>
                 <li v-if="isProfileLoaded">
@@ -73,7 +76,7 @@
         name: 'navigation',
         methods: {
             logout: function () {
-                this.$store.dispatch(AUTH_LOGOUT).then(() => this.$router.push('/'))
+                this.$store.dispatch(AUTH_LOGOUT).then(() => this.$router.push('/login'))
             }
         },
         computed: {

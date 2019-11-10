@@ -1,9 +1,12 @@
 package edu.netcracker.jobdealer;
 
+import edu.netcracker.jobdealer.controller.MessageController;
+import edu.netcracker.jobdealer.dto.MessageDto;
 import edu.netcracker.jobdealer.entity.*;
-import edu.netcracker.jobdealer.exceptions.VacancyNotFoundException;
 import edu.netcracker.jobdealer.repository.*;
+import edu.netcracker.jobdealer.service.MessageService;
 import lombok.extern.slf4j.Slf4j;
+import org.dozer.Mapper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 
@@ -26,6 +30,15 @@ import static org.junit.Assert.assertEquals;
 @ContextConfiguration
 @Transactional
 public class JobDealerApplicationTests {
+
+    @Autowired
+    MessageController messageController;
+
+    @Autowired
+    MessageService messageService;
+
+    @Autowired
+    Mapper mapper;
 
     @Autowired
     AccountRepository accountRepository;
@@ -87,6 +100,7 @@ public class JobDealerApplicationTests {
     public void registrationTest() {
         Optional<Account> byEmail = accountRepository.findByEmail("4");
         log.info(byEmail.get().getUsername());
+        log.info(byEmail.get().toString());
         assertEquals("4", byEmail.get().getUsername());
     }
 
@@ -182,7 +196,12 @@ public class JobDealerApplicationTests {
         assertEquals("txt.txt", java_dev.getFilename());
     }
 
-
+    @Test
+    public void messageServiceTest() {
+        List<Message> userMessages = messageService.getUserMessages("5");
+        List<MessageDto> dtos = userMessages.stream().map(e -> mapper.map(e, MessageDto.class)).collect(Collectors.toList());
+        log.info(dtos.toString());
+    }
 
     @After
     public void finish() {

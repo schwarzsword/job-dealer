@@ -3,8 +3,6 @@ package edu.netcracker.jobdealer.entity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -28,7 +26,6 @@ public class Account {
 
     @Column(name = "role", nullable = false)
     private String role;
-
 
 
     protected Account() {

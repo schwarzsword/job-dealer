@@ -7,7 +7,7 @@ import Center from './components/lib/CenterContainer'
 
 Vue.config.productionTip = false;
 
-Vue.component('loading', Loading)
+Vue.component('loading', Loading);
 Vue.component('center-container', Center);
 /* eslint-disable no-new */
 new Vue({

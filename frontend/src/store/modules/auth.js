@@ -2,9 +2,13 @@ import {AUTH_REQUEST, AUTH_ERROR, AUTH_SUCCESS, AUTH_LOGOUT} from '../actions/au
 import {USER_REQUEST} from '../actions/user'
 import axios from 'axios'
 import {urlPort} from "../../tool";
+import VueCookies from 'vue-cookies'
 
 
-const state = {token: localStorage.getItem('user-token') || '', status: '', hasLoadedOnce: false};
+const state = {
+    token: localStorage.getItem('user-token') || '',
+    status: '', hasLoadedOnce: false
+};
 
 const getters = {
     isAuthenticated: state => !!state.token,
@@ -18,12 +22,15 @@ const actions = {
             let params = new URLSearchParams();
             params.append('username', user.username);
             params.append('password', user.password);
+            // let remember = this.$cookies.get("remember-me-token");
+            // alert(this.$cookies.isKey("remember-me-token"));
             axios.post(urlPort("/login"), params, {withCredentials: true})
                 .then(resp => {
-                    localStorage.setItem('user-token', resp.token);
-                    axios.defaults.headers.common['Authorization'] = resp.token;
+                    localStorage.setItem('user-token', "logged");
+                    console.log(resp);
+                    axios.defaults.headers.common['Authorization'] = "logged";
                     commit(AUTH_SUCCESS, resp);
-                    dispatch(USER_REQUEST);
+                    // dispatch(USER_REQUEST);
                     resolve(resp)
                 })
                 .catch(err => {
@@ -48,7 +55,7 @@ const mutations = {
     },
     [AUTH_SUCCESS]: (state, resp) => {
         state.status = 'success';
-        state.token = resp.token;
+        state.token = "logged";
         state.hasLoadedOnce = true
     },
     [AUTH_ERROR]: (state) => {

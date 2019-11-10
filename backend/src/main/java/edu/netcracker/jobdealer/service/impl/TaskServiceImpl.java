@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Transactional
-@Service("submissionService")
+@Service
 public class TaskServiceImpl implements TaskService {
 
     private final TestTaskRepository testTaskRepository;

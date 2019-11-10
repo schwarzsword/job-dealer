@@ -8,5 +8,6 @@ import java.util.UUID;
 public interface ApplicantService {
 
     List<ApplicantDto> getAllApplicants();
+
     ApplicantDto getApplicantById(UUID id);
 }

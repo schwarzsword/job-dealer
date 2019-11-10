@@ -1,11 +1,11 @@
 package edu.netcracker.jobdealer.controller;
 
-import edu.netcracker.jobdealer.dto.MessageDTO;
+import edu.netcracker.jobdealer.dto.MessageDto;
 import edu.netcracker.jobdealer.entity.Message;
 import edu.netcracker.jobdealer.exceptions.MessageNotFoundException;
 import edu.netcracker.jobdealer.exceptions.NoRightsException;
 import edu.netcracker.jobdealer.service.MessageService;
-import org.dozer.DozerBeanMapper;
+import org.dozer.Mapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,15 +14,16 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 public class MessageController {
 
-    private final DozerBeanMapper mapper;
+    private final Mapper mapper;
 
     private final MessageService messageService;
 
-    public MessageController(MessageService messageService, DozerBeanMapper mapper) {
+    public MessageController(MessageService messageService, Mapper mapper) {
         this.messageService = messageService;
         this.mapper = mapper;
     }
@@ -32,9 +33,8 @@ public class MessageController {
     public ResponseEntity getUserMessages(@PathVariable("email") String email, @AuthenticationPrincipal User user) {
         if (user.getUsername().equals(email)) {
             List<Message> userMessages = messageService.getUserMessages(email);
-            //TODO make mappings
-//        List<MessageDTO> dtos = userMessages.stream().map(e -> mapper.map(e, MessageDTO.class)).collect(Collectors.toList());
-            return ResponseEntity.ok(userMessages);
+            List<MessageDto> dtos = userMessages.stream().map(e -> mapper.map(e, MessageDto.class)).collect(Collectors.toList());
+            return ResponseEntity.ok(dtos);
         } else return ResponseEntity.badRequest().body("You have no permission to read this message");
     }
 

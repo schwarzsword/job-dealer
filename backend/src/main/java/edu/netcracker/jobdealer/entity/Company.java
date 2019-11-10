@@ -2,7 +2,6 @@ package edu.netcracker.jobdealer.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.dozer.Mapping;
 
 import javax.persistence.*;
 import java.util.List;

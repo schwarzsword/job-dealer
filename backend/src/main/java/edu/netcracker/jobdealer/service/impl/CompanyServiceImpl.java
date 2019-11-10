@@ -9,6 +9,7 @@ import edu.netcracker.jobdealer.service.CompanyService;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +17,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class CompanyServiceImpl implements CompanyService {
 
     private final CompanyRepository companyRepository;
@@ -42,7 +44,6 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public Company getByAccount(Account account) throws CompanyNotFoundException {
         Optional<Company> byAccount = companyRepository.findByAccount(account);
-
         if (byAccount.isPresent()) {
             return byAccount.get();
         } else {

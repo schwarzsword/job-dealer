@@ -11,11 +11,11 @@ import java.util.UUID;
 public interface AccountRepository extends JpaRepository<Account, UUID> {
 
     Account getById(UUID id);
-  
+
     Optional<Account> findByEmail(String email);
-  
+
     boolean existsByEmail(String email);
-  
+
     void deleteByEmail(String email);
 
     Account getByUsername(String username);

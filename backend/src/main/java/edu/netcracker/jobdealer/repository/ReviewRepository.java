@@ -2,7 +2,6 @@ package edu.netcracker.jobdealer.repository;
 
 
 import edu.netcracker.jobdealer.entity.Account;
-import edu.netcracker.jobdealer.entity.Message;
 import edu.netcracker.jobdealer.entity.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
 

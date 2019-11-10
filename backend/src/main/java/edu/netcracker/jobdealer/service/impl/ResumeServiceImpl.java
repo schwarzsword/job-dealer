@@ -1,7 +1,5 @@
 package edu.netcracker.jobdealer.service.impl;
 
-import edu.netcracker.jobdealer.entity.Account;
-import edu.netcracker.jobdealer.entity.Applicant;
 import edu.netcracker.jobdealer.entity.Resume;
 import edu.netcracker.jobdealer.repository.ResumeRepository;
 import edu.netcracker.jobdealer.service.AccountService;
@@ -13,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Service("resumeService")
+@Service
 @Transactional
 public class ResumeServiceImpl implements ResumeService {
 

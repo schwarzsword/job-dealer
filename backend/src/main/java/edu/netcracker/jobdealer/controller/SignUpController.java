@@ -29,6 +29,6 @@ public class SignUpController {
         } catch (UsernameNotFoundException ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
         }
-        return ResponseEntity.ok(true);
+        return ResponseEntity.ok().build();
     }
 }

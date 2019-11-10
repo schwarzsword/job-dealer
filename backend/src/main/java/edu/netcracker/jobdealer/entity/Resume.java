@@ -1,10 +1,13 @@
 package edu.netcracker.jobdealer.entity;
 
+import edu.netcracker.jobdealer.config.Pair;
 import lombok.Data;
+import org.dozer.Mapping;
 
 import javax.persistence.*;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @Data
@@ -39,9 +42,11 @@ public class Resume {
     @Basic
     @Column(name = "about")
     private String about;
+
     @ManyToOne
     @JoinColumn(name = "ownedResumes", referencedColumnName = "id")
     private Applicant owner;
+
     @OneToMany(mappedBy = "owner")
     List<SkillToOwner> skills;
 
@@ -50,5 +55,10 @@ public class Resume {
 
     public Resume(Applicant applicant) {
         this.owner = applicant;
+    }
+
+    @Mapping("skills")
+    public List<Pair<String, Integer>> getSkillsString() {
+        return skills.stream().map(e -> new Pair<String, Integer>(e.getSkills(), e.getLevel())).collect(Collectors.toList());
     }
 }
