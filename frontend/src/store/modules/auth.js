@@ -27,7 +27,6 @@ const actions = {
             axios.post(urlPort("/login"), params, {withCredentials: true})
                 .then(resp => {
                     localStorage.setItem('user-token', "logged");
-                    console.log(resp);
                     axios.defaults.headers.common['Authorization'] = "logged";
                     commit(AUTH_SUCCESS, resp);
                     // dispatch(USER_REQUEST);

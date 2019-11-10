@@ -5,11 +5,12 @@ import edu.netcracker.jobdealer.config.Pair;
 import lombok.Data;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 public class ResumeDto {
 
-    private Long id;
+    private UUID id;
     private String firstName;
     private String middleName;
     private String lastName;

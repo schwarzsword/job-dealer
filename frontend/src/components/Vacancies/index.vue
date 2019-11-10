@@ -1,12 +1,30 @@
 <template>
-    <div>
-        <v-data-table
-                :headers="headers"
-                :items="desserts"
-                :items-per-page="5"
-                class="elevation-1"
-        ></v-data-table>
-    </div>
+    <v-app id="vacancies">
+        <v-card>
+            <v-card-title>
+                Vacancy
+                <v-spacer></v-spacer>
+                <v-text-field
+                        v-model="search"
+                        append-icon="search"
+                        label="Search"
+                        single-line
+                        hide-details
+                ></v-text-field>
+            </v-card-title>
+
+            <v-data-table
+                    multi-sort
+                    :sort-by="['name', 'money', 'ownerName']"
+                    :sort-desc="[false, true]"
+                    :headers="headers"
+                    :items="vacancies"
+                    :items-per-page="5"
+                    class="elevation-1"
+                    :search="search"
+            ></v-data-table>
+        </v-card>
+    </v-app>
 </template>
 
 <script>
@@ -17,6 +35,7 @@
         name: "vacancies",
         data() {
             return {
+                search: '',
                 headers: [
                     {
                         text: 'Vacancy',
@@ -24,11 +43,8 @@
                         sortable: true,
                         value: 'name',
                     },
-                    { text: 'Calories', value: 'calories', sortable: true },
-                    { text: 'Fat (g)', value: 'fat' },
-                    { text: 'Carbs (g)', value: 'carbs' },
-                    { text: 'Protein (g)', value: 'protein' },
-                    { text: 'Iron (%)', value: 'iron' },
+                    {text: 'Salary', value: 'money', sortable: true},
+                    {text: 'Company', value: 'ownerName', sortable: true},
                 ],
                 page: 1,
                 vacancies: [],
@@ -37,8 +53,9 @@
         },
         methods: {},
         created() {
-            axios.get(urlPort("/api/vacancies/" + this.page)).then(res => {
+            axios.get(urlPort("/api/vacancies/")).then(res => {
                 this.vacancies = res.data;
+                console.log(res.data);
             }).catch(reason => {
                 this.message = reason.body;
             })

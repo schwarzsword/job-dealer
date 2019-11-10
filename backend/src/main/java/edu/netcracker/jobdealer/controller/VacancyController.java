@@ -1,5 +1,6 @@
 package edu.netcracker.jobdealer.controller;
 
+import edu.netcracker.jobdealer.dto.VacancyDto;
 import edu.netcracker.jobdealer.entity.Account;
 import edu.netcracker.jobdealer.entity.Company;
 import edu.netcracker.jobdealer.entity.Vacancy;
@@ -18,9 +19,10 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("api")
+@RequestMapping("api/vacancies/")
 public class VacancyController {
     private final VacancyService vacancyService;
 
@@ -36,7 +38,7 @@ public class VacancyController {
         this.accountService = accountService;
     }
 
-    @PostMapping(value = "/{email}/vacancies/")
+    @PostMapping(value = "/{email}")
     public ResponseEntity createVacancy(@PathVariable("email") String email,
                                         @RequestParam String name, @RequestParam String description,
                                         @RequestParam Integer money, @RequestParam List<String> requestedSkills) {
@@ -52,20 +54,15 @@ public class VacancyController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/{email}/vacancies/{vacancyId}")
+    @DeleteMapping(value = "/{email}/{vacancyId}")
     public ResponseEntity deleteVacancy(@PathVariable("email") @NotBlank @Valid String email,
                                         @PathVariable("vacancyId") @NotBlank @Valid UUID vacancyId) {
         vacancyService.remove(vacancyId);
         return ResponseEntity.status(200).build();
     }
 
-//    @PutMapping(value = "/{email}/vacancies/{vacancyId}")
-//    public ResponseEntity<?> updateVacancy(@RequestBody VacancyDto vacancyDTO) {
-//        vacancyService.updateVacancy(vacancyDTO);
-//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//    }
 
-    @GetMapping(value = "/vacancies/{page}")
+    @GetMapping(value = "/{page}")
     public ResponseEntity getAllCompanyVacanciesPage(@PathVariable("page") Integer page) {
         List<Vacancy> vacancies = vacancyService.getAll();
         int begin = --page * 10;
@@ -80,9 +77,13 @@ public class VacancyController {
 
     }
 
-    @GetMapping(value = "/vacancies/")
+    @GetMapping
     public ResponseEntity getAllCompanyVacancies() {
-        List<Vacancy> vacancies = vacancyService.getAll();
+        List<Vacancy> all = vacancyService.getAll();
+        List<VacancyDto> vacancies = vacancyService.getAll()
+                .stream()
+                .map(e -> mapper.map(e, VacancyDto.class))
+                .collect(Collectors.toList());
         return ResponseEntity.ok().body(vacancies);
     }
 }

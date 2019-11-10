@@ -1,6 +1,7 @@
 package edu.netcracker.jobdealer.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.dozer.Mapping;
 
 import javax.persistence.*;
@@ -11,19 +12,9 @@ import java.util.stream.Collectors;
 @Data
 @Entity
 @Table
+@NoArgsConstructor
 public class Vacancy {
-    @ManyToMany
-    @JoinTable(
-            name = "vacancySkills",
-            joinColumns = @JoinColumn(name = "vacancyId"),
-            inverseJoinColumns = @JoinColumn(name = "skillId"))
-    List<Skills> requestedSkills;
-    @ManyToMany
-    @JoinTable(
-            name = "vacancyUser",
-            joinColumns = @JoinColumn(name = "vacancyId"),
-            inverseJoinColumns = @JoinColumn(name = "applicantId"))
-    List<Applicant> respondents;
+
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue
@@ -43,8 +34,18 @@ public class Vacancy {
     @OneToOne(mappedBy = "vacancy")
     private Task task;
 
-    protected Vacancy() {
-    }
+    @ManyToMany
+    @JoinTable(
+            name = "vacancySkills",
+            joinColumns = @JoinColumn(name = "vacancyId"),
+            inverseJoinColumns = @JoinColumn(name = "skillId"))
+    List<Skills> requestedSkills;
+    @ManyToMany
+    @JoinTable(
+            name = "vacancyUser",
+            joinColumns = @JoinColumn(name = "vacancyId"),
+            inverseJoinColumns = @JoinColumn(name = "applicantId"))
+    List<Applicant> respondents;
 
     public Vacancy(String name, String description, Integer money, List<Skills> requestedSkills, Company owner) {
         this.name = name;
@@ -60,7 +61,7 @@ public class Vacancy {
     }
 
     @Mapping("requestedSkills")
-    public List<String> getRequestedSkills(){
+    public List<String> getRequestedSkillsNames(){
         return requestedSkills.stream().map(Skills::getName).collect(Collectors.toList());
     }
 }
