@@ -5,6 +5,7 @@ import edu.netcracker.jobdealer.service.ResumeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,6 +23,7 @@ public class ResumeController {
         this.resumeService = resumeService;
     }
 
+    @Secured("ROLE_USER")
     @GetMapping(value = "/{login}/resumes/")
     public ResponseEntity<?> getAllResumes(@PathVariable("login") @NotBlank @Valid String login) {
 
@@ -29,6 +31,7 @@ public class ResumeController {
         return new ResponseEntity<>(resumes, HttpStatus.OK);
     }
 
+    @Secured("ROLE_USER")
     @PostMapping(value = "/{email}/resume")
     public ResponseEntity<?> createResume(@PathVariable("email") @NotBlank @Valid String email,
                                           @RequestBody Resume resume) {
@@ -36,12 +39,14 @@ public class ResumeController {
         return new ResponseEntity<>(createdResume, HttpStatus.OK);
     }
 
+    @Secured("ROLE_USER")
     @DeleteMapping(value = "/{email}/{resumeName}")
     public ResponseEntity<?> removeResume(@PathVariable("email") @NotBlank @Valid String email, @PathVariable("resumeName") @NotBlank @Valid String resumeName) {
         resumeService.remove(resumeName);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @Secured("ROLE_USER")
     @PatchMapping(value = "/{email}/{resumeName}")
     public ResponseEntity<?> updateResume(@PathVariable("email") @NotBlank @Valid String email,
                                           @PathVariable("resumeName") @NotBlank @Valid String resumeName,
