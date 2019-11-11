@@ -12,10 +12,10 @@
                 <li>
                     <router-link class="nav-link" to="/vacancies">Vacancies</router-link>
                 </li>
-                <li>
-                    <router-link class="nav-link" to="/rules">Resumes</router-link>
+                <li v-if="isCompany">
+                    <router-link to="/company">MyProfile</router-link>
                 </li>
-                <li v-if="isProfileLoaded">
+                <li v-if="isUser">
                     <router-link to="/profile">MyProfile</router-link>
                 </li>
                 <li v-if="isAuthenticated" @click="logout">
@@ -80,7 +80,7 @@
             }
         },
         computed: {
-            ...mapGetters(['getProfile', 'isAuthenticated', 'isProfileLoaded']),
+            ...mapGetters(['getProfile', 'isAuthenticated', 'isUser', 'isCompany']),
             ...mapState({
                 authLoading: state => state.auth.status === 'loading',
             })

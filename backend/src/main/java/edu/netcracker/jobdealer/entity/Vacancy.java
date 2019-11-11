@@ -56,7 +56,7 @@ public class Vacancy {
     }
 
     @Mapping("ownerName")
-    public String getOwner(){
+    public String getOwnerName(){
         return owner.getName();
     }
 
