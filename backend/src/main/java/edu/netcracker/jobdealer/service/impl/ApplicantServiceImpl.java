@@ -5,6 +5,7 @@ import edu.netcracker.jobdealer.exceptions.ApplicantNotFoundException;
 import edu.netcracker.jobdealer.repository.ApplicantRepository;
 import edu.netcracker.jobdealer.service.ApplicantService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,5 +36,20 @@ public class ApplicantServiceImpl implements ApplicantService {
         } else {
             throw new ApplicantNotFoundException("Applicant is not found.");
         }
+    }
+
+    @Override
+    public Applicant addApplicant(String firstName, String lastName, String middleName, UUID accountId) {
+        return null;
+    }
+
+    @Override
+    public Applicant updateApplicant(String firstName, String lastName, String middleName, UUID accountId) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity deleteApplicant(UUID id) throws ApplicantNotFoundException {
+        return null;
     }
 }

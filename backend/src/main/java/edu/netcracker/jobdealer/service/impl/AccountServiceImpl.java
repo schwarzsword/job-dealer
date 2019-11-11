@@ -109,9 +109,9 @@ public class AccountServiceImpl implements AccountService {
     public ResponseEntity deleteAccount(UUID id) throws AccountNotFoundException {
         if (accountRepository.findById(id).isPresent() && id != null) {
             accountRepository.deleteById(id);
+            return ResponseEntity.ok(true);
         } else {
             throw new AccountNotFoundException("You passed an empty parameter or the account was not found");
         }
-        return null;
     }
 }
