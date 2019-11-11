@@ -41,7 +41,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public Company addCompany(String name, Boolean isVerified, String description, String avatarUrl, UUID accountId) {
-        if (!companyRepository.existsByAccountId(accountId)) {
+        if (!companyRepository.existsByAccount_Id(accountId)) {
             return companyRepository.save(new Company(name, isVerified, description, avatarUrl, accountId));
         } else {
             throw new AccountIdAlreadyExistsException("Account id is already exists");
@@ -52,7 +52,7 @@ public class CompanyServiceImpl implements CompanyService {
     public Company updateCompany(UUID id, String name, Boolean isVerified, String description, String avatarUrl,
                                  UUID accountId) {
 
-        if (!companyRepository.existsByAccountId(accountId)) {
+        if (!companyRepository.existsByAccount_Id(accountId)) {
             return companyRepository.save(new Company(id, name, isVerified, description, avatarUrl, accountId));
         } else {
             throw new AccountIdAlreadyExistsException("Account id is already exists");
