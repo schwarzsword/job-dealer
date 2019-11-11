@@ -13,6 +13,8 @@ import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -78,9 +80,17 @@ public class VacancyController {
     }
 
     @GetMapping
-    public ResponseEntity getAllCompanyVacancies() {
-        List<Vacancy> all = vacancyService.getAll();
+    public ResponseEntity getAllVacancies() {
         List<VacancyDto> vacancies = vacancyService.getAll()
+                .stream()
+                .map(e -> mapper.map(e, VacancyDto.class))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok().body(vacancies);
+    }
+
+    @GetMapping("/{email}")
+    public ResponseEntity getAllCompanyVacancies(@AuthenticationPrincipal User user) {
+        List<VacancyDto> vacancies = vacancyService.getVacanciesByCompanyEmail(user.getUsername())
                 .stream()
                 .map(e -> mapper.map(e, VacancyDto.class))
                 .collect(Collectors.toList());

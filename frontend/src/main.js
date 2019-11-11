@@ -5,7 +5,9 @@ import store from './store'
 import Loading from './components/lib/Loading'
 import Center from './components/lib/CenterContainer'
 import Vuetify from 'vuetify'
+import 'vuetify/dist/vuetify.css'
 import 'vuetify/dist/vuetify.min.css'
+
 
 Vue.config.productionTip = false;
 

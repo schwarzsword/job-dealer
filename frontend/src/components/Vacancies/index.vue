@@ -1,18 +1,4 @@
 <template>
-    <v-app id="vacancies">
-        <v-card>
-            <v-card-title>
-                Vacancy
-                <v-spacer></v-spacer>
-                <v-text-field
-                        v-model="search"
-                        append-icon="search"
-                        label="Search"
-                        single-line
-                        hide-details
-                ></v-text-field>
-            </v-card-title>
-
             <v-data-table
                     multi-sort
                     :sort-by="['name', 'money', 'ownerName']"
@@ -22,9 +8,20 @@
                     :items-per-page="5"
                     class="elevation-1"
                     :search="search"
-            ></v-data-table>
-        </v-card>
-    </v-app>
+            >
+                <template v-slot:top>
+                    <v-text-field
+                            v-model="search"
+                            append-icon="search"
+                            label="Search"
+                            single-line
+                            hide-details
+                    ></v-text-field>
+                </template>
+
+
+
+            </v-data-table>
 </template>
 
 <script>
@@ -33,7 +30,7 @@
 
     export default {
         name: "vacancies",
-        data() {
+        data: function () {
             return {
                 search: '',
                 headers: [
@@ -45,13 +42,18 @@
                     },
                     {text: 'Salary', value: 'money', sortable: true},
                     {text: 'Company', value: 'ownerName', sortable: true},
+                    // {text: 'more', }
                 ],
                 page: 1,
                 vacancies: [],
                 message: ""
             }
         },
-        methods: {},
+        methods: {
+            more(item) {
+                console.log(item)
+            }
+        },
         created() {
             axios.get(urlPort("/api/vacancies/")).then(res => {
                 this.vacancies = res.data;
