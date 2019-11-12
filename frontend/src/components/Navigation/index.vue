@@ -7,7 +7,12 @@
                 </div>
             </div>
             <div class="find">
-                <input type="input" name="find" placeholder="Search...">
+                <input type="input" name="find" placeholder="Search..."/>
+                <div id="select" class="select">
+                    <span id="vacancies" class="item">vacancies</span>
+                    <span id="resumes" class="item">resumes</span>
+                </div>
+                <div id="selected" class="selected">vacancies</div>
             </div>
             <div class="menu">
                 <ul>
@@ -150,6 +155,44 @@
         opacity: 0.2;
     }
 
+    .header .container .find .select {
+        display: none;
+        padding: 0;
+        margin: -45px 0 0 280px;
+        width: 100px;
+        height: 60px;
+        position: absolute;
+        background: white;
+        box-shadow: 0 0 5px 1px rgba(0,0,0,.1);
+        border-radius: 10px;
+        color: #777;
+    }
+
+    .header .container .find .select span.item {
+        display: block;
+        padding: 0 10px;
+        margin: 0;
+        width: 100px;
+        height: 30px;
+        line-height: 30px;
+        cursor: pointer;
+    }
+    .header .container .find .select span.item:hover {
+        color: #000;
+    }
+    .header .container .find .selected {
+        display: block;
+        padding: 0 10px;
+        margin: -45px 0 0 280px;
+        width: 100px;
+        height: 30px;
+        line-height: 30px;
+        position: absolute;
+        border-radius: 10px;
+        color: #999;
+        cursor: pointer;
+    }
+
     /* user */
     .header .container .user {
         display: block;
@@ -192,5 +235,30 @@
                 authLoading: state => state.auth.status === 'loading',
             })
         },
+    }
+
+    window.onload = function() {
+        let selected = document.querySelector('#selected');
+        let select = document.querySelector('#select');
+        let vacancies = document.querySelector('#vacancies');
+        let resumes = document.querySelector('#resumes');
+
+        selected.onmouseover = function(e) {
+            document.getElementById('select').style.display = 'block';
+            document.getElementById('selected').style.display = 'none';
+        };
+
+        select.onmouseout = function(e) {
+            document.getElementById('select').style.display = 'none';
+            document.getElementById('selected').style.display = 'block';
+        };
+
+        vacancies.onclick = function (e) {
+            document.getElementById('selected').innerText = 'vacancies';
+        };
+
+        resumes.onclick = function (e) {
+            document.getElementById('selected').innerText = 'resumes';
+        };
     }
 </script>
