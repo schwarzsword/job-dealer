@@ -4,7 +4,7 @@ import edu.netcracker.jobdealer.entity.Company;
 import edu.netcracker.jobdealer.entity.Skills;
 import edu.netcracker.jobdealer.entity.Vacancy;
 import edu.netcracker.jobdealer.exceptions.CompanyNotFoundException;
-import edu.netcracker.jobdealer.exceptions.NoRightsException;
+import edu.netcracker.jobdealer.exceptions.NoPermissionException;
 import edu.netcracker.jobdealer.exceptions.VacancyNotFoundException;
 import edu.netcracker.jobdealer.repository.SkillsRepository;
 import edu.netcracker.jobdealer.repository.VacancyRepository;
@@ -55,13 +55,13 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
-    public void remove(UUID vacancyId, Company company) throws VacancyNotFoundException, NoRightsException {
+    public void remove(UUID vacancyId, Company company) throws VacancyNotFoundException, NoPermissionException {
         Optional<Vacancy> byId = vacancyRepository.findById(vacancyId);
         if (byId.isPresent()) {
             Vacancy vacancy = byId.get();
             if (vacancy.getOwner().equals(company)) {
                 vacancyRepository.delete(vacancy);
-            }else throw new NoRightsException("You can't delete this vacancy");
+            } else throw new NoPermissionException("You can't delete this vacancy");
         } else throw new VacancyNotFoundException("Vacancy not found");
     }
 

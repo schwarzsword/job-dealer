@@ -1,6 +1,5 @@
 package edu.netcracker.jobdealer.entity;
 
-import edu.netcracker.jobdealer.config.Pair;
 import lombok.Data;
 import org.dozer.Mapping;
 
@@ -14,6 +13,8 @@ import java.util.stream.Collectors;
 @Entity
 @Table
 public class Resume {
+    @OneToMany(mappedBy = "owner")
+    List<SkillToOwner> skills;
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue
@@ -42,13 +43,9 @@ public class Resume {
     @Basic
     @Column(name = "about")
     private String about;
-
     @ManyToOne
     @JoinColumn(name = "ownedResumes", referencedColumnName = "id")
     private Applicant owner;
-
-    @OneToMany(mappedBy = "owner")
-    List<SkillToOwner> skills;
 
     protected Resume() {
     }

@@ -6,7 +6,7 @@ import edu.netcracker.jobdealer.entity.Company;
 import edu.netcracker.jobdealer.entity.Vacancy;
 import edu.netcracker.jobdealer.exceptions.AccountNotFoundException;
 import edu.netcracker.jobdealer.exceptions.CompanyNotFoundException;
-import edu.netcracker.jobdealer.exceptions.NoRightsException;
+import edu.netcracker.jobdealer.exceptions.NoPermissionException;
 import edu.netcracker.jobdealer.service.AccountService;
 import edu.netcracker.jobdealer.service.CompanyService;
 import edu.netcracker.jobdealer.service.VacancyService;
@@ -24,7 +24,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("api/vacancies/")
+@RequestMapping("/api/vacancies/")
 public class VacancyController {
 
     private final VacancyService vacancyService;
@@ -33,7 +33,8 @@ public class VacancyController {
     private final AccountService accountService;
 
     @Autowired
-    public VacancyController(VacancyService vacancyService, Mapper mapper, CompanyService companyService, AccountService accountService) {
+    public VacancyController(VacancyService vacancyService, Mapper mapper,
+                             CompanyService companyService, AccountService accountService) {
         this.vacancyService = vacancyService;
         this.mapper = mapper;
         this.companyService = companyService;
@@ -41,7 +42,7 @@ public class VacancyController {
     }
 
     @Secured("ROLE_COMPANY")
-    @PostMapping(value = "/{email}")
+    @PostMapping(value = "/my")
     public ResponseEntity createVacancy(@RequestParam String name, @RequestParam String description,
                                         @RequestParam Integer money, @RequestParam List<String> requestedSkills,
                                         @AuthenticationPrincipal User user) {
@@ -58,17 +59,16 @@ public class VacancyController {
     }
 
     @Secured("ROLE_COMPANY")
-    @DeleteMapping(value = "/{email}/{vacancyId}")
+    @DeleteMapping(value = "/my/{vacancyId}")
     public ResponseEntity deleteVacancy(@PathVariable("vacancyId") UUID vacancyId,
                                         @AuthenticationPrincipal User user) {
-
         try {
             Account byEmail = accountService.getByEmail(user.getUsername());
             Company byAccount = companyService.getByAccount(byEmail);
             vacancyService.remove(vacancyId, byAccount);
         } catch (CompanyNotFoundException | AccountNotFoundException ex) {
             return ResponseEntity.status(404).body(ex.getMessage());
-        } catch (NoRightsException ex) {
+        } catch (NoPermissionException ex) {
             return ResponseEntity.status(401).body(ex.getMessage());
         }
         return new ResponseEntity(HttpStatus.OK);
@@ -100,7 +100,7 @@ public class VacancyController {
     }
 
     @Secured("ROLE_COMPANY")
-    @GetMapping("/{email}")
+    @GetMapping("/my")
     public ResponseEntity getAllCompanyVacancies(@AuthenticationPrincipal User user) {
         List<VacancyDto> vacancies = vacancyService.getVacanciesByCompanyEmail(user.getUsername())
                 .stream()

@@ -1,7 +1,7 @@
 package edu.netcracker.jobdealer.exceptions;
 
-public class DoubleVotingException extends RuntimeException {
-    public DoubleVotingException(String s) {
-        super(s);
+public class DoubleVotingException extends ApiException {
+    public DoubleVotingException() {
+        super("You can't vote twice");
     }
 }

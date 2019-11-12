@@ -1,79 +1,107 @@
 package edu.netcracker.jobdealer.controller;
 
+import edu.netcracker.jobdealer.dto.ReviewDto;
 import edu.netcracker.jobdealer.entity.Review;
 import edu.netcracker.jobdealer.exceptions.DoubleVotingException;
-import edu.netcracker.jobdealer.exceptions.NoRightsException;
+import edu.netcracker.jobdealer.exceptions.NoPermissionException;
+import edu.netcracker.jobdealer.exceptions.NotFoundException;
 import edu.netcracker.jobdealer.exceptions.ReviewNotFountException;
 import edu.netcracker.jobdealer.service.ReviewService;
-import org.dozer.DozerBeanMapper;
+import org.dozer.Mapper;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 public class ReviewController {
 
-    private final DozerBeanMapper mapper;
+    private final Mapper mapper;
 
     private final ReviewService reviewService;
 
-    public ReviewController(ReviewService reviewService, DozerBeanMapper mapper) {
+    public ReviewController(ReviewService reviewService, Mapper mapper) {
         this.reviewService = reviewService;
         this.mapper = mapper;
     }
 
-    @Secured({"ROLE_USER", "ROLE_COMPANY", "ROLE_ADMIN"})
-    @GetMapping(value = "{email}/reviews")
-    public ResponseEntity getUserReviews(@PathVariable("email") String email) {
-        List<Review> reviews = reviewService.getUserReviews(email);
-        //TODO make mappings
-//        List<MessageDTO> dtos = userMessages.stream().map(e -> mapper.map(e, MessageDTO.class)).collect(Collectors.toList());
-        return ResponseEntity.ok(reviews);
+    @GetMapping(value = "/accounts/{id}/reviews")
+    public ResponseEntity<?> getReviews(@PathVariable("id") UUID id) {
+        List<Review> reviews = reviewService.getUserReviews(id);
+        List<ReviewDto> dtos = reviews.stream()
+                .map(e -> mapper.map(e, ReviewDto.class))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
     }
 
-    @Secured({"ROLE_USER", "ROLE_COMPANY", "ROLE_ADMIN"})
-    @GetMapping(value = "{email}/reviews/{reviewId}")
-    public ResponseEntity getReviews(@PathVariable("reviewId") UUID reviewId) {
-        Review review = reviewService.getReviewById(reviewId);
-        return ResponseEntity.ok(review);
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping(value = "/accounts/{id}/reviews")
+    public ResponseEntity<?> sendReview(@PathVariable("id") UUID receiver,
+                                        @RequestParam String text,
+                                        @AuthenticationPrincipal User user) {
+        try {
+            reviewService.sendReview(text, user.getUsername(), receiver);
+        } catch (NotFoundException ex) {
+            return ResponseEntity.status(404).body(ex.getMessage());
+        }
+        return ResponseEntity.noContent().build();
     }
 
-    @Secured({"ROLE_USER", "ROLE_COMPANY", "ROLE_ADMIN"})
-    @PostMapping(value = "{email}/reviews")
-    public ResponseEntity sendReviews(@RequestParam String who, @RequestParam String text, @AuthenticationPrincipal User user) {
-        reviewService.sendReview(text, user.getUsername(), who);
-        return ResponseEntity.ok().build();
-    }
-
-    @Secured({"ROLE_USER", "ROLE_COMPANY", "ROLE_ADMIN"})
-    @DeleteMapping(value = "{email}/reviews/{reviewId}")
-    public ResponseEntity deleteReview(@PathVariable("reviewId") UUID reviewId, @AuthenticationPrincipal User user) {
+    @PreAuthorize("isAuthenticated()")
+    @DeleteMapping(value = "/reviews/{reviewId}")
+    public ResponseEntity<?> deleteReview(@PathVariable("reviewId") UUID reviewId,
+                                          @AuthenticationPrincipal User user) {
         try {
             reviewService.deleteReview(reviewId, user.getUsername());
-        } catch (NoRightsException ex) {
-            return ResponseEntity.badRequest().body("You have no permission to delete this message");
+        } catch (NoPermissionException ex) {
+            return ResponseEntity.status(401).body(ex.getMessage());
         } catch (ReviewNotFountException e) {
-            return ResponseEntity.badRequest().body("No message found");
+            return ResponseEntity.status(404).body(e.getMessage());
         }
         return ResponseEntity.ok().build();
     }
 
-    @Secured({"ROLE_USER", "ROLE_COMPANY", "ROLE_ADMIN"})
-    @PutMapping(value = "{email}/reviews/{reviewId}")
-    public ResponseEntity increaseRating(@PathVariable("reviewId") UUID reviewId, @AuthenticationPrincipal User user, @RequestParam boolean raise) {
+    @PreAuthorize("isAuthenticated()")
+    @PatchMapping(value = "/reviews/{reviewId}")
+    public ResponseEntity<?> increaseRating(@PathVariable("reviewId") UUID reviewId,
+                                            @AuthenticationPrincipal User user) {
         try {
-            reviewService.changeRating(reviewId, raise, user.getUsername());
+            reviewService.increaseRating(reviewId, user.getUsername());
         } catch (DoubleVotingException ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
         } catch (ReviewNotFountException e) {
-            return ResponseEntity.badRequest().body("No review found");
+            return ResponseEntity.status(404).body(e.getMessage());
         }
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @PatchMapping(value = "/reviews/{reviewId}")
+    public ResponseEntity<?> decreaseRating(@PathVariable("reviewId") UUID reviewId,
+                                            @AuthenticationPrincipal User user) {
+        try {
+            reviewService.decreaseRating(reviewId, user.getUsername());
+        } catch (DoubleVotingException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        } catch (ReviewNotFountException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
+        return ResponseEntity.noContent().build();
+    }
+
+
+//    @PreAuthorize("isAuthenticated()")
+//    @GetMapping(value = "{email}/reviews/{reviewId}")
+//    public ResponseEntity<?> getReview(@PathVariable("reviewId") UUID reviewId) {
+//        Review review = reviewService.getReviewById(reviewId);
+//        ReviewDto dto = mapper.map(review, ReviewDto.class);
+//        return ResponseEntity.ok(dto);
+//    }
 
 }

@@ -2,6 +2,8 @@ package edu.netcracker.jobdealer.service.impl;
 
 import edu.netcracker.jobdealer.dto.AccountDto;
 import edu.netcracker.jobdealer.entity.Account;
+import edu.netcracker.jobdealer.exceptions.AccountByEmailNotFoundException;
+import edu.netcracker.jobdealer.exceptions.AccountByIdNotFoundException;
 import edu.netcracker.jobdealer.exceptions.AccountNotFoundException;
 import edu.netcracker.jobdealer.repository.AccountRepository;
 import edu.netcracker.jobdealer.service.AccountService;
@@ -28,21 +30,19 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<AccountDto> getAllAccounts() {
-        return accountRepository.findAll().stream()
-                .map(account -> mapper.map(account, AccountDto.class))
-                .collect(Collectors.toList());
+    public List<Account> getAllAccounts() {
+        return accountRepository.findAll();
     }
 
     @Override
-    public AccountDto getAccountById(UUID id) {
-        return mapper.map(accountRepository.getById(id), AccountDto.class);
-    }
-
-    @Override
-
-    public Account getByEmail(String email) throws AccountNotFoundException {
+    public Account getByEmail(String email) throws AccountByEmailNotFoundException {
         return accountRepository.findByEmail(email)
-                .orElseThrow(() -> new AccountNotFoundException("Account with mail " + email + " not found"));
+                .orElseThrow(() -> new AccountByEmailNotFoundException(email));
+    }
+
+    @Override
+    public Account getById(UUID id) throws AccountByIdNotFoundException {
+        return accountRepository.findById(id)
+                .orElseThrow(() -> new AccountByIdNotFoundException(id));
     }
 }

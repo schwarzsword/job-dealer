@@ -1,7 +1,7 @@
 package edu.netcracker.jobdealer.exceptions;
 
-public class ReviewNotFountException extends RuntimeException {
-    public ReviewNotFountException(String msg) {
-        super(msg);
+public class ReviewNotFountException extends NotFoundException {
+    public ReviewNotFountException() {
+        super("Review not found");
     }
 }

@@ -4,8 +4,7 @@ import edu.netcracker.jobdealer.service.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,8 +18,10 @@ public class SignUpController {
         this.registrationService = registrationService;
     }
 
-    @RequestMapping(value = "/signUp", method = RequestMethod.POST)
-    public ResponseEntity signUp(@RequestParam String email, @RequestParam String password, @RequestParam boolean isCompany) {
+    @PostMapping(value = "/signUp")
+    public ResponseEntity signUp(@RequestParam String email,
+                                 @RequestParam String password,
+                                 @RequestParam boolean isCompany) {
         String role;
         if (isCompany) role = "ROLE_COMPANY";
         else role = "ROLE_USER";

@@ -1,7 +1,7 @@
 package edu.netcracker.jobdealer.exceptions;
 
-public class TaskNotFoundException extends RuntimeException {
-    public TaskNotFoundException(String msg) {
-        super(msg);
+public class TaskNotFoundException extends NotFoundException {
+    public TaskNotFoundException() {
+        super("Task not found");
     }
 }
