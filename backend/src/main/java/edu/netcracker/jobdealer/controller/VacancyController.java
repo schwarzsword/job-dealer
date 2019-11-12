@@ -4,7 +4,6 @@ import edu.netcracker.jobdealer.dto.VacancyDto;
 import edu.netcracker.jobdealer.entity.Account;
 import edu.netcracker.jobdealer.entity.Company;
 import edu.netcracker.jobdealer.entity.Vacancy;
-import edu.netcracker.jobdealer.exceptions.AccountNotFoundException;
 import edu.netcracker.jobdealer.exceptions.CompanyNotFoundException;
 import edu.netcracker.jobdealer.exceptions.NoPermissionException;
 import edu.netcracker.jobdealer.service.AccountService;
@@ -24,7 +23,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/vacancies/")
+@RequestMapping("/vacancies")
 public class VacancyController {
 
     private final VacancyService vacancyService;
@@ -52,8 +51,6 @@ public class VacancyController {
             vacancyService.addVacancy(name, description, money, requestedSkills, byAccount);
         } catch (CompanyNotFoundException ex) {
             return ResponseEntity.status(401).body("You have no permission to create vacancies");
-        } catch (AccountNotFoundException ex) {
-            return ResponseEntity.status(404).body(ex.getMessage());
         }
         return new ResponseEntity(HttpStatus.OK);
     }
@@ -66,10 +63,8 @@ public class VacancyController {
             Account byEmail = accountService.getByEmail(user.getUsername());
             Company byAccount = companyService.getByAccount(byEmail);
             vacancyService.remove(vacancyId, byAccount);
-        } catch (CompanyNotFoundException | AccountNotFoundException ex) {
-            return ResponseEntity.status(404).body(ex.getMessage());
-        } catch (NoPermissionException ex) {
-            return ResponseEntity.status(401).body(ex.getMessage());
+        } catch (CompanyNotFoundException | NoPermissionException ex) {
+            return ResponseEntity.status(401).body("You have no permission to create vacancies");
         }
         return new ResponseEntity(HttpStatus.OK);
     }

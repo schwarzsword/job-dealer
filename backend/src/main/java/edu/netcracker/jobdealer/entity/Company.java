@@ -12,7 +12,6 @@ import java.util.UUID;
 @Table
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(of = "id")
 public class Company {
 
     @Id
