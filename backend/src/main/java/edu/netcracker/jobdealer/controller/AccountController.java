@@ -50,19 +50,6 @@ public class AccountController {
         }
     }
 
-    @Secured("ROLE_ADMIN")
-    @PostMapping(value = "/admin/accounts")
-    public ResponseEntity signUpAccountWithRole(@RequestParam String username, @RequestParam String email,
-                                                @RequestParam String password, @RequestParam String role) {
-        try {
-            AccountDto account = mapper.map(accountService.addAccount(username, email, password, role),
-                    AccountDto.class);
-            return new ResponseEntity<>(account, HttpStatus.OK);
-        } catch (UsernameNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @PutMapping(value = "/accounts")
     public ResponseEntity UpdateAccount(@RequestParam UUID id, @RequestParam String username,
