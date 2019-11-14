@@ -65,13 +65,4 @@ public class CompanyController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
-    @DeleteMapping(value = "/companies")
-    public ResponseEntity deleteCompany(@RequestParam String id) {
-        try {
-            return companyService.deleteCompany(UUID.fromString(id));
-        } catch (CompanyNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
 }
