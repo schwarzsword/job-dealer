@@ -69,13 +69,15 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account addAccount(String username, String email, String password, String role) {
-        if (!accountRepository.existsByEmail(email) && email != null && !email.equals("")) {
+        if (accountRepository.existsByEmail(email)) {
+            throw new EmailExistsException("Email is already exists");
+        } else if (email == null || email.equals("")) {
+            throw new BadParameterException("You passed an empty parameter");
+        } else {
             String pwd = BCrypt.hashpw(password, salt);
             Account account = new Account(username, email, pwd, role);
             accountRepository.save(account);
             return account;
-        } else {
-            throw new UsernameNotFoundException("You passed an empty parameter or the account already exists");
         }
     }
 

@@ -2,6 +2,7 @@ package edu.netcracker.jobdealer.service.impl;
 
 import edu.netcracker.jobdealer.entity.Applicant;
 import edu.netcracker.jobdealer.exceptions.ApplicantNotFoundException;
+import edu.netcracker.jobdealer.exceptions.NotImplementedMethodException;
 import edu.netcracker.jobdealer.repository.ApplicantRepository;
 import edu.netcracker.jobdealer.service.ApplicantService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,16 +43,16 @@ public class ApplicantServiceImpl implements ApplicantService {
 
     @Override
     public Applicant addApplicant(String firstName, String lastName, String middleName, UUID accountId) {
-        return null;
+        throw new NotImplementedMethodException("Method is not implemented");
     }
 
     @Override
     public Applicant updateApplicant(String firstName, String lastName, String middleName, UUID accountId) {
-        return null;
+        throw new NotImplementedMethodException("Method is not implemented");
     }
 
     @Override
     public ResponseEntity deleteApplicant(UUID id) throws ApplicantNotFoundException {
-        return null;
+        throw new NotImplementedMethodException("Method is not implemented");
     }
 }
