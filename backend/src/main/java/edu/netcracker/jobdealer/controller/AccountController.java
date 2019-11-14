@@ -11,9 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.security.auth.login.AccountNotFoundException;
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 public class AccountController {
@@ -25,13 +23,6 @@ public class AccountController {
     public AccountController(AccountService accountService, Mapper mapper) {
         this.accountService = accountService;
         this.mapper = mapper;
-    }
-
-    @GetMapping(name = "/accounts")
-    public List<AccountDto> getAllAccounts() {
-        return accountService.getAllAccounts().stream()
-                .map(account -> mapper.map(account, AccountDto.class))
-                .collect(Collectors.toList());
     }
 
     @GetMapping(value = "/accounts/{id}")
