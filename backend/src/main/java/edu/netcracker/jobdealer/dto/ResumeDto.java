@@ -16,7 +16,7 @@ public class ResumeDto {
     private String firstName;
     private String lastName;
     private String middleName;
-    private Integer salary;
+    private int salary;
     private String avatarUrl;
     private String about;
     private UUID applicantId;

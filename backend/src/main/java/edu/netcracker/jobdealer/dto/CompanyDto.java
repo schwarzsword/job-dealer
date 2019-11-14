@@ -13,7 +13,7 @@ public class CompanyDto {
 
     private UUID id;
     private String name;
-    private Boolean isVerified;
+    private boolean isVerified;
     private String description;
     private String avatarUrl;
     private UUID accountId;
