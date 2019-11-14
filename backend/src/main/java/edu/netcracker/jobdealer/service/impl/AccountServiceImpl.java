@@ -1,6 +1,8 @@
 package edu.netcracker.jobdealer.service.impl;
 
 import edu.netcracker.jobdealer.entity.Account;
+import edu.netcracker.jobdealer.exceptions.AccountIdAlreadyExistsException;
+import edu.netcracker.jobdealer.exceptions.BadParameterException;
 import edu.netcracker.jobdealer.exceptions.EmailAlreadyExistsException;
 import edu.netcracker.jobdealer.exceptions.UsernameAlreadyExistsException;
 import edu.netcracker.jobdealer.repository.AccountRepository;
@@ -51,14 +53,16 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account addAccount(String username, String email, String password, boolean isCompany) {
-        if (!accountRepository.existsByEmail(email) && email != null && !email.equals("")) {
+        if (accountRepository.existsByEmail(email)) {
+            throw new EmailAlreadyExistsException("Email is already exists");
+        } else if (email == null || email.equals("")) {
+            throw new BadParameterException("You passed an empty parameter");
+        } else {
             String role = isCompany ? "ROLE_COMPANY" : "ROLE_USER";
             String pwd = BCrypt.hashpw(password, salt);
             Account account = new Account(username, email, pwd, role);
             accountRepository.save(account);
             return account;
-        } else {
-            throw new UsernameNotFoundException("You passed an empty parameter or the account already exists");
         }
     }
 
