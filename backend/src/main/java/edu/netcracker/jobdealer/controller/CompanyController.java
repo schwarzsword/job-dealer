@@ -1,7 +1,7 @@
 package edu.netcracker.jobdealer.controller;
 
 import edu.netcracker.jobdealer.dto.CompanyDto;
-import edu.netcracker.jobdealer.exceptions.AccountIdAlreadyExistsException;
+import edu.netcracker.jobdealer.exceptions.AccountIdExistsException;
 import edu.netcracker.jobdealer.exceptions.CompanyNotFoundException;
 import edu.netcracker.jobdealer.service.CompanyService;
 import org.dozer.Mapper;
@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.security.auth.login.AccountNotFoundException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -46,7 +47,7 @@ public class CompanyController {
             CompanyDto company = mapper.map(
                     companyService.addCompany(name, isVerified, description, avatarUrl, accountId), CompanyDto.class);
             return new ResponseEntity<>(company, HttpStatus.OK);
-        } catch (AccountIdAlreadyExistsException e) {
+        } catch (AccountNotFoundException | AccountIdExistsException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -60,7 +61,7 @@ public class CompanyController {
             CompanyDto company = mapper.map(
                     companyService.updateCompany(id, name, isVerified, description, avatarUrl, accountId), CompanyDto.class);
             return new ResponseEntity<>(company, HttpStatus.OK);
-        } catch (AccountIdAlreadyExistsException e) {
+        } catch (AccountIdExistsException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }

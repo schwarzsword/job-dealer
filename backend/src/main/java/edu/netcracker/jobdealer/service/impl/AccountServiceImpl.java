@@ -1,9 +1,8 @@
 package edu.netcracker.jobdealer.service.impl;
 
 import edu.netcracker.jobdealer.entity.Account;
-import edu.netcracker.jobdealer.exceptions.AccountIdAlreadyExistsException;
 import edu.netcracker.jobdealer.exceptions.BadParameterException;
-import edu.netcracker.jobdealer.exceptions.EmailAlreadyExistsException;
+import edu.netcracker.jobdealer.exceptions.EmailExistsException;
 import edu.netcracker.jobdealer.exceptions.UsernameAlreadyExistsException;
 import edu.netcracker.jobdealer.repository.AccountRepository;
 import edu.netcracker.jobdealer.service.AccountService;
@@ -54,7 +53,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account addAccount(String username, String email, String password, boolean isCompany) {
         if (accountRepository.existsByEmail(email)) {
-            throw new EmailAlreadyExistsException("Email is already exists");
+            throw new EmailExistsException("Email is already exists");
         } else if (email == null || email.equals("")) {
             throw new BadParameterException("You passed an empty parameter");
         } else {
@@ -98,7 +97,7 @@ public class AccountServiceImpl implements AccountService {
                 if (!accountRepository.existsByEmail(email)) {
                     account.setEmail(email);
                 } else {
-                    throw new EmailAlreadyExistsException("You passed an empty parameter " +
+                    throw new EmailExistsException("You passed an empty parameter " +
                             "or the username already exists");
                 }
             }
@@ -111,11 +110,14 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public ResponseEntity deleteAccount(UUID id) throws AccountNotFoundException {
-        if (accountRepository.findById(id).isPresent() && id != null) {
+        if (id == null) {
+            throw new BadParameterException("You passed an empty parameter");
+        }
+        if (accountRepository.findById(id).isPresent()) {
             accountRepository.deleteById(id);
             return ResponseEntity.ok(true);
         } else {
-            throw new AccountNotFoundException("You passed an empty parameter or the account was not found");
+            throw new AccountNotFoundException("The account was not found");
         }
     }
 }

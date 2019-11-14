@@ -2,7 +2,7 @@ package edu.netcracker.jobdealer.controller;
 
 import edu.netcracker.jobdealer.dto.AccountDto;
 import edu.netcracker.jobdealer.exceptions.BadParameterException;
-import edu.netcracker.jobdealer.exceptions.EmailAlreadyExistsException;
+import edu.netcracker.jobdealer.exceptions.EmailExistsException;
 import edu.netcracker.jobdealer.service.AccountService;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,7 @@ public class AccountController {
             AccountDto account = mapper.map(accountService.addAccount(username, email, password, role),
                     AccountDto.class);
             return new ResponseEntity<>(account, HttpStatus.CREATED);
-        } catch (EmailAlreadyExistsException | BadParameterException e) {
+        } catch (EmailExistsException | BadParameterException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -64,8 +64,8 @@ public class AccountController {
     }
 
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    @DeleteMapping(value = "/accounts")
-    public ResponseEntity deleteAccountById(@RequestParam String id) {
+    @DeleteMapping(value = "/accounts/{id}")
+    public ResponseEntity deleteAccountById(@PathVariable String id) {
         try {
             return accountService.deleteAccount(UUID.fromString(id));
         } catch (AccountNotFoundException e) {
