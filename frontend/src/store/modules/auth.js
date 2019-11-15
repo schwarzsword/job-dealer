@@ -20,7 +20,7 @@ const actions = {
             let params = new URLSearchParams();
             params.append('username', user.username);
             params.append('password', user.password);
-            axios.post(urlPort("/login"), params, {withCredentials: true})
+            urlPort.post("/login", params, {withCredentials: true})
                 .then(resp => {
                     sessionStorage.setItem('user-token', "logged");
                     axios.defaults.headers.common['Authorization'] = "logged";

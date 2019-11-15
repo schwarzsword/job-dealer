@@ -37,13 +37,12 @@ public class AccountController {
         }
     }
 
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @PostMapping(value = "/accounts")
-    public ResponseEntity signUpAccount(@RequestParam String username, @RequestParam String email,
-                                        @RequestParam String password, @RequestParam boolean isCompany) {
+    public ResponseEntity signUpAccount(@RequestParam("email") String email,
+                                        @RequestParam("password") String password, @RequestParam("isCompany") boolean isCompany) {
         try {
             String role = isCompany ? "ROLE_COMPANY" : "ROLE_USER";
-            AccountDto account = mapper.map(accountService.addAccount(username, email, password, role),
+            AccountDto account = mapper.map(accountService.addAccount(email, password, role),
                     AccountDto.class);
             return new ResponseEntity<>(account, HttpStatus.CREATED);
         } catch (EmailExistsException | BadParameterException e) {

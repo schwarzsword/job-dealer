@@ -52,34 +52,6 @@ public class AccountServiceImpl implements AccountService {
                 .orElseThrow(() -> new AccountByIdNotFoundException(id));
     }
 
-    @Override
-    public Account signIn(String email, String password) {
-        Account account = getUserByEmail(email);
-        if (BCrypt.checkpw(password, account.getPassword())) {
-            return account;
-        } else {
-            throw new UsernameNotFoundException("Invalid username or password");
-        }
-    }
-
-    @Override
-    public Account signUp(String password, String mail, String role) throws UsernameNotFoundException {
-        if (!accountRepository.existsByEmail(mail)) {
-            String pwd = BCrypt.hashpw(password, salt);
-            Account user = new Account(null, null, mail, pwd, role);
-            accountRepository.save(user);
-
-            Optional<Account> addedAccount = accountRepository.findByEmail(mail);
-
-            if (addedAccount.isPresent()) {
-                return addedAccount.get();
-            } else {
-                throw new UsernameNotFoundException("User is not registered");
-            }
-        } else {
-            throw new UsernameNotFoundException("User is already exists");
-        }
-    }
 
     @Override
     public Account getUserByEmail(String email) throws UsernameNotFoundException {
@@ -122,14 +94,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account addAccount(String username, String email, String password, String role) {
+    public Account addAccount( String email, String password, String role) {
         if (accountRepository.existsByEmail(email)) {
             throw new EmailExistsException("Email is already exists");
-        } else if (email == null || email.equals("")) {
-            throw new BadParameterException("You passed an empty parameter");
         } else {
-            String pwd = BCrypt.hashpw(password, salt);
-            Account account = new Account(username, email, pwd, role);
+            Account account = new Account(email, BCrypt.hashpw(password, salt), role);
             accountRepository.save(account);
             return account;
         }

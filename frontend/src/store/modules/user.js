@@ -1,10 +1,10 @@
-import { USER_REQUEST, USER_ERROR, USER_SUCCESS } from '../actions/user'
+import {USER_REQUEST, USER_ERROR, USER_SUCCESS} from '../actions/user'
 import Vue from 'vue'
-import { AUTH_LOGOUT } from '../actions/auth'
+import {AUTH_LOGOUT} from '../actions/auth'
 import axios from 'axios'
 import {urlPort} from "../../tool";
 
-const state = { status: '', profile: {} };
+const state = {status: '', profile: {}};
 
 const getters = {
     getProfile: state => state.profile,
@@ -14,7 +14,7 @@ const getters = {
 const actions = {
     [USER_REQUEST]: ({commit, dispatch}) => {
         commit(USER_REQUEST);
-        axios.get(urlPort("/profile"),{withCredentials: true})
+        urlPort.get("/profile", {withCredentials: true})
             .then(resp => {
                 commit(USER_SUCCESS, resp)
             })

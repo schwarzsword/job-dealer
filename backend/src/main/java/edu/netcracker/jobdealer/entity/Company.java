@@ -32,27 +32,27 @@ public class Company {
     private String avatarUrl;
 
     @OneToOne
-    @JoinColumn(name = "accountId", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "account", referencedColumnName = "id", nullable = false)
     private Account account;
 
     @OneToMany
     private List<Vacancy> vacancies;
 
-    public Company(UUID id, String name, Boolean verified, String description, String avatarUrl, UUID accountId) {
+    public Company(UUID id, String name, Boolean verified, String description, String avatarUrl, Account account) {
         this.id = id;
         this.name = name;
         this.verified = verified;
         this.description = description;
         this.avatarUrl = avatarUrl;
-        this.account.setId(accountId);
+        this.account = account;
     }
 
-    public Company(String name, Boolean verified, String description, String avatarUrl, UUID accountId) {
+    public Company(String name, Boolean verified, String description, String avatarUrl, Account account) {
         this.name = name;
         this.verified = verified;
         this.description = description;
         this.avatarUrl = avatarUrl;
-        this.account.setId(accountId);
+        this.account = account;
     }
 
     @Mapping("accountId")

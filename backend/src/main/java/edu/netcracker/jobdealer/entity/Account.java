@@ -29,8 +29,8 @@ public class Account {
     @Column(name = "role", nullable = false)
     private String role;
 
-    public Account(String username, String email, String password, String role) {
-        this.username = username;
+    public Account(String email, String password, String role) {
+        this.username = email;
         this.email = email;
         this.password = password;
         this.role = role;
