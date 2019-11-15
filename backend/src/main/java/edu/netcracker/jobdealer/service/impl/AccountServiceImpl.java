@@ -1,18 +1,12 @@
 package edu.netcracker.jobdealer.service.impl;
 
 import edu.netcracker.jobdealer.entity.Account;
-import edu.netcracker.jobdealer.exceptions.AccountByEmailNotFoundException;
-import edu.netcracker.jobdealer.exceptions.AccountByIdNotFoundException;
-import edu.netcracker.jobdealer.exceptions.BadParameterException;
-import edu.netcracker.jobdealer.exceptions.EmailExistsException;
-import edu.netcracker.jobdealer.exceptions.UsernameAlreadyExistsException;
-
+import edu.netcracker.jobdealer.exceptions.*;
 import edu.netcracker.jobdealer.repository.AccountRepository;
 import edu.netcracker.jobdealer.repository.ApplicantRepository;
 import edu.netcracker.jobdealer.repository.CompanyRepository;
 import edu.netcracker.jobdealer.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;

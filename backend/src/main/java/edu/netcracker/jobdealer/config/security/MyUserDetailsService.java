@@ -1,6 +1,7 @@
 package edu.netcracker.jobdealer.config.security;
 
 import edu.netcracker.jobdealer.entity.Account;
+import edu.netcracker.jobdealer.service.AccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,12 +20,13 @@ import java.util.ArrayList;
 public class MyUserDetailsService implements UserDetailsService {
 
     @Resource
-    private RegistrationService registrationService;
+    //private RegistrationService registrationService;
+    private AccountService accountService;
 
     @Transactional
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
 
-        Account account = registrationService.getUserByEmail(login);
+        Account account = accountService.getUserByEmail(login);
 
         if (account == null) {
             log.info("User not found");

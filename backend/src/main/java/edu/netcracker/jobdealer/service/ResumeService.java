@@ -1,19 +1,13 @@
 package edu.netcracker.jobdealer.service;
 
-import edu.netcracker.jobdealer.dto.ResumeDto;
+import edu.netcracker.jobdealer.entity.Resume;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface ResumeService {
-    List<Resume> getAll();
 
     Resume add(Resume resume);
-
     Resume update(String resumeName, Resume resume, String email);
-
     void remove(String resumeName, String email);
-
     List<Resume> getAllResumeOfUser(String login);
-
 }

@@ -1,5 +1,6 @@
 package edu.netcracker.jobdealer.service.impl;
 
+import edu.netcracker.jobdealer.entity.Account;
 import edu.netcracker.jobdealer.entity.Company;
 import edu.netcracker.jobdealer.exceptions.AccountIdExistsException;
 import edu.netcracker.jobdealer.exceptions.CompanyNotFoundException;
@@ -19,8 +20,9 @@ import java.util.UUID;
 @Service
 @Transactional
 public class CompanyServiceImpl implements CompanyService {
-  
-  //TODO убрать null  и посмотреть исключения
+
+    // TODO: убрать null  и посмотреть исключения (+)
+    // TODO: потестить методы, хотя бы визуально
 
     private final CompanyRepository companyRepository;
     private final AccountRepository accountRepository;
@@ -48,7 +50,6 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-
     public Company addCompany(String name, Boolean isVerified, String description, String avatarUrl, UUID accountId)
             throws AccountNotFoundException {
         if (!companyRepository.existsByAccount_Id(accountId)) {
@@ -63,7 +64,6 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public Company updateCompany(UUID id, String name, Boolean isVerified, String description, String avatarUrl,
                                  UUID accountId) {
-
         if (companyRepository.existsByAccount_Id(accountId)) {
             return companyRepository.save(new Company(id, name, isVerified, description, avatarUrl, accountId));
         } else {
@@ -78,6 +78,16 @@ public class CompanyServiceImpl implements CompanyService {
             return ResponseEntity.ok(true);
         } else {
             throw new CompanyNotFoundException("You passed an empty parameter or the company was not found");
+        }
+    }
+
+    @Override
+    public Company getByAccount(Account accountByEmail) {
+        Optional<Company> company = companyRepository.findByAccount(accountByEmail);
+        if (company.isPresent()) {
+            return company.get();
+        } else {
+            throw new CompanyNotFoundException("Company is not found");
         }
     }
 }

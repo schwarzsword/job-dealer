@@ -32,9 +32,9 @@ public class Applicant {
     @OneToMany(mappedBy = "submiter")
     private List<Submission> ownedSubmissions;
 
-    @OneToOne
-    @JoinColumn(name = "account", referencedColumnName = "id", nullable = false)
-    private Account account;
+//    @OneToOne
+//    @JoinColumn(name = "account", referencedColumnName = "id", nullable = false)
+//    private Account account;
 
     public Applicant(Account account) {
         this.account = account;

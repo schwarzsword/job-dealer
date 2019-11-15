@@ -8,15 +8,14 @@ import edu.netcracker.jobdealer.exceptions.CompanyNotFoundException;
 import edu.netcracker.jobdealer.exceptions.NoPermissionException;
 import edu.netcracker.jobdealer.exceptions.VacancyNotFoundException;
 import edu.netcracker.jobdealer.repository.SkillsRepository;
-
 import edu.netcracker.jobdealer.repository.VacancyRepository;
 import edu.netcracker.jobdealer.service.VacancyService;
-import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 

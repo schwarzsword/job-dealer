@@ -4,9 +4,7 @@ import lombok.Data;
 import org.dozer.Mapping;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Data
 @Entity
@@ -69,8 +67,8 @@ public class Resume {
         this.applicant = applicant;
     }
 
-    @Mapping("skills")
-    public List<Pair<String, Integer>> getSkillsString() {
-        return skills.stream().map(e -> new Pair<String, Integer>(e.getSkills(), e.getLevel())).collect(Collectors.toList());
-    }
+//    @Mapping("skills")
+//    public List<Pair<String, Integer>> getSkillsString() {
+//        return skills.stream().map(e -> new Pair<String, Integer>(e.getSkills(), e.getLevel())).collect(Collectors.toList());
+//    }
 }
