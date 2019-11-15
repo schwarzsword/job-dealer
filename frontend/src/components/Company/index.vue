@@ -50,12 +50,15 @@
     width: 100%;
   }
   .companies .company {
-    margin: 0 0 10px 0;
+    margin: 10px;
     padding: 10px;
     display: table;
-    width: 100%;
-    height: auto;
-    border: 1px solid #fff;
+    width: 480px;
+    height: 100px;
+    border: 1px solid #eee;
+    background: #fff;
+    box-shadow: 0 0 1px 0 rgba(0, 0, 0, .2);
+    border-radius: 6px;
   }
   .companies .company .title h2 {
     font-size: 20px;

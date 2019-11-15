@@ -21,7 +21,7 @@ spring:
             non_contextual_creation: true
         ddl-auto: create
     generate-ddl: true
-    show-sql: true
+    show-sql: false
     open-in-view: false
 server:
   port: 8080
