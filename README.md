@@ -3,9 +3,9 @@
 # job-dealer
 
 ## Installation
-To create services and launch in containers, run `start.sh`.
+To create services and launch in docker containers, run `start.sh`.
 ```bash
-$ bash /start.sh
+$ bash ./start.sh
 ```
 
 ## Technologies
