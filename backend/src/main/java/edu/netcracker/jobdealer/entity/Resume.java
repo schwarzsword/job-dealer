@@ -1,5 +1,6 @@
 package edu.netcracker.jobdealer.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -11,6 +12,7 @@ import java.util.UUID;
 @Entity
 @Table
 public class Resume {
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToMany(mappedBy = "owner")
     List<SkillToOwner> skills;
     @Id

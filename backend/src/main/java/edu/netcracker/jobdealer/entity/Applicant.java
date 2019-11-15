@@ -1,6 +1,7 @@
 package edu.netcracker.jobdealer.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -15,6 +16,7 @@ public class Applicant {
     @GeneratedValue
     @Column(name = "id")
     private UUID id;
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToOne
     @JoinColumn(name = "account", referencedColumnName = "id", nullable = false)
     private Account account;
