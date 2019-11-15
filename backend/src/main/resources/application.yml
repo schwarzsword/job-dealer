@@ -23,7 +23,7 @@ spring:
     generate-ddl: true
 #    show-sql: true
 server:
-  port: 8080
+  port: 8081
 
 logging:
   level:
