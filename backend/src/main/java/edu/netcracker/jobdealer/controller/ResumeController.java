@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/user")
 public class ResumeController {
 
     private final ResumeService resumeService;
