@@ -13,7 +13,16 @@
 </template>
 
 <script>
+import ResumeShortDescription from './resumeShortDescription'
 export default {
-    name: 'ResumeForm'
+    name: 'ResumeForm',
+    data(){
+        return {
+            a: "aaa",
+        }
+    },
+    mounted: function() {
+        ResumeShortDescription.create();
+    }
 }
 </script>

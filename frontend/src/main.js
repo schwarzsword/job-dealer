@@ -6,6 +6,7 @@ import Loading from './components/lib/Loading'
 import Center from './components/lib/CenterContainer'
 import Resume from "./components/Resume/index"
 import ResumeShortDescription from "./components/Resume/resumeShortDescription"
+import vuetify from './plugins/vuetify';
 
 Vue.config.productionTip = false;
 
@@ -20,5 +21,6 @@ new Vue({
     store,
     template: '<App/>',
     components: {App},
+    vuetify,
     render: h => h(App)
 });
