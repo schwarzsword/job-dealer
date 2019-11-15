@@ -3,6 +3,7 @@ package edu.netcracker.jobdealer.service.impl;
 import edu.netcracker.jobdealer.entity.Account;
 import edu.netcracker.jobdealer.entity.Applicant;
 import edu.netcracker.jobdealer.entity.Resume;
+import edu.netcracker.jobdealer.exceptions.ResourceNotFoundException;
 import edu.netcracker.jobdealer.repository.ResumeRepository;
 import edu.netcracker.jobdealer.service.AccountService;
 import edu.netcracker.jobdealer.service.ApplicantService;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service("resumeService")
 @Transactional
@@ -41,8 +43,12 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
-    public Resume update(String resumeName, Resume resume) {
-        Resume resumeToUpdate = resumeRepository.findByResumeName(resumeName);
+    public Resume update(UUID resumeId, Resume resume) {
+        Resume resumeToUpdate = resumeRepository.findById(resumeId).orElseThrow(
+                () -> {
+                    throw new ResourceNotFoundException("Resume with id " + resumeId.toString() + " is not found");
+                }
+        );
 
         if (resume.getAbout() != null) {
             resumeToUpdate.setAbout(resume.getAbout());
@@ -70,14 +76,18 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
-    public void remove(String resumeName) {
-        Resume resumeToDelete = resumeRepository.findByResumeName(resumeName);
+    public void remove(UUID resumeId) {
+        Resume resumeToDelete = resumeRepository.findById(resumeId).orElseThrow(
+                () -> {
+                    throw new ResourceNotFoundException("Resume with id " + resumeId.toString() + " is not found");
+                }
+        );
         resumeRepository.delete(resumeToDelete);
     }
 
     @Override
-    public List<Resume> getAllResumeOfUser(String login) {
-        Account account = accountService.getByLogin(login);
+    public List<Resume> getAllResumeOfUser(UUID userId) {
+        Account account = accountService.getById(userId);
         Applicant applicant = applicantService.getByAccount(account);
         return resumeRepository.findAllByOwner(applicant);
     }

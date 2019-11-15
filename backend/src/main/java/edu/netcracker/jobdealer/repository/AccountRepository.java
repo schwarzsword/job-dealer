@@ -12,5 +12,7 @@ public interface AccountRepository extends JpaRepository<Account, UUID> {
 
     Optional<Account> findByUsername(String login);
 
+    Optional<Account> findById(UUID userId);
+
     boolean existsByEmail(String email);
 }

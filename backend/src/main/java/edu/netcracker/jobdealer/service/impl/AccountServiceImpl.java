@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Service("accountService")
 @Transactional
 public class AccountServiceImpl implements AccountService {
@@ -26,5 +28,10 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account getByLogin(String login) {
         return accountRepository.findByUsername(login).orElseThrow(() -> new ResourceNotFoundException("Account with login " + login + " not found"));
+    }
+
+    @Override
+    public Account getById(UUID userId) {
+        return accountRepository.getOne(userId);
     }
 }
