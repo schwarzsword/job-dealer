@@ -3,12 +3,13 @@ package edu.netcracker.jobdealer.entity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.UUID;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @Table
+@NoArgsConstructor
 public class Account {
 
     @Id
@@ -28,27 +29,6 @@ public class Account {
     @Column(name = "role", nullable = false)
     private String role;
 
-    @OneToMany(mappedBy = "messageSource")
-    private List<Message> messagesAsSource;
-
-    @OneToMany(mappedBy = "messageDest")
-    private List<Message> messagesAsDest;
-
-    @OneToMany(mappedBy = "reviewSource")
-    private List<Review> reviewsAsSource;
-
-    @OneToMany(mappedBy = "reviewDest")
-    private List<Review> reviewsAsDest;
-
-    public Account() {
-    }
-
-    // delete it
-    public Account(String password, String mail, String role) {
-        this.email = mail;
-        this.password = password;
-        this.role = role;
-        this.username = email;
     }
 
     public Account(String username, String email, String password, String role) {
@@ -67,3 +47,4 @@ public class Account {
 
 
 }
+

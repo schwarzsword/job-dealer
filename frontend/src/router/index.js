@@ -9,6 +9,7 @@ import Account from "../components/Account";
 import Applicant from "../components/Applicant";
 import Company from "../components/Company";
 import store from '../store'
+import Vacancies from "../components/Vacancies"
 
 Vue.use(Router);
 
@@ -80,5 +81,10 @@ export default new Router({
         //     component: Profile,
         //     beforeEnter: ifAuthenticated
         // },
+        {
+            path: '/vacancies',
+            name: 'vacancies',
+            component: Vacancies,
+        }
     ]
 })

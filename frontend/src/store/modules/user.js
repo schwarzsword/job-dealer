@@ -21,7 +21,7 @@ const actions = {
             // eslint-disable-next-line no-unused-vars
             .catch(resp => {
                 commit(USER_ERROR);
-                dispatch(AUTH_LOGOUT)
+                // dispatch(AUTH_LOGOUT)
             })
     },
 }

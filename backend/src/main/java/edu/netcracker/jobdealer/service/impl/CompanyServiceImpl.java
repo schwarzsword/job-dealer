@@ -19,6 +19,8 @@ import java.util.UUID;
 @Service
 @Transactional
 public class CompanyServiceImpl implements CompanyService {
+  
+  //TODO убрать null  и посмотреть исключения
 
     private final CompanyRepository companyRepository;
     private final AccountRepository accountRepository;
@@ -46,6 +48,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
+
     public Company addCompany(String name, Boolean isVerified, String description, String avatarUrl, UUID accountId)
             throws AccountNotFoundException {
         if (!companyRepository.existsByAccount_Id(accountId)) {

@@ -1,6 +1,6 @@
 package edu.netcracker.jobdealer.service.impl;
 
-import edu.netcracker.jobdealer.dto.ResumeDto;
+
 import edu.netcracker.jobdealer.repository.ResumeRepository;
 import edu.netcracker.jobdealer.service.ResumeService;
 import org.dozer.Mapper;
@@ -24,16 +24,6 @@ public class ResumeServiceImpl implements ResumeService {
         this.resumeRepository = resumeRepository;
         this.mapper = mapper;
     }
-
-    @Override
-    public List<ResumeDto> getAllResumes() {
-        return resumeRepository.findAll().stream()
-                .map(resume -> mapper.map(resume, ResumeDto.class))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public ResumeDto getResumeById(UUID id) {
-        return mapper.map(resumeRepository.getOne(id), ResumeDto.class);
-    }
+  //TODO написать методы
+  
 }

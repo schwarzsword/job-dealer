@@ -55,7 +55,7 @@
     }
     .wrapper .container {
         display: table;
-        margin: 60px auto 0 auto;
+        margin: 30px auto 0 auto;
         width: 1000px;
         height: auto;
         padding: 0;
@@ -63,20 +63,20 @@
     .wrapper .container .left-sidebar {
         display: block;
         float: left;
-        width: 200px;
+        width: 150px;
         min-height: 100px;
         /*background-color: #eee;*/
     }
     .wrapper .container .content {
         display: block;
         float: left;
-        width: 500px;
+        width: 700px;
         min-height: 100px;
     }
     .wrapper .container .right-sidebar {
         display: block;
         float: left;
-        width: 300px;
+        width: 150px;
         min-height: 100px;
         /*background-color: #eee;*/
     }
@@ -116,3 +116,4 @@
         .footer .container {width: 1000px;}
     }
 </style>
+

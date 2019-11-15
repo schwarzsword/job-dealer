@@ -6,7 +6,14 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ResumeService {
+    List<Resume> getAll();
 
-    List<ResumeDto> getAllResumes();
-    ResumeDto getResumeById(UUID id);
+    Resume add(Resume resume);
+
+    Resume update(String resumeName, Resume resume, String email);
+
+    void remove(String resumeName, String email);
+
+    List<Resume> getAllResumeOfUser(String login);
+
 }

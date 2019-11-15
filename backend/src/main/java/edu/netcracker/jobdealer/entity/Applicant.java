@@ -19,15 +19,6 @@ public class Applicant {
     @Column(name = "id")
     private UUID id;
 
-    @Column(name = "firstName")
-    private String firstName;
-
-    @Column(name = "lastName")
-    private String lastName;
-
-    @Column(name = "middleName")
-    private String middleName;
-
     @OneToOne
     @JoinColumn(name = "accountId", referencedColumnName = "id", nullable = false)
     private Account account;
@@ -36,10 +27,18 @@ public class Applicant {
     private List<Resume> ownedResumes;
 
     @ManyToMany(mappedBy = "respondents")
-    List<Vacancy> responsedVacancies;
+    private List<Vacancy> responsedVacancies;
 
-    @ManyToMany(mappedBy = "submiter")
-    List<Submission> ownedSubmissions;
+    @OneToMany(mappedBy = "submiter")
+    private List<Submission> ownedSubmissions;
+
+    @OneToOne
+    @JoinColumn(name = "account", referencedColumnName = "id", nullable = false)
+    private Account account;
+
+    public Applicant(Account account) {
+        this.account = account;
+    }
 
     @Mapping("accountId")
     public UUID getAccountId() {

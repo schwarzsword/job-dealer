@@ -20,13 +20,35 @@ public class ResumeController {
         this.resumeService = resumeService;
     }
 
-    @GetMapping(value = "/resumes")
-    public List<ResumeDto> getAllResumes() {
-        return resumeService.getAllResumes();
+  
+  //TODO пофиксить
+    @RequestMapping(value = "/{login}/resumes/", method = RequestMethod.GET)
+    public ResponseEntity<?> getAllResumes(@PathVariable("login") @NotBlank @Valid String login) {
+
+        List<Resume> resumes = resumeService.getAllResumeOfUser(login);
+        return new ResponseEntity<>(resumes, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/resumes/{id}")
-    public ResumeDto getResumeById(@PathVariable UUID id) {
-        return resumeService.getResumeById(id);
+    @RequestMapping(value = "/{email}/resume", method = RequestMethod.POST)
+    public ResponseEntity<?> createResume(@PathVariable("email") @NotBlank @Valid String email,
+                                          @RequestBody Resume resume) {
+        Resume createdResume = resumeService.add(resume);
+        return new ResponseEntity<>(createdResume, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{email}/{resumeName}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> getAllResumes(@PathVariable("email") @NotBlank @Valid String email,
+                                           @PathVariable("resumeName") @NotBlank @Valid String resumeName) {
+        resumeService.remove(resumeName, email);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @RequestMapping(value = "/{email}/{resumeName}", method = RequestMethod.PATCH)
+    public ResponseEntity<?> updateResume(@PathVariable("email") @NotBlank @Valid String email,
+                                          @PathVariable("resumeName") @NotBlank @Valid String resumeName,
+                                          @RequestBody Resume resume) {
+        resumeService.update(resumeName, resume, email);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
     }
 }

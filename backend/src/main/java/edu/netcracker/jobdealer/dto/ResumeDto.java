@@ -12,6 +12,7 @@ import java.util.UUID;
 public class ResumeDto {
 
     private UUID id;
+
     private String name;
     private String firstName;
     private String lastName;
@@ -19,5 +20,7 @@ public class ResumeDto {
     private int salary;
     private String avatarUrl;
     private String about;
+
     private UUID applicantId;
+
 }

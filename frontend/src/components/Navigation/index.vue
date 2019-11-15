@@ -1,4 +1,5 @@
 <template>
+
     <div class="header">
         <div class="container">
             <div class="logo">
@@ -21,8 +22,11 @@
                 </ul>
             </div>
             <div class="user">
-                <div v-if="isProfileLoaded">
+                <div v-if="isUser">
                     <router-link class="sign_in" to="/profile">My profile</router-link>
+                </div>
+                 <div v-if="isCompany">
+                    <router-link class="sign_in" to="/company">My profile</router-link>
                 </div>
                 <div v-if="isAuthenticated" @click="logout">
                     <router-link class="sign_in" to="/logout">Logout</router-link>
@@ -226,11 +230,11 @@
         name: 'navigation',
         methods: {
             logout: function () {
-                this.$store.dispatch(AUTH_LOGOUT).then(() => this.$router.push('/'))
+                this.$store.dispatch(AUTH_LOGOUT).then(() => this.$router.push('/login'))
             }
         },
         computed: {
-            ...mapGetters(['getProfile', 'isAuthenticated', 'isProfileLoaded']),
+            ...mapGetters(['getProfile', 'isAuthenticated', 'isUser', 'isCompany']),
             ...mapState({
                 authLoading: state => state.auth.status === 'loading',
             })

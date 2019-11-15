@@ -1,7 +1,6 @@
 package edu.netcracker.jobdealer.config.security;
 
 import edu.netcracker.jobdealer.entity.Account;
-import edu.netcracker.jobdealer.service.RegistrationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

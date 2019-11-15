@@ -6,6 +6,7 @@ import edu.netcracker.jobdealer.exceptions.EmailExistsException;
 import edu.netcracker.jobdealer.service.AccountService;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.security.auth.login.AccountNotFoundException;
 import java.util.UUID;
+
 
 @RestController
 public class AccountController {
@@ -26,6 +28,7 @@ public class AccountController {
         this.accountService = accountService;
         this.mapper = mapper;
     }
+
 
     @GetMapping(value = "/accounts/{id}")
     public ResponseEntity<?> getAccountById(@PathVariable("id") String id) {
@@ -71,5 +74,7 @@ public class AccountController {
         } catch (AccountNotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
+
     }
+
 }
