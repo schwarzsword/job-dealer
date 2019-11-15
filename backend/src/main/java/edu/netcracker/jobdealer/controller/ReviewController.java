@@ -54,34 +54,33 @@ public class ReviewController {
         return ResponseEntity.noContent().build();
     }
 
-    // TODO: Исправить повторное использования путей в методах
-//    @PreAuthorize("isAuthenticated()")
-//    @DeleteMapping(value = "/reviews/{reviewId}")
-//    public ResponseEntity<?> deleteReview(@PathVariable("reviewId") UUID reviewId,
-//                                          @AuthenticationPrincipal User user) {
-//        try {
-//            reviewService.deleteReview(reviewId, user.getUsername());
-//        } catch (NoPermissionException ex) {
-//            return ResponseEntity.status(401).body(ex.getMessage());
-//        } catch (ReviewNotFountException e) {
-//            return ResponseEntity.status(404).body(e.getMessage());
-//        }
-//        return ResponseEntity.ok().build();
-//    }
-//
-//    @PreAuthorize("isAuthenticated()")
-//    @PatchMapping(value = "/reviews/{reviewId}")
-//    public ResponseEntity<?> increaseRating(@PathVariable("reviewId") UUID reviewId,
-//                                            @AuthenticationPrincipal User user) {
-//        try {
-//            reviewService.increaseRating(reviewId, user.getUsername());
-//        } catch (DoubleVotingException ex) {
-//            return ResponseEntity.badRequest().body(ex.getMessage());
-//        } catch (ReviewNotFountException e) {
-//            return ResponseEntity.status(404).body(e.getMessage());
-//        }
-//        return ResponseEntity.noContent().build();
-//    }
+    @PreAuthorize("isAuthenticated()")
+    @DeleteMapping(value = "/reviews/{reviewId}/rating/increase")
+    public ResponseEntity<?> deleteReview(@PathVariable("reviewId") UUID reviewId,
+                                          @AuthenticationPrincipal User user) {
+        try {
+            reviewService.deleteReview(reviewId, user.getUsername());
+        } catch (NoPermissionException ex) {
+            return ResponseEntity.status(401).body(ex.getMessage());
+        } catch (ReviewNotFountException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PatchMapping(value = "/reviews/{reviewId}/rating/decrease")
+    public ResponseEntity<?> increaseRating(@PathVariable("reviewId") UUID reviewId,
+                                            @AuthenticationPrincipal User user) {
+        try {
+            reviewService.increaseRating(reviewId, user.getUsername());
+        } catch (DoubleVotingException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        } catch (ReviewNotFountException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
+        return ResponseEntity.noContent().build();
+    }
 
     @PreAuthorize("isAuthenticated()")
     @PatchMapping(value = "/reviews/{reviewId}")
