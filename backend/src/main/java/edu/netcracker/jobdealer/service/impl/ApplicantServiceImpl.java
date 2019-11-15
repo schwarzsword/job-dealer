@@ -1,17 +1,23 @@
 package edu.netcracker.jobdealer.service.impl;
 
-import edu.netcracker.jobdealer.entity.Account;
 import edu.netcracker.jobdealer.entity.Applicant;
-import edu.netcracker.jobdealer.exceptions.ResourceNotFoundException;
+import edu.netcracker.jobdealer.exceptions.ApplicantNotFoundException;
+import edu.netcracker.jobdealer.exceptions.NotImplementedMethodException;
 import edu.netcracker.jobdealer.repository.ApplicantRepository;
 import edu.netcracker.jobdealer.service.ApplicantService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service("applicantService")
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+@Service
 @Transactional
 public class ApplicantServiceImpl implements ApplicantService {
+
     private final ApplicantRepository applicantRepository;
 
     @Autowired
@@ -19,11 +25,34 @@ public class ApplicantServiceImpl implements ApplicantService {
         this.applicantRepository = applicantRepository;
     }
 
-    public Applicant getByAccount(Account account) {
-        return applicantRepository.findByAccount(account).orElseThrow(() ->
-                new ResourceNotFoundException("Applicant for email "
-                        + account.getEmail()
-                        + " not found")
-        );
+    @Override
+    public List<Applicant> getAllApplicants() {
+        return applicantRepository.findAll();
+    }
+
+    @Override
+    public Applicant getApplicantById(UUID id) {
+        Optional<Applicant> applicant = applicantRepository.findById(id);
+
+        if (applicant.isPresent()) {
+            return applicant.get();
+        } else {
+            throw new ApplicantNotFoundException("Applicant is not found.");
+        }
+    }
+
+    @Override
+    public Applicant addApplicant(String firstName, String lastName, String middleName, UUID accountId) {
+        throw new NotImplementedMethodException("Method is not implemented");
+    }
+
+    @Override
+    public Applicant updateApplicant(String firstName, String lastName, String middleName, UUID accountId) {
+        throw new NotImplementedMethodException("Method is not implemented");
+    }
+
+    @Override
+    public ResponseEntity deleteApplicant(UUID id) throws ApplicantNotFoundException {
+        throw new NotImplementedMethodException("Method is not implemented");
     }
 }

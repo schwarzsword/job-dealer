@@ -6,11 +6,12 @@ services:
     ports:
       - "6564:5432"
     environment:
-      - POSTGRES_DB=netcracker
+      - POSTGRES_DB=jobdealer
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
 
   backend:
-    build: backend
+    restart: always
+    build: ./backend/
     ports:
-      - 6565:8080
+      - "6565:8080"

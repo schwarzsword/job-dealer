@@ -13,7 +13,7 @@ public class VacancyDto {
     private List<Skills> requestedSkills;
     private String name;
     private String description;
-    private Integer money;
+    private int money;
     private Company owner;
 
     private VacancyDto() {
