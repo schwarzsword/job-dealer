@@ -1,18 +1,12 @@
 package edu.netcracker.jobdealer.service.impl;
 
 import edu.netcracker.jobdealer.entity.Account;
-import edu.netcracker.jobdealer.exceptions.AccountByEmailNotFoundException;
-import edu.netcracker.jobdealer.exceptions.AccountByIdNotFoundException;
-import edu.netcracker.jobdealer.exceptions.BadParameterException;
-import edu.netcracker.jobdealer.exceptions.EmailExistsException;
-import edu.netcracker.jobdealer.exceptions.UsernameAlreadyExistsException;
-
+import edu.netcracker.jobdealer.exceptions.*;
 import edu.netcracker.jobdealer.repository.AccountRepository;
 import edu.netcracker.jobdealer.repository.ApplicantRepository;
 import edu.netcracker.jobdealer.repository.CompanyRepository;
 import edu.netcracker.jobdealer.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
@@ -26,9 +20,8 @@ import java.util.UUID;
 @Service
 @Transactional
 public class AccountServiceImpl implements AccountService {
-  
-  //TODO посмотреть изменения
 
+    // TODO: посмотреть изменения
 
     private final ApplicantRepository applicantRepository;
     private final CompanyRepository companyRepository;
@@ -36,7 +29,6 @@ public class AccountServiceImpl implements AccountService {
     private String salt = BCrypt.gensalt();
 
     @Autowired
-
     public AccountServiceImpl(ApplicantRepository applicantRepository, CompanyRepository companyRepository, AccountRepository accountRepository) {
         this.applicantRepository = applicantRepository;
         this.companyRepository = companyRepository;
@@ -49,7 +41,6 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-
     public Account getByEmail(String email) throws AccountByEmailNotFoundException {
         return accountRepository.findByEmail(email)
                 .orElseThrow(() -> new AccountByEmailNotFoundException(email));
@@ -66,18 +57,28 @@ public class AccountServiceImpl implements AccountService {
         Account account = getUserByEmail(email);
         if (BCrypt.checkpw(password, account.getPassword())) {
             return account;
-        } else throw new UsernameNotFoundException("Invalid username or password");
+        } else {
+            throw new UsernameNotFoundException("Invalid username or password");
+        }
     }
 
     @Override
-    public Account signUp(String password, String mail, String role)
-            throws UsernameNotFoundException {
+    public Account signUp(String password, String mail, String role) throws UsernameNotFoundException {
         if (!accountRepository.existsByEmail(mail)) {
             String pwd = BCrypt.hashpw(password, salt);
-            Account user = new Account(pwd, mail, role);
+            Account user = new Account(null, null, mail, pwd, role);
             accountRepository.save(user);
-            return accountRepository.findByEmail(mail).get();
-        } else throw new UsernameNotFoundException("User is already exists");
+
+            Optional<Account> addedAccount = accountRepository.findByEmail(mail);
+
+            if (addedAccount.isPresent()) {
+                return addedAccount.get();
+            } else {
+                throw new UsernameNotFoundException("User is not registered");
+            }
+        } else {
+            throw new UsernameNotFoundException("User is already exists");
+        }
     }
 
     @Override
@@ -85,7 +86,9 @@ public class AccountServiceImpl implements AccountService {
         Optional<Account> optionalUsersEntity = accountRepository.findByEmail(email);
         if (optionalUsersEntity.isPresent()) {
             return optionalUsersEntity.get();
-        } else throw new UsernameNotFoundException("User not found");
+        } else {
+            throw new UsernameNotFoundException("User not found");
+        }
     }
 
     @Override
@@ -96,26 +99,27 @@ public class AccountServiceImpl implements AccountService {
             user.setPassword(pwd);
             accountRepository.save(user);
             return user;
-        } else throw new UsernameNotFoundException("User not found");
+        } else {
+            throw new UsernameNotFoundException("User not found");
+        }
+    }
 
     public Account getAccount(String id) {
-        Account account;
+        Optional<Account> account;
 
         try {
             UUID uuid = UUID.fromString(id);
-            account = accountRepository.getById(uuid);
+            account = accountRepository.findById(uuid);
         } catch (IllegalArgumentException exception) {
-            account = accountRepository.getByUsername(id);
+            account = accountRepository.findByUsername(id);
         }
 
-        if (accountRepository.existsById(account.getId())) {
-            return account;
+        if (account.isPresent() && accountRepository.existsById(account.get().getId())) {
+            return account.get();
         } else {
             throw new UsernameNotFoundException("Account was not found");
         }
     }
-
-
 
     @Override
     public Account addAccount(String username, String email, String password, String role) {
@@ -133,45 +137,39 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account updateAccount(UUID id, String username, String email, String password) {
-        if (accountRepository.existsById(id) && id != null) {
-            Account account = accountRepository.getById(id);
+        Optional<Account> account = accountRepository.findById(id);
 
-            if (!account.getUsername().equals(username) && username != null && !username.equals("")) {
+        if (account.isPresent()) {
+            if (!account.get().getUsername().equals(username)) {
                 if (!accountRepository.existsByUsername(username)) {
-                    account.setUsername(username);
+                    account.get().setUsername(username);
                 } else {
-                    throw new UsernameAlreadyExistsException("You passed an empty parameter " +
-                            "or the username already exists");
+                    throw new UsernameAlreadyExistsException("Username already exists");
                 }
             }
-            if (!account.getPassword().equals(password) && password != null && !password.equals("")) {
-                account.setPassword(BCrypt.hashpw(password, salt));
+            if (!account.get().getPassword().equals(password)) {
+                account.get().setPassword(BCrypt.hashpw(password, salt));
             }
-            if (!account.getEmail().equals(email) && email != null && !email.equals("")) {
+            if (!account.get().getEmail().equals(email)) {
                 if (!accountRepository.existsByEmail(email)) {
-                    account.setEmail(email);
+                    account.get().setEmail(email);
                 } else {
-                    throw new EmailExistsException("You passed an empty parameter " +
-                            "or the username already exists");
+                    throw new EmailExistsException("Username already exists");
                 }
             }
-            accountRepository.save(account);
-            return account;
+            accountRepository.save(account.get());
+            return account.get();
         } else {
-            throw new UsernameNotFoundException("You passed an empty parameter or the account was not found");
+            throw new UsernameNotFoundException("Account was not found");
         }
     }
 
     @Override
-    public ResponseEntity deleteAccount(UUID id) throws AccountNotFoundException {
-        if (id == null) {
-            throw new BadParameterException("You passed an empty parameter");
-        }
+    public void deleteAccount(UUID id) throws AccountNotFoundException {
         if (accountRepository.findById(id).isPresent()) {
             accountRepository.deleteById(id);
-            return ResponseEntity.ok(true);
         } else {
-            throw new AccountNotFoundException("The account was not found");
+            throw new AccountNotFoundException("Account was not found");
         }
     }
 }
