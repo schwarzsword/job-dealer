@@ -1,24 +1,26 @@
 package edu.netcracker.jobdealer.dto;
 
-
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.List;
 import java.util.UUID;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ResumeDto {
 
     private UUID id;
+
+    private String name;
     private String firstName;
-    private String middleName;
     private String lastName;
-    private Integer salary;
-    private String photoLink;
+    private String middleName;
+    private int salary;
+    private String avatarUrl;
     private String about;
-    private List<SkillLevelDto> skills;
 
+    private UUID applicantId;
 
-    private ResumeDto() {
-    }
 }

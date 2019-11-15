@@ -2,32 +2,32 @@ spring:
   profiles:
     active: dev
   datasource:
-    url: jdbc:postgresql://localhost:5432/netcracker
-    username: netcracker
-    password: netcracker
+    url: jdbc:postgresql://localhost:5432/jobdealer
+    username: root
+    password: root
     driver-class-name: org.postgresql.Driver
     initialization-mode: always
     hikari:
-      catalog: netcracker
+      catalog: jobdealer
       schema: public
   jpa:
     properties:
       hibernate:
         hbm2ddl:
-          auto: update
+          auto: create
         dialect: org.hibernate.dialect.PostgreSQL95Dialect
         jdbc:
           lob:
             non_contextual_creation: true
-        ddl-auto: update
+        ddl-auto: create
     generate-ddl: true
-#    show-sql: true
+    show-sql: true
 server:
   port: 8080
 
 logging:
   level:
-    org.springframework: ERROR
+    org.springframework: INFO
     edu.netcracker.jobdealer: INFO
   pattern:
     console: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"

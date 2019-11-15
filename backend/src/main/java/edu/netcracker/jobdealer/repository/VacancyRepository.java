@@ -1,15 +1,12 @@
 package edu.netcracker.jobdealer.repository;
 
-
-import edu.netcracker.jobdealer.entity.Company;
-import edu.netcracker.jobdealer.entity.Skills;
 import edu.netcracker.jobdealer.entity.Vacancy;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
+@Repository
 public interface VacancyRepository extends JpaRepository<Vacancy, UUID> {
     Optional<Vacancy> findById(UUID vacancyId);
 
@@ -37,3 +34,4 @@ public interface VacancyRepository extends JpaRepository<Vacancy, UUID> {
 
     void deleteByNameAndOwner_Account_Email(String name, String email);
 }
+

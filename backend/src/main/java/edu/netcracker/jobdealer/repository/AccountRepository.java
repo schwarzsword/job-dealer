@@ -9,15 +9,19 @@ import java.util.UUID;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, UUID> {
-
-    Account getById(UUID id);
-
+  
     Optional<Account> findByEmail(String email);
-
+  
+    boolean existsById(UUID id);
+  
     boolean existsByEmail(String email);
-
+  
+    boolean existsByUsername(String username);
+  
     void deleteByEmail(String email);
-
-    Account getByUsername(String username);
+  
+    void deleteByUsername(String username);
+  
+    Optional<Account> findByUsername(String username);
 }
 

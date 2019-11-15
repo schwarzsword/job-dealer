@@ -4,8 +4,10 @@ import lombok.Data;
 
 import java.util.List;
 import java.util.UUID;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class VacancyDto {
 
     private UUID id;
@@ -14,8 +16,5 @@ public class VacancyDto {
     private Integer money;
     private List<String> requestedSkills;
     private String ownerName;
-
-    private VacancyDto() {
-    }
 
 }

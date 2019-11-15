@@ -19,16 +19,11 @@ public class Applicant {
     @Column(name = "id")
     private UUID id;
 
-    @Column(name = "firstName")
-    private String firstName;
+    @OneToOne
+    @JoinColumn(name = "accountId", referencedColumnName = "id", nullable = false)
+    private Account account;
 
-    @Column(name = "lastName")
-    private String lastName;
-
-    @Column(name = "middleName")
-    private String middleName;
-
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "applicant")
     private List<Resume> ownedResumes;
 
     @ManyToMany(mappedBy = "respondents")

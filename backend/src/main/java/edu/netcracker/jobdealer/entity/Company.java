@@ -38,17 +38,24 @@ public class Company {
     @OneToMany
     private List<Vacancy> vacancies;
 
-    public Company(Account account) {
-        this.account = account;
-    }
-
-    public Company(String name, Boolean verified, String description, String avatarUrl) {
+    public Company(UUID id, String name, Boolean verified, String description, String avatarUrl, UUID accountId) {
+        this.id = id;
         this.name = name;
         this.verified = verified;
         this.description = description;
         this.avatarUrl = avatarUrl;
+        this.account.setId(accountId);
     }
 
+    public Company(String name, Boolean verified, String description, String avatarUrl, UUID accountId) {
+        this.name = name;
+        this.verified = verified;
+        this.description = description;
+        this.avatarUrl = avatarUrl;
+        this.account.setId(accountId);
+    }
+
+    @Mapping("accountId")
     public UUID getAccountId() {
         return this.account.getId();
     }

@@ -3,13 +3,15 @@ package edu.netcracker.jobdealer.repository;
 
 import edu.netcracker.jobdealer.entity.Account;
 import edu.netcracker.jobdealer.entity.Applicant;
+
 import edu.netcracker.jobdealer.entity.Resume;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
+@Repository
 public interface ResumeRepository extends JpaRepository<Resume, UUID> {
 
 
@@ -22,9 +24,6 @@ public interface ResumeRepository extends JpaRepository<Resume, UUID> {
     Resume findByResumeNameAndOwner_Account_Email(String resumeName, String email);
 
     void deleteByResumeNameAndOwner_Account_Email(String resumeName, String email);
-
-    @Override
-    Optional<Resume> findById(UUID uuid);
 
     List<Resume> findAllByOwner(Applicant applicant);
 
@@ -39,3 +38,4 @@ public interface ResumeRepository extends JpaRepository<Resume, UUID> {
     void deleteAllByOwner_Account_Email(String email);
 
 }
+

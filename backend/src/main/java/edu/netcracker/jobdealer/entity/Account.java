@@ -4,10 +4,12 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.UUID;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @Table
+@NoArgsConstructor
 public class Account {
 
     @Id
@@ -27,15 +29,22 @@ public class Account {
     @Column(name = "role", nullable = false)
     private String role;
 
-
-    protected Account() {
-
     }
 
-    public Account(String password, String mail, String role) {
-        this.email = mail;
+    public Account(String username, String email, String password, String role) {
+        this.username = username;
+        this.email = email;
         this.password = password;
         this.role = role;
-        this.username = email;
     }
+
+    public Account(UUID id, String username, String email, String password) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+
+
 }
+

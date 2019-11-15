@@ -5,6 +5,9 @@ import Rules from "../components/Rules/index"
 import About from "../components/About/index";
 import Login from "../components/Login/index";
 import SignUp from "../components/SignUp/index";
+import Account from "../components/Account";
+import Applicant from "../components/Applicant";
+import Company from "../components/Company";
 import store from '../store'
 import Vacancies from "../components/Vacancies"
 
@@ -44,6 +47,21 @@ export default new Router({
             path: '/about',
             name: 'about',
             component: About
+        },
+        {
+            path: '/account',
+            name: 'account',
+            component: Account
+        },
+        {
+            path: '/companies',
+            name: 'companies',
+            component: Company
+        },
+        {
+            path: '/applicants',
+            name: 'applicants',
+            component: Applicant
         },
         {
             path: '/login',
