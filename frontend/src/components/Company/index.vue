@@ -1,35 +1,37 @@
 <template>
   <div>
     <div class="companies" v-if="companies.length > 0">
-      <div class="company" v-for="company in companies" v-bind:key="company">
+      <div class="company" v-for="company in companies">
         <div class="title">
-          <h2><a href="/">{{company.name}}</a></h2>
+          <h2>
+            <router-link class="" :to="'/companies/' + company.id">{{ company.name }}</router-link>
+            <span class="verified" v-if="company.verified === true"></span>
+          </h2>
         </div>
-        <div class="description">{{company.description}}</div>
+        <div class="description">{{ company.description }}</div>
       </div>
     </div>
     <div style="width: 480px;margin: 0 10px;" class="companies" v-else>
-      <div class="alert alert-danger" role="alert">
-        No companies found
-      </div>
+      No companies found
     </div>
   </div>
 </template>
 
 <script>
   import axios from 'axios';
+  import {urlPort} from "../../tool";
 
   export default {
     name: 'Company',
+
     data() {
       return {
         companies: [],
       }
     },
     created() {
-      axios.get(`http://localhost:8080/companies`)
+      axios.get(urlPort("/companies"))
         .then(response => {
-          // JSON responses are automatically parsed.
           this.companies = response.data;
         })
         .catch(e => {
