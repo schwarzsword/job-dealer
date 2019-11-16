@@ -65,49 +65,126 @@
                         class="mb-12"
                         color="grey lighten-1"
                         height="350px"
+                        v-if="isCompany"
                 >
-                    <div v-if="isCompany">
+                    <v-text-field
+                            v-model="company.name"
+                            label="Company name"
+                            required
+                            autofocus
+                    ></v-text-field>
 
-                        <v-text-field
-                                v-model="company.name"
-                                label="Company name"
-                                required
-                                autofocus
-                        ></v-text-field>
+                    <v-textarea
+                            name="input-7-1"
+                            label="Company description"
+                            v-model="company.description"
+                            required
+                    ></v-textarea>
 
-                        <v-textarea
-                                name="input-7-1"
-                                label="Company description"
-                                v-model="company.description"
-                        ></v-textarea>
+                    <v-file-input
+                            v-model="company.file"
+                            label="Select image file..."
+                            accept="image/*"
+                            @change="onFileChange"
+                            required
+                    ></v-file-input>
 
-                        <v-file-input
-                                v-model="company.file"
-                                label="Select image file..."
-                                accept="image/*"
-                                @change="onFileChange"
-                        ></v-file-input>
-                    </div>
-                    <div v-else>
+                    <v-btn
+                            color="primary"
+                            @click="registerCompany"
+                    >
+                        Sign up
+                    </v-btn>
 
-                    </div>
+                    <v-btn
+                            color="primary"
+                            @click="e1 = 1"
+                    >
+                        Back
+                    </v-btn>
+
+                    <router-link class="sign_in" to="/login">Cancel</router-link>
+                </v-card>
+                <v-card v-else
+                        class="mb-12"
+                        color="grey lighten-1"
+                        height="650px">
+                    <v-text-field
+                            v-model="resume.resumeName"
+                            label="Vacancy you apply"
+                            required
+                            autofocus
+                    ></v-text-field>
+                    <v-text-field
+                            v-model="resume.firstName"
+                            label="Your name"
+                            required
+                            autofocus
+                    ></v-text-field>
+                    <v-text-field
+                            v-model="resume.lastName"
+                            label="Your last name"
+                            required
+                            autofocus
+                    ></v-text-field>
+                    <v-text-field
+                            v-model="resume.salary"
+                            label="Salary you wish"
+                            required
+                            :rules="salaryRules"
+                            autofocus
+                    ></v-text-field>
+                    <v-textarea
+                            name="input-7-1"
+                            label="Something about you"
+                            v-model="resume.about"
+                            required
+                    ></v-textarea>
+                    <v-file-input
+                            v-model="file"
+                            label="Select image file..."
+                            accept="image/*"
+                            @change="onFileChange"
+                            required
+                    ></v-file-input>
+                    <v-combobox
+                            v-model="resume.skills"
+                            :items="skills"
+                            chips
+                            clearable
+                            label="Your skills"
+                            multiple
+                            solo
+                    >
+                        <template v-slot:selection="{ attrs, item, select, selected }">
+                            <v-chip
+                                    v-bind="attrs"
+                                    :input-value="selected"
+                                    close
+                                    @click="select"
+                                    @click:close="remove(item)"
+                            >
+                                <strong>{{ item }}</strong>&nbsp;
+                            </v-chip>
+                        </template>
+                    </v-combobox>
+                    <v-btn
+                            color="primary"
+                            @click="registerUser"
+                    >
+                        Sign up
+                    </v-btn>
+
+                    <v-btn
+                            color="primary"
+                            @click="e1 = 1"
+                    >
+                        Back
+                    </v-btn>
+
+                    <router-link class="sign_in" to="/login">Cancel</router-link>
                 </v-card>
 
-                <v-btn
-                        color="primary"
-                        @click="registerCompany"
-                >
-                    Sign up
-                </v-btn>
-
-                <v-btn
-                        color="primary"
-                        @click="e1 = 1"
-                >
-                    Back
-                </v-btn>
-
-                <router-link class="sign_in" to="/login">Cancel</router-link>
             </v-stepper-content>
 
         </v-stepper-items>
@@ -123,9 +200,10 @@
         data() {
             return {
                 e1: 0,
+                file: null,
+                imageUrl: null,
                 show1: false,
                 show2: false,
-                imageUrl: null,
                 email: "",
                 password: "",
                 password_confirmation: "",
@@ -136,13 +214,23 @@
                 company: {
                     name: "",
                     description: "",
-                    file: null,
                 },
-                applicant: {},
-
+                applicantId: null,
+                resume: {
+                    resumeName: "",
+                    firstName: "",
+                    lastName: "",
+                    salary: "",
+                    about: "",
+                    skills: []
+                },
+                skills: ['test', "qwe"],
                 emailRules: [
                     v => !!v || 'E-mail is required',
                     v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+                ],
+                salaryRules: [
+                    v => /[0-9]/.test(v) || 'It should be a number',
                 ],
             }
         },
@@ -152,7 +240,11 @@
                 reader.onload = () => {
                     this.imageUrl = reader.result
                 };
-                reader.readAsDataURL(this.company.file)
+                reader.readAsDataURL(this.file)
+            },
+            remove(item) {
+                this.chips.splice(this.chips.indexOf(item), 1)
+                this.chips = [...this.chips]
             },
             verifyStep1: function () {
                 if (this.email) {
@@ -175,7 +267,7 @@
                         let params = new FormData();
                         params.append('name', this.company.name);
                         params.append('description', this.company.description);
-                        params.append('file', this.company.file);
+                        params.append('file', this.file ? this.file : null);
                         params.append('accountId', this.accountId);
                         urlPort.post('/companies', params, {headers: {ContentType: 'multipart/form-data'}})
                             .then(resp => {
@@ -198,12 +290,27 @@
                 urlPort.post('/accounts', params)
                     .then(resp => {
                         this.accountId = resp.data.id;
-                        urlPort
-                        let params = new FormData();
+                        let params = new URLSearchParams();
                         params.append('accountId', this.accountId);
-                        urlPort.post('/companies', params, {headers: {ContentType: 'multipart/form-data'}})
+                        urlPort.post('/applicants', params)
                             .then(resp => {
-                                this.$router.push('/login');
+                                this.applicantId = resp.data.id;
+                                let params = new FormData();
+                                params.append('applicantId', this.applicantId);
+                                params.append('resumeName', this.resume.resumeName);
+                                params.append('firstName', this.resume.firstName);
+                                params.append('lastName', this.resume.lastName);
+                                params.append('salary', this.resume.salary);
+                                params.append('about', this.resume.about);
+                                params.append('file', this.file ? this.file : null);
+                                params.append('skills', this.resume.skills);
+                                urlPort.post('/resumes', params, {headers: {ContentType: 'multipart/form-data'}})
+                                    .then(resp => {
+                                        this.$router.push('/login')
+                                    })
+                                    .catch(err => {
+                                        //TODO добавить обработку ошибок
+                                    })
                             })
                             .catch(err => {
                                 //TODO сделать обработку ошибок
@@ -214,6 +321,12 @@
                     this.e1 = 1;
                 })
             },
+        },
+        created() {
+            urlPort.get('/skills')
+                .then(resp => {
+                    this.skills = resp.data;
+                })
         }
     }
 

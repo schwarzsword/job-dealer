@@ -7,7 +7,6 @@ import edu.netcracker.jobdealer.exceptions.CompanyNotFoundException;
 import edu.netcracker.jobdealer.exceptions.NoPermissionException;
 import edu.netcracker.jobdealer.exceptions.VacancyNotFoundException;
 
-
 import java.util.List;
 import java.util.UUID;
 

@@ -55,8 +55,9 @@ public class AccountController {
     public ResponseEntity UpdateAccount(@RequestParam UUID id, @RequestParam String username,
                                         @RequestParam String email, @RequestParam String password) {
         try {
-            AccountDto account = mapper.map(accountService.updateAccount(id, username, email, password),
+            AccountDto account = mapper.map(accountService.updateAccount(id, email, password),
                     AccountDto.class);
+            //TODO испрвить на на билдер
             return new ResponseEntity<>(account, HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_MODIFIED);

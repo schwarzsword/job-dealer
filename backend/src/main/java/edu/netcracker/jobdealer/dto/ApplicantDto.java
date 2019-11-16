@@ -12,8 +12,5 @@ import java.util.UUID;
 public class ApplicantDto {
 
     private UUID id;
-    private String firstName;
-    private String lastName;
-    private String middleName;
     private UUID accountId;
 }

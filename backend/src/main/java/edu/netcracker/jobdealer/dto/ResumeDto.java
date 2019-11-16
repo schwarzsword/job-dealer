@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -16,10 +17,10 @@ public class ResumeDto {
     private String name;
     private String firstName;
     private String lastName;
-    private String middleName;
-    private int salary;
+    private long salary;
     private String avatarUrl;
     private String about;
+    private List<String> skills;
 
     private UUID applicantId;
 

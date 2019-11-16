@@ -1,10 +1,10 @@
 package edu.netcracker.jobdealer.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.UUID;
-import lombok.NoArgsConstructor;
 
 @Data
 @Entity
@@ -36,9 +36,9 @@ public class Account {
         this.role = role;
     }
 
-    public Account(UUID id, String username, String email, String password, String role) {
+    public Account(UUID id, String email, String password, String role) {
         this.id = id;
-        this.username = username;
+        this.username = email;
         this.email = email;
         this.password = password;
         this.role = role;

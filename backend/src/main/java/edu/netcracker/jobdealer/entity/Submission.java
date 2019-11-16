@@ -1,6 +1,7 @@
 package edu.netcracker.jobdealer.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -8,6 +9,7 @@ import java.util.UUID;
 @Data
 @Entity
 @Table
+@NoArgsConstructor
 public class Submission {
     @Id
     @Column(name = "id", nullable = false)
@@ -25,8 +27,6 @@ public class Submission {
     @JoinColumn(name = "submissions", referencedColumnName = "id")
     private Task task;
 
-    protected Submission() {
-    }
 
     public Submission(String filename, Task task, Applicant submiter) {
         this.filename = filename;

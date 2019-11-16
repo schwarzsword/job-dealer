@@ -14,12 +14,12 @@ spring:
     properties:
       hibernate:
         hbm2ddl:
-          auto: create
+          auto: update
         dialect: org.hibernate.dialect.PostgreSQL95Dialect
         jdbc:
           lob:
             non_contextual_creation: true
-        ddl-auto: create
+        ddl-auto: update
     generate-ddl: true
   servlet:
     multipart:

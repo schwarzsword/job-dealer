@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class Vacancy {
 
+
     @ManyToMany
     @JoinTable(
             name = "vacancySkills",

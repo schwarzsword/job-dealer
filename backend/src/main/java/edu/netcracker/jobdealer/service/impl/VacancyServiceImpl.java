@@ -51,8 +51,13 @@ public class VacancyServiceImpl implements VacancyService {
 
 
     @Override
-    public void addVacancy(String name, String description, Integer money, List<String> skills, Company company) throws CompanyNotFoundException {
-        List<Skills> requestedSkills = skills.stream().map(e -> skillsRepository.findByName(e).orElseGet(() -> skillsRepository.save(new Skills(e)))).collect(Collectors.toList());
+    public void addVacancy(String name, String description, Integer money,
+                           List<String> skills, Company company) throws CompanyNotFoundException {
+        List<Skills> requestedSkills = skills.stream()
+                .map(e -> skillsRepository.findByName(e)
+                        .orElseGet(() -> skillsRepository
+                                .save(new Skills(e))))
+                .collect(Collectors.toList());
         vacancyRepository.save(new Vacancy(name, description, money, requestedSkills, company));
     }
 
@@ -66,7 +71,6 @@ public class VacancyServiceImpl implements VacancyService {
             } else throw new NoPermissionException("You can't delete this vacancy");
         } else throw new VacancyNotFoundException("Vacancy not found");
     }
-
 
 
 }

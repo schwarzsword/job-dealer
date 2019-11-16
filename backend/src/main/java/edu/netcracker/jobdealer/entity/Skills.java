@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -13,8 +12,6 @@ import java.util.UUID;
 @Table
 @NoArgsConstructor
 public class Skills {
-    @OneToMany(mappedBy = "skill")
-    List<SkillToOwner> owners;
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue
