@@ -19,4 +19,5 @@ public interface CompanyService {
                           UUID accountId);
     ResponseEntity deleteCompany(UUID id) throws CompanyNotFoundException;
     Company getByAccount(Account accountByEmail);
-}
+    List<Company> getCompanies(Integer page, Integer size, String sortBy);
+    }
