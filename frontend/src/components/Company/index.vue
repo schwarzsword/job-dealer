@@ -8,7 +8,11 @@
         <div class="description">{{company.description}}</div>
       </div>
     </div>
-    <div class="companies" v-else>No companies found</div>
+    <div style="width: 480px;margin: 0 10px;" class="companies" v-else>
+      <div class="alert alert-danger" role="alert">
+        No companies found
+      </div>
+    </div>
   </div>
 </template>
 
