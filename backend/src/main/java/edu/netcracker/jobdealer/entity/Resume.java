@@ -41,6 +41,7 @@ public class Resume {
     @JoinColumn(name = "applicantId", referencedColumnName = "id")
     private Applicant applicant;
 
+
     public Resume(Applicant applicant) {
         this.applicant = applicant;
     }

@@ -23,15 +23,13 @@ public class ResumeController {
 
     private final ResumeService resumeService;
     private final Mapper mapper;
+    @Value("${upload.path}")
+    String path;
 
     public ResumeController(ResumeService resumeService, Mapper mapper) {
         this.resumeService = resumeService;
         this.mapper = mapper;
     }
-
-    @Value("${upload.path}")
-    String path;
-
 
     @PostMapping(value = "/resumes")
     public ResponseEntity<?> createResume(@RequestParam String resumeName, @RequestParam String firstName,

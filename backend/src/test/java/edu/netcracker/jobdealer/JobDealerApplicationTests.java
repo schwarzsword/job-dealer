@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 
@@ -157,10 +158,10 @@ public class JobDealerApplicationTests {
 
     @Test
     public void vacancyTestByMoney() {
-        List<Vacancy> money = vacancyRepository.findAllByMoneyIsGreaterThanEqual(100);
+        Set<Vacancy> money = vacancyRepository.findAllByMoneyIsGreaterThanEqual(100);
         money.forEach(e -> log.info("vacancy: " + e.getName()));
         log.info("total vacancies found by money: " + money.size());
-        assertEquals(1, money.size());
+        assertEquals(1, ((Set) money).size());
     }
 
     @Test

@@ -49,7 +49,14 @@ public class ResumeServiceImpl implements ResumeService {
                                 .save(new Skills(e))))
                 .collect(Collectors.toList());
         if (!resumeRepository.existsByNameAndApplicant(resumeName, applicant)) {
-            return resumeRepository.save(new Resume(resumeName, firstName, lastName, salary, avataUrl, about, applicant, skills));
+            Resume resume = resumeRepository.save(
+                    new Resume(resumeName, firstName, lastName, salary, avataUrl, about, applicant, skills));
+            List<Resume> ownedResumes = applicant.getOwnedResumes();
+            ownedResumes.add(resume);
+            applicant.setOwnedResumes(ownedResumes);
+            applicant.setActiveResume(resume);
+            applicantRepository.save(applicant);
+            return resume;
         } else throw new ResumeAlreadyExistsException();
     }
 

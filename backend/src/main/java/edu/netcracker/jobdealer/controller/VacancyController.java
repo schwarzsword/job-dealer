@@ -6,12 +6,12 @@ import edu.netcracker.jobdealer.entity.Company;
 import edu.netcracker.jobdealer.entity.Vacancy;
 import edu.netcracker.jobdealer.exceptions.CompanyNotFoundException;
 import edu.netcracker.jobdealer.exceptions.NoPermissionException;
+import edu.netcracker.jobdealer.exceptions.SkillNotFoundException;
 import edu.netcracker.jobdealer.service.AccountService;
 import edu.netcracker.jobdealer.service.CompanyService;
 import edu.netcracker.jobdealer.service.VacancyService;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -42,66 +42,60 @@ public class VacancyController {
 
     @Secured("ROLE_COMPANY")
     @PostMapping(value = "/my")
-    public ResponseEntity createVacancy(@RequestParam String name, @RequestParam String description,
-                                        @RequestParam Integer money, @RequestParam List<String> requestedSkills,
-                                        @AuthenticationPrincipal User user) {
+    public ResponseEntity<?> createVacancy(@RequestParam String name, @RequestParam String description,
+                                           @RequestParam Integer money, @RequestParam List<String> requestedSkills,
+                                           @AuthenticationPrincipal User user) {
         try {
             Account byEmail = accountService.getByEmail(user.getUsername());
             Company byAccount = companyService.getByAccount(byEmail);
-            vacancyService.addVacancy(name, description, money, requestedSkills, byAccount);
+            return ResponseEntity.ok(
+                    mapper.map(
+                            vacancyService.addVacancy(name, description, money, requestedSkills, byAccount),
+                            VacancyDto.class));
+
         } catch (CompanyNotFoundException ex) {
             return ResponseEntity.status(401).body("You have no permission to create vacancies");
         }
-        return new ResponseEntity(HttpStatus.OK);
     }
 
     @Secured("ROLE_COMPANY")
     @DeleteMapping(value = "/my/{vacancyId}")
-    public ResponseEntity deleteVacancy(@PathVariable("vacancyId") UUID vacancyId,
-                                        @AuthenticationPrincipal User user) {
+    public ResponseEntity<?> deleteVacancy(@PathVariable("vacancyId") UUID vacancyId,
+                                           @AuthenticationPrincipal User user) {
         try {
             Account byEmail = accountService.getByEmail(user.getUsername());
             Company byAccount = companyService.getByAccount(byEmail);
             vacancyService.remove(vacancyId, byAccount);
+            return ResponseEntity.noContent().build();
         } catch (CompanyNotFoundException | NoPermissionException ex) {
             return ResponseEntity.status(401).body("You have no permission to create vacancies");
         }
-        return new ResponseEntity(HttpStatus.OK);
     }
 
-
-    @GetMapping(value = "/{page}")
-    public ResponseEntity getAllVacanciesPage(@PathVariable("page") Integer page) {
-        List<Vacancy> vacancies = vacancyService.getAll();
-        int begin = --page * 10;
-        int end = begin + 9;
-        if (vacancies.size() <= begin) {
-            return ResponseEntity.badRequest().body("There are no more vacancies");
-        } else {
-            if (vacancies.size() > end) {
-                return ResponseEntity.ok().body(vacancies.subList(begin, vacancies.size() - 1));
-            } else return ResponseEntity.ok().body(vacancies.subList(begin, end));
-        }
-
-    }
-
-    @GetMapping
-    public ResponseEntity getAllVacancies() {
-        List<VacancyDto> vacancies = vacancyService.getAll()
-                .stream()
-                .map(e -> mapper.map(e, VacancyDto.class))
-                .collect(Collectors.toList());
-        return ResponseEntity.ok().body(vacancies);
-    }
 
     @Secured("ROLE_COMPANY")
     @GetMapping("/my")
-    public ResponseEntity getAllCompanyVacancies(@AuthenticationPrincipal User user) {
+    public ResponseEntity<?> getAllCompanyVacancies(@AuthenticationPrincipal User user) {
         List<VacancyDto> vacancies = vacancyService.getVacanciesByCompanyEmail(user.getUsername())
                 .stream()
                 .map(e -> mapper.map(e, VacancyDto.class))
                 .collect(Collectors.toList());
         return ResponseEntity.ok().body(vacancies);
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getVacancies(@RequestParam int limit, @RequestParam int offset, @RequestParam(required = false) Integer salary, @RequestParam String skill) {
+        try {
+            List<Vacancy> vacancies = vacancyService.applyConditions(skill, salary);
+            List<Vacancy> page = vacancyService.getPage(vacancies, offset, limit);
+            if (page != null) {
+                return ResponseEntity.ok(page.stream()
+                        .map(e -> mapper.map(e, VacancyDto.class))
+                        .collect(Collectors.toList()));
+            } else return ResponseEntity.noContent().build();
+        } catch (SkillNotFoundException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
 
     }
 }
