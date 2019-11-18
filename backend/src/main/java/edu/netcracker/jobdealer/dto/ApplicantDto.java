@@ -13,4 +13,5 @@ public class ApplicantDto {
 
     private UUID id;
     private UUID accountId;
+    private ResumeDto activeResume;
 }

@@ -28,4 +28,5 @@ public interface AccountService {
     Account updateAccount(UUID id, String email, String password);
 
     void deleteAccount(UUID id) throws AccountNotFoundException;
+
 }

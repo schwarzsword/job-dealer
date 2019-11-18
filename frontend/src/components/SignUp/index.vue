@@ -82,7 +82,7 @@
                     ></v-textarea>
 
                     <v-file-input
-                            v-model="company.file"
+                            v-model="file"
                             label="Select image file..."
                             accept="image/*"
                             @change="onFileChange"
