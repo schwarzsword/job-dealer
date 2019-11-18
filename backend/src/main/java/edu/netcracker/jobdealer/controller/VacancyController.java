@@ -84,9 +84,9 @@ public class VacancyController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getVacancies(@RequestParam int limit, @RequestParam int offset, @RequestParam(required = false) Integer salary, @RequestParam String skill) {
+    public ResponseEntity<?> getVacancies(@RequestParam int limit, @RequestParam int offset, @RequestParam(required = false) Integer salary, @RequestParam List<String> skills) {
         try {
-            List<Vacancy> vacancies = vacancyService.applyConditions(skill, salary);
+            List<Vacancy> vacancies = vacancyService.applyConditions(skills, salary);
             List<Vacancy> page = vacancyService.getPage(vacancies, offset, limit);
             if (page != null) {
                 return ResponseEntity.ok(page.stream()

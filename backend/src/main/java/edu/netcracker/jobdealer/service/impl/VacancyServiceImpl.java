@@ -57,14 +57,21 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
-    public List<Vacancy> applyConditions(String skill, Integer salary) throws SkillNotFoundException {
-        Skills skills = skillsRepository.findByName(skill).orElseThrow(SkillNotFoundException::new);
-        Set<Vacancy> allByRequestedSkillsContains = vacancyRepository.findAllByRequestedSkillsContains(skills);
+    public List<Vacancy> applyConditions(List<String> skills, Integer salary) throws SkillNotFoundException {
+        List<Skills> requestedSkills = skills.stream()
+                .map(e -> skillsRepository.findByName(e)
+                        .orElseThrow(SkillNotFoundException::new))
+                .collect(Collectors.toList());
+        Set<Vacancy> vacancies = new HashSet<Vacancy>(vacancyRepository.findAll());
+        requestedSkills.forEach(e -> {
+            Set<Vacancy> allByRequestedSkillsContains = vacancyRepository.findAllByRequestedSkillsContains(e);
+            vacancies.retainAll(allByRequestedSkillsContains);
+        });
         if (salary != null) {
             Set<Vacancy> allByMoneyIsGreaterThanEqual = vacancyRepository.findAllByMoneyIsGreaterThanEqual(salary);
-            allByRequestedSkillsContains.retainAll(allByMoneyIsGreaterThanEqual);
+            vacancies.retainAll(allByMoneyIsGreaterThanEqual);
         }
-        return new ArrayList<Vacancy>(allByRequestedSkillsContains);
+        return new ArrayList<Vacancy>(vacancies);
     }
 
 
