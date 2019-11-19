@@ -85,7 +85,7 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>JobDealer</finalName>
+        <finalName>job-dealer</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
