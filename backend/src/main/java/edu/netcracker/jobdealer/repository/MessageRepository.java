@@ -10,13 +10,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface MessageRepository extends JpaRepository<Message, UUID> {
-    List<Message> findAllByMessageDest_Email(String email);
+    List<Message> findAllByMessageDestEmail(String email);
 
-    List<Message> findAllByMessageDest_Id(UUID id);
+    List<Message> findAllByMessageDestId(UUID id);
 
-    List<Message> findAllByMessageSource_Email(String email);
+    List<Message> findAllByMessageSourceEmail(String email);
 
-    List<Message> findAllByMessageSource_Id(UUID id);
+    List<Message> findAllByMessageSourceId(UUID id);
 
     List<Message> findAllByMessageDest(Account account);
 
@@ -26,15 +26,15 @@ public interface MessageRepository extends JpaRepository<Message, UUID> {
 
     void deleteAllByMessageSource(Account account);
 
-    void deleteAllByMessageDest_Email(String email);
+    void deleteAllByMessageDestEmail(String email);
 
-    void deleteAllByMessageDest_Id(UUID id);
+    void deleteAllByMessageDestId(UUID id);
 
-    void deleteAllByMessageSource_Email(String email);
+    void deleteAllByMessageSourceEmail(String email);
 
-    void deleteAllByMessageSource_Id(UUID id);
+    void deleteAllByMessageSourceId(UUID id);
 
-    Optional<Message> findByMessageDest_EmailAndMessageSource_Email(String dest, String source);
+    Optional<Message> findByMessageDestEmailAndMessageSourceEmail(String dest, String source);
 
-    Optional<Message> findByMessageDest_IdAndMessageSource_Id(UUID dest, UUID source);
+    Optional<Message> findByMessageDestIdAndMessageSourceId(UUID dest, UUID source);
 }

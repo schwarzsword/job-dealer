@@ -8,6 +8,7 @@ import edu.netcracker.jobdealer.exceptions.CompanyNotFoundException;
 import edu.netcracker.jobdealer.exceptions.NoPermissionException;
 import edu.netcracker.jobdealer.exceptions.SkillNotFoundException;
 import edu.netcracker.jobdealer.exceptions.VacancyNotFoundException;
+import edu.netcracker.jobdealer.repository.CompanyRepository;
 import edu.netcracker.jobdealer.repository.SkillsRepository;
 import edu.netcracker.jobdealer.repository.VacancyRepository;
 import edu.netcracker.jobdealer.service.VacancyService;
@@ -25,12 +26,14 @@ public class VacancyServiceImpl implements VacancyService {
 
     private final VacancyRepository vacancyRepository;
     private final SkillsRepository skillsRepository;
+    private final CompanyRepository companyRepository;
 
 
     @Autowired
-    public VacancyServiceImpl(final VacancyRepository vacancyRepository, SkillsRepository skillsRepository) {
+    public VacancyServiceImpl(final VacancyRepository vacancyRepository, SkillsRepository skillsRepository, CompanyRepository companyRepository) {
         this.vacancyRepository = vacancyRepository;
         this.skillsRepository = skillsRepository;
+        this.companyRepository = companyRepository;
     }
 
     @Override
@@ -78,6 +81,17 @@ public class VacancyServiceImpl implements VacancyService {
     @Override
     public Vacancy addVacancy(String name, String description, Integer money,
                               List<String> skills, Company company) throws CompanyNotFoundException {
+        List<Skills> requestedSkills = skills.stream()
+                .map(e -> skillsRepository.findByName(e)
+                        .orElseGet(() -> skillsRepository
+                                .save(new Skills(e))))
+                .collect(Collectors.toList());
+        return vacancyRepository.save(new Vacancy(name, description, money, requestedSkills, company));
+    }
+
+    @Override
+    public Vacancy addVacancy(String name, String description, Integer money, List<String> skills, String email) throws CompanyNotFoundException {
+        Company company = companyRepository.findByAccountEmail(email).orElseThrow(CompanyNotFoundException::new);
         List<Skills> requestedSkills = skills.stream()
                 .map(e -> skillsRepository.findByName(e)
                         .orElseGet(() -> skillsRepository

@@ -42,7 +42,7 @@ public class ApplicantServiceImpl implements ApplicantService {
 
     @Override
     public Applicant addApplicant(UUID accountId) throws AccountAlreadyInUseException, AccountByIdNotFoundException {
-        if (!applicantRepository.existsByAccount_Id(accountId)) {
+        if (!applicantRepository.existsByAccountId(accountId)) {
             Account account = accountRepository.findById(accountId).orElseThrow(ApplicantNotFoundException::new);
             return applicantRepository.save(new Applicant(account));
         } else throw new AccountAlreadyInUseException();

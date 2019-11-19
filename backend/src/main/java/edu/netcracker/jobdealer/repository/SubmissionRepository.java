@@ -11,7 +11,7 @@ import java.util.UUID;
 public interface SubmissionRepository extends JpaRepository<Submission, UUID> {
     List<Submission> findAllByTask(Task task);
 
-    Submission findByTaskAndSubmiter_Account_Email(Task task, String email);
+    Submission findByTaskAndSubmiterAccountEmail(Task task, String email);
 
-    void deleteByTaskAndSubmiter_Account_Email(Task task, String email);
+    void deleteByTaskAndSubmiterAccountEmail(Task task, String email);
 }

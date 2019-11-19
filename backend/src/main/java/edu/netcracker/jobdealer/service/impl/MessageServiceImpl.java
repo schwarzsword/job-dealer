@@ -39,7 +39,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public List<Message> getUserMessages(String email) {
-        return messageRepository.findAllByMessageDest_Email(email);
+        return messageRepository.findAllByMessageDestEmail(email);
     }
 
 

@@ -12,13 +12,11 @@ import java.util.UUID;
 public interface ApplicantRepository extends JpaRepository<Applicant, UUID> {
     Optional<Applicant> findByAccount(Account account);
 
-    Optional<Applicant> findByAccount_Email(String email);
+    Optional<Applicant> findByAccountEmail(String email);
 
-    Optional<Applicant> findById(UUID id);
+    void deleteByAccountEmail(String email);
 
-    void deleteByAccount_Email(String email);
-
-    boolean existsByAccount_Id(UUID id);
+    boolean existsByAccountId(UUID id);
 
 }
 

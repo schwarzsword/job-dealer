@@ -4,6 +4,7 @@ import edu.netcracker.jobdealer.entity.Account;
 import edu.netcracker.jobdealer.entity.Company;
 import edu.netcracker.jobdealer.exceptions.AccountIdExistsException;
 import edu.netcracker.jobdealer.exceptions.AccountNotFoundException;
+import edu.netcracker.jobdealer.exceptions.CompanyNotFoundException;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,5 +24,7 @@ public interface CompanyService {
 
     //читать импл
 //    void deleteCompany(UUID id) throws CompanyNotFoundException;
-    Company getByAccount(Account accountByEmail);
+    Company getByAccount(Account accountByEmail)throws CompanyNotFoundException;
+
+    Company getByAccountEmail(String email) throws CompanyNotFoundException;
 }

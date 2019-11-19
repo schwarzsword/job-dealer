@@ -24,7 +24,7 @@ public class CompanyController {
     private final CompanyService companyService;
 
     @Value("${upload.path}")
-    String path;
+    private String path;
 
     @Autowired
     public CompanyController(Mapper mapper, CompanyService companyService) {
@@ -49,6 +49,8 @@ public class CompanyController {
                                         @RequestParam("file") MultipartFile file, @RequestParam UUID accountId) {
 
         //todo добавить проверку, если файл null то дальше прокидывать дефолтный урл картинки, которую мы положим заранее
+
+         //todo решить, где хранить файлы
 
         File uploadDir = new File(path);
         if (!uploadDir.exists()) {

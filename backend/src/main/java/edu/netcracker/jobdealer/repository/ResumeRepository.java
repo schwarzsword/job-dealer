@@ -12,29 +12,29 @@ import java.util.UUID;
 @Repository
 public interface ResumeRepository extends JpaRepository<Resume, UUID> {
 
-    List<Resume> findAllBySalaryIsGreaterThanEqual(int money);
+    List<Resume> findAllBySalaryIsGreaterThanEqual(long money);
 
-    List<Resume> findAllBySalary(int money);
+    List<Resume> findAllBySalary(long money);
 
-    List<Resume> findAllBySalaryIsLessThanEqual(int money);
+    List<Resume> findAllBySalaryIsLessThanEqual(long money);
 
-    Resume findByNameAndApplicant_Account_Email(String resumeName, String email);
+    Resume findByNameAndApplicantAccountEmail(String resumeName, String email);
 
-    void deleteByNameAndApplicant_Account_Email(String resumeName, String email);
+    void deleteByNameAndApplicantAccountEmail(String resumeName, String email);
 
     List<Resume> findAllByApplicant(Applicant applicant);
 
-    List<Resume> findAllByApplicant_Account(Account account);
+    List<Resume> findAllByApplicantAccount(Account account);
 
-    List<Resume> findAllByApplicant_Account_Email(String email);
+    List<Resume> findAllByApplicantAccountEmail(String email);
 
     void deleteAllByApplicant(Applicant applicant);
 
-    void deleteAllByApplicant_Account(Account account);
+    void deleteAllByApplicantAccount(Account account);
 
-    void deleteAllByApplicant_Account_Email(String email);
+    void deleteAllByApplicantAccountEmail(String email);
 
-    boolean existsByNameAndApplicant_Id(String name, UUID applicantId);
+    boolean existsByNameAndApplicantId(String name, UUID applicantId);
 
     boolean existsByNameAndApplicant(String name, Applicant applicant);
 }

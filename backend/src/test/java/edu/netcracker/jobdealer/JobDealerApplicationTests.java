@@ -102,21 +102,21 @@ public class JobDealerApplicationTests {
 
     @Test
     public void applicantTest() {
-        Optional<Applicant> byAccount = applicantRepository.findByAccount_Email("4");
+        Optional<Applicant> byAccount = applicantRepository.findByAccountEmail("4");
         log.info("applicant found: " + byAccount.get().getAccount().getEmail());
         assertEquals("4", byAccount.get().getAccount().getEmail());
     }
 
     @Test
     public void companyTest() {
-        Optional<Company> byAccount = companyRepository.findByAccount_Email("5");
+        Optional<Company> byAccount = companyRepository.findByAccountEmail("5");
         log.info("company found: " + byAccount.get().getAccount().getEmail());
         assertEquals("5", byAccount.get().getAccount().getEmail());
     }
 
     @Test
     public void messageTest() {
-        List<Message> allByMessageDest = messageRepository.findAllByMessageDest_Email("5");
+        List<Message> allByMessageDest = messageRepository.findAllByMessageDestEmail("5");
         allByMessageDest.forEach(e -> log.info("message: " + e.getText()));
         log.info("total messages: " + allByMessageDest.size());
         assertEquals(1, allByMessageDest.size());
@@ -124,7 +124,7 @@ public class JobDealerApplicationTests {
 
     @Test
     public void resumeTest() {
-        List<Resume> resumes = resumeRepository.findAllByApplicant_Account_Email("4");
+        List<Resume> resumes = resumeRepository.findAllByApplicantAccountEmail("4");
         resumes.forEach(e -> log.info("resume: " + e.getName()));
         log.info("total resumes: " + resumes.size());
         assertEquals(1, resumes.size());
@@ -132,7 +132,7 @@ public class JobDealerApplicationTests {
 
     @Test
     public void reviewTest() {
-        List<Review> reviews = reviewRepository.findAllByReviewDest_Email("5");
+        List<Review> reviews = reviewRepository.findAllByReviewDestEmail("5");
         reviews.forEach(e -> log.info("review: " + e.getText() + "; rating: " + e.getRating()));
         log.info("total reviews: " + reviews.size());
         assertEquals(1, reviews.size());
@@ -150,7 +150,7 @@ public class JobDealerApplicationTests {
 
     @Test
     public void vacancyTestByNameAndCompany() {
-        List<Vacancy> java = vacancyRepository.findAllByNameContainingAndOwner_Account_Email("java", "5");
+        List<Vacancy> java = vacancyRepository.findAllByNameContainingAndOwnerAccountEmail("java", "5");
         java.forEach(e -> log.info("vacancy: " + e.getName()));
         log.info("total vacancies found by name and company: " + java.size());
         assertEquals(1, java.size());
@@ -166,14 +166,14 @@ public class JobDealerApplicationTests {
 
     @Test
     public void testTaskTest() {
-        Task java_dev = testTaskRepository.findByVacancy(vacancyRepository.findByNameAndOwner_Account_Email("java dev", "5")).get();
+        Task java_dev = testTaskRepository.findByVacancy(vacancyRepository.findByNameAndOwnerAccountEmail("java dev", "5")).get();
         log.info("test task: " + java_dev.getName());
         assertEquals("task", java_dev.getName());
     }
 
     @Test
     public void submissionTest() {
-        Submission java_dev = submissionRepository.findByTaskAndSubmiter_Account_Email(testTaskRepository.findByVacancy(vacancyRepository.findByNameAndOwner_Account_Email("java dev", "5")).get(), "4");
+        Submission java_dev = submissionRepository.findByTaskAndSubmiterAccountEmail(testTaskRepository.findByVacancy(vacancyRepository.findByNameAndOwnerAccountEmail("java dev", "5")).get(), "4");
         log.info("submission: " + java_dev.getFilename());
         assertEquals("txt.txt", java_dev.getFilename());
     }
@@ -181,15 +181,15 @@ public class JobDealerApplicationTests {
 
     @After
     public void finish() {
-        submissionRepository.deleteByTaskAndSubmiter_Account_Email(testTaskRepository.findByVacancy(vacancyRepository.findByNameAndOwner_Account_Email("java dev", "5")).get(), "4");
-        testTaskRepository.deleteByVacancy(vacancyRepository.findByNameAndOwner_Account_Email("java dev", "5"));
-        vacancyRepository.deleteByNameAndOwner_Account_Email("java dev", "5");
+        submissionRepository.deleteByTaskAndSubmiterAccountEmail(testTaskRepository.findByVacancy(vacancyRepository.findByNameAndOwnerAccountEmail("java dev", "5")).get(), "4");
+        testTaskRepository.deleteByVacancy(vacancyRepository.findByNameAndOwnerAccountEmail("java dev", "5"));
+        vacancyRepository.deleteByNameAndOwnerAccountEmail("java dev", "5");
         skillsRepository.deleteAllByNameContaining("java");
-        reviewRepository.deleteAllByReviewDest_Email("5");
-        resumeRepository.deleteAllByApplicant_Account_Email("4");
-        messageRepository.deleteAllByMessageDest_Email("5");
-        applicantRepository.deleteByAccount_Email("4");
-        companyRepository.deleteByAccount_Email("4");
+        reviewRepository.deleteAllByReviewDestEmail("5");
+        resumeRepository.deleteAllByApplicantAccountEmail("4");
+        messageRepository.deleteAllByMessageDestEmail("5");
+        applicantRepository.deleteByAccountEmail("4");
+        companyRepository.deleteByAccountEmail("4");
         accountRepository.deleteByEmail("4");
         accountRepository.deleteByEmail("5");
     }

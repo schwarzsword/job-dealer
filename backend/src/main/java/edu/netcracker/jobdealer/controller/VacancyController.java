@@ -46,13 +46,9 @@ public class VacancyController {
                                            @RequestParam Integer money, @RequestParam List<String> requestedSkills,
                                            @AuthenticationPrincipal User user) {
         try {
-            Account byEmail = accountService.getByEmail(user.getUsername());
-            Company byAccount = companyService.getByAccount(byEmail);
+            Vacancy vacancy = vacancyService.addVacancy(name, description, money, requestedSkills, user.getUsername());
             return ResponseEntity.ok(
-                    mapper.map(
-                            vacancyService.addVacancy(name, description, money, requestedSkills, byAccount),
-                            VacancyDto.class));
-
+                    mapper.map(vacancy, VacancyDto.class));
         } catch (CompanyNotFoundException ex) {
             return ResponseEntity.status(401).body("You have no permission to create vacancies");
         }

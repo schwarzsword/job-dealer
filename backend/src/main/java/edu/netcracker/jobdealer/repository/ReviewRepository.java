@@ -10,13 +10,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface ReviewRepository extends JpaRepository<Review, UUID> {
-    List<Review> findAllByReviewDest_Email(String email);
+    List<Review> findAllByReviewDestEmail(String email);
 
-    List<Review> findAllByReviewSource_Email(String email);
+    List<Review> findAllByReviewSourceEmail(String email);
 
-    List<Review> findAllByReviewDest_Id(UUID id);
+    List<Review> findAllByReviewDestId(UUID id);
 
-    List<Review> findAllByReviewSource_Id(UUID id);
+    List<Review> findAllByReviewSourceId(UUID id);
 
     List<Review> findAllByReviewDest(Account account);
 
@@ -26,15 +26,15 @@ public interface ReviewRepository extends JpaRepository<Review, UUID> {
 
     void deleteAllByReviewSource(Account account);
 
-    void deleteAllByReviewDest_Email(String email);
+    void deleteAllByReviewDestEmail(String email);
 
-    void deleteAllByReviewSource_Email(String email);
+    void deleteAllByReviewSourceEmail(String email);
 
-    void deleteAllByReviewDest_Id(UUID id);
+    void deleteAllByReviewDestId(UUID id);
 
-    void deleteAllByReviewSource_Id(UUID id);
+    void deleteAllByReviewSourceId(UUID id);
 
-    Optional<Review> findByReviewDest_EmailAndReviewSource_Email(String dest, String source);
+    Optional<Review> findByReviewDestEmailAndReviewSourceEmail(String dest, String source);
 
-    Optional<Review> findByReviewDest_IdAndReviewSource_Id(UUID dest, UUID source);
+    Optional<Review> findByReviewDestIdAndReviewSourceId(UUID dest, UUID source);
 }

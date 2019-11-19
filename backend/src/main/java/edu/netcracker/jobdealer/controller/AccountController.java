@@ -57,7 +57,7 @@ public class AccountController {
 
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @PutMapping
-    public ResponseEntity UpdateAccount(@RequestParam UUID id, @RequestParam String username,
+    public ResponseEntity updateAccount(@RequestParam UUID id,
                                         @RequestParam String email, @RequestParam String password) {
         try {
             AccountDto account = mapper.map(accountService.updateAccount(id, email, password),

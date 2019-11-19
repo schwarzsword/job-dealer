@@ -54,7 +54,7 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public Company addCompany(String name, Boolean isVerified, String description, String avatarUrl, UUID accountId)
             throws AccountByIdNotFoundException, AccountIdExistsException {
-        if (!companyRepository.existsByAccount_Id(accountId)) {
+        if (!companyRepository.existsByAccountId(accountId)) {
             Account byId = accountService.getById(accountId);
             return companyRepository.save(new Company(name, false, description, avatarUrl, byId));
         } else throw new AccountIdExistsException();
@@ -80,12 +80,12 @@ public class CompanyServiceImpl implements CompanyService {
 //    }
 
     @Override
-    public Company getByAccount(Account accountByEmail) {
-        Optional<Company> company = companyRepository.findByAccount(accountByEmail);
-        if (company.isPresent()) {
-            return company.get();
-        } else {
-            throw new CompanyNotFoundException("Company is not found");
-        }
+    public Company getByAccount(Account accountByEmail) throws CompanyNotFoundException {
+        return companyRepository.findByAccount(accountByEmail).orElseThrow(CompanyNotFoundException::new);
+    }
+
+    @Override
+    public Company getByAccountEmail(String email) throws CompanyNotFoundException {
+        return companyRepository.findByAccountEmail(email).orElseThrow(CompanyNotFoundException::new);
     }
 }

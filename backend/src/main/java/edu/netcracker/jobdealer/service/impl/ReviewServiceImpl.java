@@ -40,12 +40,12 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public List<Review> getUserReviews(UUID userId) {
-        return reviewRepository.findAllByReviewDest_Id(userId);
+        return reviewRepository.findAllByReviewDestId(userId);
     }
 
     @Override
     public List<Review> getUserReviews(String email) {
-        return reviewRepository.findAllByReviewDest_Email(email);
+        return reviewRepository.findAllByReviewDestEmail(email);
     }
 
     @Override

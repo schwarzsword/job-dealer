@@ -20,6 +20,8 @@ public interface VacancyService {
 
     Vacancy addVacancy(String name, String description, Integer money, List<String> skills, Company company) throws CompanyNotFoundException;
 
+    Vacancy addVacancy(String name, String description, Integer money, List<String> skills, String email) throws CompanyNotFoundException;
+
     void remove(UUID vacancyId, Company company) throws VacancyNotFoundException, NoPermissionException;
 
     List<Vacancy> getVacanciesByCompanyEmail(String email);

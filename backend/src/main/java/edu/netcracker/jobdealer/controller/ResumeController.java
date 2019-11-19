@@ -24,7 +24,7 @@ public class ResumeController {
     private final ResumeService resumeService;
     private final Mapper mapper;
     @Value("${upload.path}")
-    String path;
+    private String path;
 
     public ResumeController(ResumeService resumeService, Mapper mapper) {
         this.resumeService = resumeService;
@@ -39,6 +39,9 @@ public class ResumeController {
 
 
         //todo добавить проверку, если файл null то дальше прокидывать дефолтный урл картинки, которую мы положим заранее
+
+        //todo решить, где хранить файлы
+
         File uploadDir = new File(path);
         if (!uploadDir.exists()) {
             uploadDir.mkdir();
