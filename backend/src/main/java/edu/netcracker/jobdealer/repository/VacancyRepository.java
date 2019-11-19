@@ -16,9 +16,9 @@ public interface VacancyRepository extends JpaRepository<Vacancy, UUID> {
 
     Optional<Vacancy> findById(UUID vacancyId);
 
-    Set<Vacancy> findAllByMoneyIsGreaterThanEqual(long money);
+    Set<Vacancy> findAllByMoneyIsGreaterThanEqual(int money);
 
-    List<Vacancy> findAllByMoneyIsLessThanEqual(long money);
+    List<Vacancy> findAllByMoneyIsLessThanEqual(int money);
 
     List<Vacancy> findAllByOwner(Company company);
 

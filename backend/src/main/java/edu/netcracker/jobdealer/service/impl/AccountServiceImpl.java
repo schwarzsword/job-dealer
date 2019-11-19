@@ -79,7 +79,7 @@ public class AccountServiceImpl implements AccountService {
             UUID uuid = UUID.fromString(id);
             account = accountRepository.findById(uuid);
         } catch (IllegalArgumentException exception) {
-            account = accountRepository.findByUsername(id);
+            account = accountRepository.findByEmail(id);
         }
 
         if (account.isPresent() && accountRepository.existsById(account.get().getId())) {

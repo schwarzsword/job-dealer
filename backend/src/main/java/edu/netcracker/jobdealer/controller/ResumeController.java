@@ -35,7 +35,7 @@ public class ResumeController {
     public ResponseEntity<?> createResume(@RequestParam String resumeName, @RequestParam String firstName,
                                           @RequestParam String lastName, @RequestParam String about,
                                           @RequestParam("file") MultipartFile file, @RequestParam UUID applicantId,
-                                          @RequestParam List<String> skills, @RequestParam long salary) {
+                                          @RequestParam List<String> skills, @RequestParam int salary) {
 
 
         //todo добавить проверку, если файл null то дальше прокидывать дефолтный урл картинки, которую мы положим заранее

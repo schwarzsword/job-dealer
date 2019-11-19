@@ -55,7 +55,7 @@ public class VacancyServiceImpl implements VacancyService {
     public List<Vacancy> getPage(List<Vacancy> vacancies, int offset, int limit) {
         int size = vacancies.size();
         if (size > offset) {
-            return vacancies.subList(offset, limit > (size - offset) ? size : limit);
+            return vacancies.subList(offset, limit > (size - offset) ? size : (limit+offset));
         } else return null;
     }
 

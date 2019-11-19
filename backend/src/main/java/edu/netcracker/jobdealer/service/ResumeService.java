@@ -11,7 +11,7 @@ public interface ResumeService {
 
     public Resume add(String resumeName, String firstName,
                       String lastName, String about,
-                      String avataUrl, long salary,
+                      String avataUrl, int salary,
                       UUID applicantId, List<String> skillsString)
             throws ApplicantNotFoundException, ResumeAlreadyExistsException;
 

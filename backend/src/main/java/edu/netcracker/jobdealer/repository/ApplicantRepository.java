@@ -16,7 +16,7 @@ public interface ApplicantRepository extends JpaRepository<Applicant, UUID> {
 
     void deleteByAccountEmail(String email);
 
-    boolean existsByAccountId(UUID id);
+    boolean existsByAccount_Id(UUID id);
 
 }
 

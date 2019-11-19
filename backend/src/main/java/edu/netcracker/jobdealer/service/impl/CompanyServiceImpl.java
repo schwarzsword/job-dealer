@@ -54,7 +54,7 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public Company addCompany(String name, Boolean isVerified, String description, String avatarUrl, UUID accountId)
             throws AccountByIdNotFoundException, AccountIdExistsException {
-        if (!companyRepository.existsByAccountId(accountId)) {
+        if (!companyRepository.existsByAccount_Id(accountId)) {
             Account byId = accountService.getById(accountId);
             return companyRepository.save(new Company(name, false, description, avatarUrl, byId));
         } else throw new AccountIdExistsException();

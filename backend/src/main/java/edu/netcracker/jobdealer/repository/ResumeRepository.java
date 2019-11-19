@@ -12,11 +12,11 @@ import java.util.UUID;
 @Repository
 public interface ResumeRepository extends JpaRepository<Resume, UUID> {
 
-    List<Resume> findAllBySalaryIsGreaterThanEqual(long money);
+    List<Resume> findAllBySalaryIsGreaterThanEqual(int money);
 
-    List<Resume> findAllBySalary(long money);
+    List<Resume> findAllBySalary(int money);
 
-    List<Resume> findAllBySalaryIsLessThanEqual(long money);
+    List<Resume> findAllBySalaryIsLessThanEqual(int money);
 
     Resume findByNameAndApplicantAccountEmail(String resumeName, String email);
 

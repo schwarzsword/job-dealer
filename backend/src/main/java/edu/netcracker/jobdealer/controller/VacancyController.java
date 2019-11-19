@@ -43,7 +43,7 @@ public class VacancyController {
     @Secured("ROLE_COMPANY")
     @PostMapping(value = "/my")
     public ResponseEntity<?> createVacancy(@RequestParam String name, @RequestParam String description,
-                                           @RequestParam Integer money, @RequestParam List<String> requestedSkills,
+                                           @RequestParam int money, @RequestParam List<String> requestedSkills,
                                            @AuthenticationPrincipal User user) {
         try {
             Vacancy vacancy = vacancyService.addVacancy(name, description, money, requestedSkills, user.getUsername());
@@ -80,7 +80,9 @@ public class VacancyController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getVacancies(@RequestParam int limit, @RequestParam int offset, @RequestParam(required = false) Integer salary, @RequestParam List<String> skills) {
+    public ResponseEntity<?> getVacancies(@RequestParam int limit,
+                                          @RequestParam int offset, @RequestParam(required = false) int salary,
+                                          @RequestParam List<String> skills) {
         try {
             List<Vacancy> vacancies = vacancyService.applyConditions(skills, salary);
             List<Vacancy> page = vacancyService.getPage(vacancies, offset, limit);

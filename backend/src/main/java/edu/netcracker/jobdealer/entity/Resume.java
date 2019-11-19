@@ -32,7 +32,7 @@ public class Resume {
     @Column(name = "lastName")
     private String lastName;
     @Column(name = "salary")
-    private long salary;
+    private int salary;
     @Column(name = "avatarUrl")
     private String avatarUrl;
     @Column(name = "about")
@@ -46,7 +46,7 @@ public class Resume {
         this.applicant = applicant;
     }
 
-    public Resume(String name, String firstName, String lastName, long salary, String avatarUrl,
+    public Resume(String name, String firstName, String lastName, int salary, String avatarUrl,
                   String about, Applicant applicant, List<Skills> skills) {
         this.name = name;
         this.firstName = firstName;

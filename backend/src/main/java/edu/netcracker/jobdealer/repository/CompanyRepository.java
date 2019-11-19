@@ -17,5 +17,5 @@ public interface CompanyRepository extends JpaRepository<Company, UUID> {
 
     Optional<Company> findByAccount(Account account);
 
-    boolean existsByAccountId(UUID id);
+    boolean existsByAccount_Id(UUID id);
 }
