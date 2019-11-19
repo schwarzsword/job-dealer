@@ -1,6 +1,9 @@
 <template>
   <div>
     <div class="companies" v-if="companies.length > 0">
+      <div class="sort">
+        Sort by: <a href="#">ID</a> <a href="#">Name</a> <a href="#">Verified</a>
+      </div>
       <div class="company" v-for="company in companies">
         <div class="title">
           <h2>
