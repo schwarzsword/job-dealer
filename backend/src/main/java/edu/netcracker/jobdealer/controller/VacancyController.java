@@ -23,7 +23,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/vacancies")
+@RequestMapping
 public class VacancyController {
 
     private final VacancyService vacancyService;
@@ -41,7 +41,7 @@ public class VacancyController {
     }
 
     @Secured("ROLE_COMPANY")
-    @PostMapping(value = "/my")
+    @PostMapping(value = "/my/vacancies")
     public ResponseEntity<?> createVacancy(@RequestParam String name, @RequestParam String description,
                                            @RequestParam int money, @RequestParam List<String> requestedSkills,
                                            @AuthenticationPrincipal User user) {
@@ -55,7 +55,7 @@ public class VacancyController {
     }
 
     @Secured("ROLE_COMPANY")
-    @DeleteMapping(value = "/my/{vacancyId}")
+    @DeleteMapping(value = "/my/vacancies/{vacancyId}")
     public ResponseEntity<?> deleteVacancy(@PathVariable("vacancyId") UUID vacancyId,
                                            @AuthenticationPrincipal User user) {
         try {
@@ -79,12 +79,14 @@ public class VacancyController {
         return ResponseEntity.ok().body(vacancies);
     }
 
-    @GetMapping
+    @GetMapping(value = "/vacancies")
     public ResponseEntity<?> getVacancies(@RequestParam int limit,
-                                          @RequestParam int offset, @RequestParam(required = false) int salary,
-                                          @RequestParam List<String> skills) {
+                                          @RequestParam int offset,
+                                          @RequestParam(required = false) int salary,
+                                          @RequestParam(required = false) List<String> skills,
+                                          @RequestParam(required = false) String resumeName) {
         try {
-            List<Vacancy> vacancies = vacancyService.applyConditions(skills, salary);
+            List<Vacancy> vacancies = vacancyService.applyConditions(skills, salary, resumeName);
             List<Vacancy> page = vacancyService.getPage(vacancies, offset, limit);
             if (page != null) {
                 return ResponseEntity.ok(page.stream()

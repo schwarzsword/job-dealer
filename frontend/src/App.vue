@@ -21,7 +21,7 @@
 <script>
     import Navigation from './components/Navigation'
     import {USER_REQUEST} from './store/actions/user'
-    import '@/assets/css/bootstrap.min.css';
+    // import '@/assets/css/bootstrap.min.css';
     import Footer from "./components/Footer/index";
 
     export default {

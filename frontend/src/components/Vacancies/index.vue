@@ -25,7 +25,6 @@
 </template>
 
 <script>
-    import axios from "axios";
     import {urlPort} from "../../tool";
 
     export default {
