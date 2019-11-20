@@ -4,10 +4,7 @@ package edu.netcracker.jobdealer.service.impl;
 import edu.netcracker.jobdealer.entity.Company;
 import edu.netcracker.jobdealer.entity.Skills;
 import edu.netcracker.jobdealer.entity.Vacancy;
-import edu.netcracker.jobdealer.exceptions.CompanyNotFoundException;
-import edu.netcracker.jobdealer.exceptions.NoPermissionException;
-import edu.netcracker.jobdealer.exceptions.SkillNotFoundException;
-import edu.netcracker.jobdealer.exceptions.VacancyNotFoundException;
+import edu.netcracker.jobdealer.exceptions.*;
 import edu.netcracker.jobdealer.repository.CompanyRepository;
 import edu.netcracker.jobdealer.repository.SkillsRepository;
 import edu.netcracker.jobdealer.repository.VacancyRepository;
@@ -55,24 +52,32 @@ public class VacancyServiceImpl implements VacancyService {
     public List<Vacancy> getPage(List<Vacancy> vacancies, int offset, int limit) {
         int size = vacancies.size();
         if (size > offset) {
-            return vacancies.subList(offset, limit > (size - offset) ? size : (limit+offset));
+            return vacancies.subList(offset, limit > (size - offset) ? size : (limit + offset));
         } else return null;
     }
 
     @Override
-    public List<Vacancy> applyConditions(List<String> skills, Integer salary) throws SkillNotFoundException {
-        List<Skills> requestedSkills = skills.stream()
-                .map(e -> skillsRepository.findByName(e)
-                        .orElseThrow(SkillNotFoundException::new))
-                .collect(Collectors.toList());
+    public List<Vacancy> applyConditions(List<String> skills, Integer salary, String resumeName) throws SkillNotFoundException, BadParameterException {
+        if (skills == null && salary == null && resumeName == null)
+            throw new BadParameterException("Can't search with empty parameters");
         Set<Vacancy> vacancies = new HashSet<Vacancy>(vacancyRepository.findAll());
-        requestedSkills.forEach(e -> {
-            Set<Vacancy> allByRequestedSkillsContains = vacancyRepository.findAllByRequestedSkillsContains(e);
-            vacancies.retainAll(allByRequestedSkillsContains);
-        });
+        if (skills != null) {
+            List<Skills> requestedSkills = skills.stream()
+                    .map(e -> skillsRepository.findByName(e)
+                            .orElseThrow(SkillNotFoundException::new))
+                    .collect(Collectors.toList());
+            requestedSkills.forEach(e -> {
+                Set<Vacancy> allByRequestedSkillsContains = vacancyRepository.findAllByRequestedSkillsContains(e);
+                vacancies.retainAll(allByRequestedSkillsContains);
+            });
+        }
         if (salary != null) {
             Set<Vacancy> allByMoneyIsGreaterThanEqual = vacancyRepository.findAllByMoneyIsGreaterThanEqual(salary);
             vacancies.retainAll(allByMoneyIsGreaterThanEqual);
+        }
+        if (resumeName != null) {
+            Set<Vacancy> allByNameLike = vacancyRepository.findAllByNameLike(resumeName);
+            vacancies.retainAll(allByNameLike);
         }
         return new ArrayList<Vacancy>(vacancies);
     }

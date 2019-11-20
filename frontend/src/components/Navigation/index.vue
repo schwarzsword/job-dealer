@@ -8,18 +8,22 @@
                 </div>
             </div>
             <div class="find">
-                <input id="find" type="input" name="find" placeholder="Search"/>
-                <div id="select" class="select">
-                    <span id="vacancies" class="item">vacancies</span>
-                    <span id="resumes" class="item">resumes</span>
+                <input id="find" name="find" placeholder="Search" type="input"/>
+                <div class="select" id="select">
+                    <span class="item" id="vacancies">vacancies</span>
+                    <span class="item" id="resumes">resumes</span>
                 </div>
-                <div id="selected" class="selected">vacancies</div>
-                <div id="histories" class="histories"></div>
+                <div class="selected" id="selected">vacancies</div>
+                <div class="histories" id="histories"></div>
             </div>
             <div class="menu">
                 <ul>
-                    <li><router-link class="nav-link" to="/vacancies">Vacancies</router-link></li>
-                    <li><router-link class="nav-link" to="/resumes">Resumes</router-link></li>
+                    <li>
+                        <router-link class="nav-link" to="/vacancies">Vacancies</router-link>
+                    </li>
+                    <li>
+                        <router-link class="nav-link" to="/resumes">Resumes</router-link>
+                    </li>
                     <li v-if="isUser">
                         <router-link class="sign_in" to="/profile">My profile</router-link>
                     </li>
@@ -30,7 +34,7 @@
                 </ul>
             </div>
             <div class="user">
-                <div v-if="isAuthenticated" @click="logout">
+                <div @click="logout" v-if="isAuthenticated">
                     <router-link class="sign_in" to="/logout">Logout</router-link>
                 </div>
                 <div v-if="!isAuthenticated && !authLoading">

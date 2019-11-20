@@ -1,31 +1,30 @@
-
 <template>
     <v-form
+            lazy-validation
             ref="form"
             v-model="valid"
-            lazy-validation
     >
         <div>Login</div>
         <v-text-field
-                v-model="username"
                 :rules="emailRules"
                 label="E-mail"
                 required
+                v-model="username"
         ></v-text-field>
 
         <v-text-field
-                v-model="password"
-                label="Password"
-                required
                 :type="show1 ? 'text' : 'password'"
                 @click:append="show1 = !show1"
+                label="Password"
+                required
+                v-model="password"
         ></v-text-field>
 
         <v-btn
                 :disabled="!valid"
-                color="green"
-                class="mr-4"
                 @click="this.login"
+                class="mr-4"
+                color="green"
         >
             Login
         </v-btn>

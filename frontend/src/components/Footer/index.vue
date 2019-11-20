@@ -12,9 +12,8 @@
 <script>
     export default {
         name: 'Footer',
-        data () {
-            return {
-            }
+        data() {
+            return {}
         }
     }
 </script>

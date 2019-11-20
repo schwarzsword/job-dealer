@@ -28,6 +28,6 @@ public interface VacancyService {
 
     List<Vacancy> getPage(List<Vacancy> inp, int offset, int limit);
 
-    public List<Vacancy> applyConditions(List<String> skills, Integer salary) throws SkillNotFoundException;
+    public List<Vacancy> applyConditions(List<String> skills, Integer salary, String resumeName) throws SkillNotFoundException;
 
 }

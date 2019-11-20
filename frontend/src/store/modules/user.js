@@ -1,7 +1,6 @@
-import {USER_REQUEST, USER_ERROR, USER_SUCCESS} from '../actions/user'
+import {USER_ERROR, USER_REQUEST, USER_SUCCESS} from '../actions/user'
 import Vue from 'vue'
 import {AUTH_LOGOUT} from '../actions/auth'
-import axios from 'axios'
 import {urlPort} from "../../tool";
 
 const state = {status: '', profile: {}};

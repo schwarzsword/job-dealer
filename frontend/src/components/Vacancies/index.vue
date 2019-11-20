@@ -1,31 +1,29 @@
 <template>
-            <v-data-table
-                    multi-sort
-                    :sort-by="['name', 'money', 'ownerName']"
-                    :sort-desc="[false, true]"
-                    :headers="headers"
-                    :items="vacancies"
-                    :items-per-page="5"
-                    class="elevation-1"
-                    :search="search"
-            >
-                <template v-slot:top>
-                    <v-text-field
-                            v-model="search"
-                            append-icon="search"
-                            label="Search"
-                            single-line
-                            hide-details
-                    ></v-text-field>
-                </template>
+    <v-data-table
+            :headers="headers"
+            :items="vacancies"
+            :items-per-page="5"
+            :search="search"
+            :sort-by="['name', 'money', 'ownerName']"
+            :sort-desc="[false, true]"
+            class="elevation-1"
+            multi-sort
+    >
+        <template v-slot:top>
+            <v-text-field
+                    append-icon="search"
+                    hide-details
+                    label="Search"
+                    single-line
+                    v-model="search"
+            ></v-text-field>
+        </template>
 
 
-
-            </v-data-table>
+    </v-data-table>
 </template>
 
 <script>
-    import axios from "axios";
     import {urlPort} from "../../tool";
 
     export default {
