@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class Vacancy {
 
+
     @ManyToMany
     @JoinTable(
             name = "vacancySkills",
@@ -39,14 +40,14 @@ public class Vacancy {
     private String description;
     @Basic
     @Column(name = "money")
-    private Integer money;
+    private int money;
     @ManyToOne
     @JoinColumn(name = "vacancies", referencedColumnName = "id")
     private Company owner;
     @OneToOne(mappedBy = "vacancy")
     private Task task;
 
-    public Vacancy(String name, String description, Integer money, List<Skills> requestedSkills, Company owner) {
+    public Vacancy(String name, String description, int money, List<Skills> requestedSkills, Company owner) {
         this.name = name;
         this.description = description;
         this.money = money;

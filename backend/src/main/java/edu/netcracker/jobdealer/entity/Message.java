@@ -1,6 +1,7 @@
 package edu.netcracker.jobdealer.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.dozer.Mapping;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import java.util.UUID;
 @Data
 @Entity
 @Table
+@NoArgsConstructor
 public class Message {
     @Id
     @Column(name = "id", nullable = false)
@@ -30,10 +32,6 @@ public class Message {
     @ManyToOne
     @JoinColumn(name = "messagesAsDest", referencedColumnName = "id")
     private Account messageDest;
-
-
-    protected Message() {
-    }
 
     public Message(String text, Account source, Account dest) {
         this.text = text;

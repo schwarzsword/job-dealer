@@ -1,6 +1,7 @@
 package edu.netcracker.jobdealer.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.UUID;
 @Data
 @Entity
 @Table
+@NoArgsConstructor
 public class Review {
     @Id
     @Column(name = "id", nullable = false)
@@ -37,9 +39,6 @@ public class Review {
             inverseJoinColumns = @JoinColumn(name = "accountId"))
     private List<Account> increased;
 
-
-    protected Review() {
-    }
 
     public Review(String text, Account source, Account dest) {
         this.text = text;

@@ -24,7 +24,7 @@ public class CompanyController {
     private final CompanyService companyService;
 
     @Value("${upload.path}")
-    String path;
+    private String path;
 
     @Autowired
     public CompanyController(Mapper mapper, CompanyService companyService) {
@@ -47,12 +47,15 @@ public class CompanyController {
     @PostMapping(value = "/companies")
     public ResponseEntity<?> addCompany(@RequestParam String name, @RequestParam String description,
                                         @RequestParam("file") MultipartFile file, @RequestParam UUID accountId) {
+
+        //todo добавить проверку, если файл null то дальше прокидывать дефолтный урл картинки, которую мы положим заранее
+
+         //todo решить, где хранить файлы
+
         File uploadDir = new File(path);
         if (!uploadDir.exists()) {
             uploadDir.mkdir();
         }
-
-
         String avatarUrl = UUID.randomUUID().toString() + "." + file.getOriginalFilename();
         try {
             file.transferTo(new File(path + "/" + avatarUrl));
@@ -61,7 +64,7 @@ public class CompanyController {
                             .addCompany(name, false, description, avatarUrl, accountId), CompanyDto.class);
             return ResponseEntity.ok(company);
         } catch (AccountNotFoundException e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(404).body(e.getMessage());
         } catch (AccountIdExistsException | IOException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

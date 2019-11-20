@@ -10,7 +10,6 @@ import edu.netcracker.jobdealer.repository.CompanyRepository;
 import edu.netcracker.jobdealer.service.AccountService;
 import edu.netcracker.jobdealer.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,23 +71,21 @@ public class CompanyServiceImpl implements CompanyService {
 //        }
 //    }
 
+
+    //TODO удаление должно быть на уровне аккаунта
+//    @Override
+//    public void deleteCompany(UUID id) throws CompanyNotFoundException {
+//        Company company = companyRepository.findById().orElseThrow(CompanyNotFoundException::new);
+//        companyRepository.de
+//    }
+
     @Override
-    public ResponseEntity deleteCompany(UUID id) throws CompanyNotFoundException {
-        if (companyRepository.findById(id).isPresent() && id != null) {
-            companyRepository.deleteById(id);
-            return ResponseEntity.ok(true);
-        } else {
-            throw new CompanyNotFoundException("You passed an empty parameter or the company was not found");
-        }
+    public Company getByAccount(Account accountByEmail) throws CompanyNotFoundException {
+        return companyRepository.findByAccount(accountByEmail).orElseThrow(CompanyNotFoundException::new);
     }
 
     @Override
-    public Company getByAccount(Account accountByEmail) {
-        Optional<Company> company = companyRepository.findByAccount(accountByEmail);
-        if (company.isPresent()) {
-            return company.get();
-        } else {
-            throw new CompanyNotFoundException("Company is not found");
-        }
+    public Company getByAccountEmail(String email) throws CompanyNotFoundException {
+        return companyRepository.findByAccountEmail(email).orElseThrow(CompanyNotFoundException::new);
     }
 }

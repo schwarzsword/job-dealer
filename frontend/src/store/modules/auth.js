@@ -1,6 +1,7 @@
 import {AUTH_ERROR, AUTH_LOGOUT, AUTH_REQUEST, AUTH_SUCCESS} from '../actions/auth'
 import axios from 'axios'
 import {urlPort} from "../../tool";
+import {USER_REQUEST} from "../actions/user";
 
 
 const state = {
@@ -14,7 +15,7 @@ const getters = {
 };
 
 const actions = {
-    [AUTH_REQUEST]: ({commit}, user) => {
+    [AUTH_REQUEST]: ({commit, dispatch}, user) => {
         return new Promise((resolve, reject) => {
             commit(AUTH_REQUEST);
             let params = new URLSearchParams();
@@ -25,7 +26,7 @@ const actions = {
                     sessionStorage.setItem('user-token', "logged");
                     axios.defaults.headers.common['Authorization'] = "logged";
                     commit(AUTH_SUCCESS, resp);
-                    // dispatch(USER_REQUEST);
+                    dispatch(USER_REQUEST);
                     resolve(resp)
                 })
                 .catch(err => {

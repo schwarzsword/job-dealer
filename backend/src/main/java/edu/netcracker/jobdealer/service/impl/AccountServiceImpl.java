@@ -1,18 +1,19 @@
 package edu.netcracker.jobdealer.service.impl;
 
 import edu.netcracker.jobdealer.entity.Account;
-import edu.netcracker.jobdealer.exceptions.*;
+import edu.netcracker.jobdealer.exceptions.AccountByEmailNotFoundException;
+import edu.netcracker.jobdealer.exceptions.AccountByIdNotFoundException;
+import edu.netcracker.jobdealer.exceptions.AccountNotFoundException;
+import edu.netcracker.jobdealer.exceptions.EmailExistsException;
 import edu.netcracker.jobdealer.repository.AccountRepository;
 import edu.netcracker.jobdealer.repository.ApplicantRepository;
 import edu.netcracker.jobdealer.repository.CompanyRepository;
 import edu.netcracker.jobdealer.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.security.auth.login.AccountNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -54,17 +55,12 @@ public class AccountServiceImpl implements AccountService {
 
 
     @Override
-    public Account getUserByEmail(String email) throws UsernameNotFoundException {
-        Optional<Account> optionalUsersEntity = accountRepository.findByEmail(email);
-        if (optionalUsersEntity.isPresent()) {
-            return optionalUsersEntity.get();
-        } else {
-            throw new UsernameNotFoundException("User not found");
-        }
+    public Account getUserByEmail(String email) throws AccountByEmailNotFoundException {
+        return accountRepository.findByEmail(email).orElseThrow(() -> new AccountByEmailNotFoundException(email));
     }
 
     @Override
-    public Account changePassword(String email, String newPass) throws UsernameNotFoundException {
+    public Account changePassword(String email, String newPass) throws AccountByEmailNotFoundException {
         if (accountRepository.existsByEmail(email)) {
             String pwd = BCrypt.hashpw(newPass, salt);
             Account user = getUserByEmail(email);
@@ -72,7 +68,7 @@ public class AccountServiceImpl implements AccountService {
             accountRepository.save(user);
             return user;
         } else {
-            throw new UsernameNotFoundException("User not found");
+            throw new AccountByEmailNotFoundException(email);
         }
     }
 
@@ -83,18 +79,18 @@ public class AccountServiceImpl implements AccountService {
             UUID uuid = UUID.fromString(id);
             account = accountRepository.findById(uuid);
         } catch (IllegalArgumentException exception) {
-            account = accountRepository.findByUsername(id);
+            account = accountRepository.findByEmail(id);
         }
 
         if (account.isPresent() && accountRepository.existsById(account.get().getId())) {
             return account.get();
         } else {
-            throw new UsernameNotFoundException("Account was not found");
+            throw new AccountNotFoundException("Account not found");
         }
     }
 
     @Override
-    public Account addAccount( String email, String password, String role) {
+    public Account addAccount(String email, String password, String role) {
         if (accountRepository.existsByEmail(email)) {
             throw new EmailExistsException("Email is already exists");
         } else {
@@ -105,17 +101,10 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account updateAccount(UUID id, String username, String email, String password) {
+    public Account updateAccount(UUID id, String email, String password) {
         Optional<Account> account = accountRepository.findById(id);
 
         if (account.isPresent()) {
-            if (!account.get().getUsername().equals(username)) {
-                if (!accountRepository.existsByUsername(username)) {
-                    account.get().setUsername(username);
-                } else {
-                    throw new UsernameAlreadyExistsException("Username already exists");
-                }
-            }
             if (!account.get().getPassword().equals(password)) {
                 account.get().setPassword(BCrypt.hashpw(password, salt));
             }
@@ -129,7 +118,7 @@ public class AccountServiceImpl implements AccountService {
             accountRepository.save(account.get());
             return account.get();
         } else {
-            throw new UsernameNotFoundException("Account was not found");
+            throw new AccountNotFoundException("Account was not found");
         }
     }
 
@@ -141,4 +130,7 @@ public class AccountServiceImpl implements AccountService {
             throw new AccountNotFoundException("Account was not found");
         }
     }
+
+
+
 }

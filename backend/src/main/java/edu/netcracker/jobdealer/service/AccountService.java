@@ -15,7 +15,7 @@ public interface AccountService {
 
     Account getByEmail(String email) throws AccountByEmailNotFoundException;
 
-    public Account getById(UUID id) throws AccountByIdNotFoundException;
+    Account getById(UUID id) throws AccountByIdNotFoundException;
 
     Account getUserByEmail(String email) throws UsernameNotFoundException;
 
@@ -25,7 +25,8 @@ public interface AccountService {
 
     Account addAccount(String email, String password, String role);
 
-    Account updateAccount(UUID id, String username, String email, String password);
+    Account updateAccount(UUID id, String email, String password);
 
     void deleteAccount(UUID id) throws AccountNotFoundException;
+
 }

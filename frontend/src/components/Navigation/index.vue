@@ -17,17 +17,18 @@
             </div>
             <div class="menu">
                 <ul>
-                    <li><router-link class="nav-link" to="/about">Vacancies</router-link></li>
+                    <li><router-link class="nav-link" to="/vacancies">Vacancies</router-link></li>
                     <li><router-link class="nav-link" to="/rules">Resumes</router-link></li>
+                    <li v-if="isUser">
+                        <router-link class="sign_in" to="/profile">My profile</router-link>
+                    </li>
+                    <li v-if="isCompany">
+                        <router-link class="sign_in" to="/company">My profile</router-link>
+                    </li>
                 </ul>
             </div>
             <div class="user">
-                <div v-if="isUser">
-                    <router-link class="sign_in" to="/profile">My profile</router-link>
-                </div>
-                 <div v-if="isCompany">
-                    <router-link class="sign_in" to="/company">My profile</router-link>
-                </div>
+
                 <div v-if="isAuthenticated" @click="logout">
                     <router-link class="sign_in" to="/logout">Logout</router-link>
                 </div>
@@ -50,7 +51,7 @@
     }
     .header .container {
         display: block;
-        width: 1000px;
+        width: 1200px;
         height: inherit;
         line-height: inherit;
     }
@@ -232,9 +233,10 @@
             logout: function () {
                 this.$store.dispatch(AUTH_LOGOUT).then(() => this.$router.push('/login'))
             }
+
         },
         computed: {
-            ...mapGetters(['getProfile', 'isAuthenticated', 'isUser', 'isCompany']),
+            ...mapGetters(['getProfile', 'isAuthenticated', 'isUser', 'isCompany', 'profile']),
             ...mapState({
                 authLoading: state => state.auth.status === 'loading',
             })

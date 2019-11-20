@@ -55,7 +55,7 @@
             }
         },
         created() {
-            urlPort.get("/api/vacancies/").then(res => {
+            urlPort.get("/vacancies/").then(res => {
                 this.vacancies = res.data;
                 console.log(res.data);
             }).catch(reason => {

@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 
@@ -41,17 +40,17 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public List<Review> getUserReviews(UUID userId) {
-        return reviewRepository.findAllByReviewDest_Id(userId);
+        return reviewRepository.findAllByReviewDestId(userId);
     }
 
     @Override
     public List<Review> getUserReviews(String email) {
-        return reviewRepository.findAllByReviewDest_Email(email);
+        return reviewRepository.findAllByReviewDestEmail(email);
     }
 
     @Override
     public Review getReviewById(UUID reviewId) throws ReviewNotFountException {
-        return  reviewRepository.findById(reviewId).orElseThrow(ReviewNotFountException::new);
+        return reviewRepository.findById(reviewId).orElseThrow(ReviewNotFountException::new);
     }
 
     @Override
