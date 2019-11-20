@@ -2,6 +2,7 @@ package edu.netcracker.jobdealer.controller;
 
 import edu.netcracker.jobdealer.dto.CompanyDto;
 import edu.netcracker.jobdealer.exceptions.AccountIdExistsException;
+
 import edu.netcracker.jobdealer.exceptions.AccountNotFoundException;
 import edu.netcracker.jobdealer.service.CompanyService;
 import org.dozer.Mapper;
@@ -33,8 +34,10 @@ public class CompanyController {
     }
 
     @GetMapping(value = "/companies")
-    public List<CompanyDto> getAllCompanies() {
-        return companyService.getAllCompanies().stream()
+    public List<CompanyDto> getCompanies(@RequestParam(defaultValue = "0") Integer page,
+                                         @RequestParam(defaultValue = "10") Integer size,
+                                         @RequestParam(defaultValue = "id") String sortBy) {
+        return companyService.getCompanies(page, size, sortBy).stream()
                 .map(company -> this.mapper.map(company, CompanyDto.class))
                 .collect(Collectors.toList());
     }
