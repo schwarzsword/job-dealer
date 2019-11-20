@@ -5,6 +5,7 @@ import edu.netcracker.jobdealer.entity.Company;
 import edu.netcracker.jobdealer.exceptions.AccountByIdNotFoundException;
 import edu.netcracker.jobdealer.exceptions.AccountIdExistsException;
 import edu.netcracker.jobdealer.exceptions.CompanyNotFoundException;
+import edu.netcracker.jobdealer.exceptions.NotImplementedMethodException;
 import edu.netcracker.jobdealer.repository.AccountRepository;
 import edu.netcracker.jobdealer.repository.CompanyRepository;
 import edu.netcracker.jobdealer.service.AccountService;
@@ -78,6 +79,11 @@ public class CompanyServiceImpl implements CompanyService {
             Account byId = accountService.getById(accountId);
             return companyRepository.save(new Company(name, false, description, avatarUrl, byId));
         } else throw new AccountIdExistsException();
+    }
+
+    @Override
+    public Company updateCompany(UUID id, String name, Boolean isVerified, String description, String avatarUrl, UUID accountId) {
+        throw new NotImplementedMethodException("");
     }
 
     //TODO исправить

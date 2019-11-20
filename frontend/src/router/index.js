@@ -97,13 +97,7 @@ export default new Router({
             name: 'resumeForm',
             component: ResumeForm,
             //beforeEnter: ifAuthenticated
-        }
-        // {
-        //     path: '/profile',
-        //     name: 'profile',
-        //     component: Profile,
-        //     beforeEnter: ifAuthenticated
-        // },
+        },
         {
             path: '/vacancies',
             name: 'vacancies',
