@@ -17,23 +17,23 @@
             </div>
             <div class="menu">
                 <ul>
-                    <li>
-                        <router-link class="nav-link" to="/about">Vacancies</router-link>
+                    <li><router-link class="nav-link" to="/vacancies">Vacancies</router-link></li>
+                    <li><router-link class="nav-link" to="/rules">Resumes</router-link></li>
+                    <li v-if="isUser">
+                        <router-link class="sign_in" to="/profile">My profile</router-link>
                     </li>
-                    <li>
-                        <router-link class="nav-link" to="/rules">Resumes</router-link>
+                    <li v-if="isCompany">
+                        <router-link class="sign_in" to="/company">My profile</router-link>
+
                     </li>
                 </ul>
             </div>
             <div class="user">
-                <div v-if="isProfileLoaded">
-                    <router-link class="sign_in" to="/profile">My profile</router-link>
-                </div>
                 <div v-if="isAuthenticated" @click="logout">
                     <router-link class="sign_in" to="/logout">Logout</router-link>
                 </div>
                 <div v-if="!isAuthenticated && !authLoading">
-                    <router-link class="sign_in" to="/account">Sign in</router-link>
+                    <router-link class="sign_in" to="/login">Sign in</router-link>
                 </div>
             </div>
         </div>
@@ -52,7 +52,7 @@
 
     .header .container {
         display: block;
-        width: 1000px;
+        width: 1200px;
         height: inherit;
         line-height: inherit;
         margin: 0 auto;
@@ -273,9 +273,11 @@
             logout: function () {
                 this.$store.dispatch(AUTH_LOGOUT).then(() => this.$router.push('/'))
             }
+
         },
         computed: {
-            ...mapGetters(['getProfile', 'isAuthenticated', 'isProfileLoaded']),
+
+            ...mapGetters(['getProfile', 'isAuthenticated', 'isUser', 'isCompany', 'profile']),
             ...mapState({
                 authLoading: state => state.auth.status === 'loading',
             })

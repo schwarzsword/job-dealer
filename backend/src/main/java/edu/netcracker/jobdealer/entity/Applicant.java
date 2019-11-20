@@ -19,9 +19,9 @@ public class Applicant {
     @Column(name = "id")
     private UUID id;
 
-    @OneToOne
-    @JoinColumn(name = "accountId", referencedColumnName = "id", nullable = false)
-    private Account account;
+    @ManyToOne
+    @JoinColumn(name = "resumeId", referencedColumnName = "id")
+    private Resume activeResume;
 
     @OneToMany(mappedBy = "applicant")
     private List<Resume> ownedResumes;
@@ -32,9 +32,9 @@ public class Applicant {
     @OneToMany(mappedBy = "submiter")
     private List<Submission> ownedSubmissions;
 
-//    @OneToOne
-//    @JoinColumn(name = "account", referencedColumnName = "id", nullable = false)
-//    private Account account;
+    @OneToOne
+    @JoinColumn(name = "account", referencedColumnName = "id", nullable = false)
+    private Account account;
 
     public Applicant(Account account) {
         this.account = account;

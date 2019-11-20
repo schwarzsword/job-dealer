@@ -1,6 +1,7 @@
 package edu.netcracker.jobdealer.controller;
 
 import edu.netcracker.jobdealer.dto.AccountDto;
+import edu.netcracker.jobdealer.entity.Account;
 import edu.netcracker.jobdealer.exceptions.BadParameterException;
 import edu.netcracker.jobdealer.exceptions.EmailExistsException;
 import edu.netcracker.jobdealer.service.AccountService;
@@ -9,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +20,7 @@ import javax.security.auth.login.AccountNotFoundException;
 import java.util.UUID;
 
 @RestController
+@RequestMapping("/accounts")
 public class AccountController {
 
     private final AccountService accountService;
@@ -28,7 +33,7 @@ public class AccountController {
     }
 
 
-    @GetMapping(value = "/accounts/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<?> getAccountById(@PathVariable("id") String id) {
         try {
             return ResponseEntity.ok(mapper.map(accountService.getAccount(id), AccountDto.class));
@@ -37,13 +42,12 @@ public class AccountController {
         }
     }
 
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    @PostMapping(value = "/accounts")
-    public ResponseEntity signUpAccount(@RequestParam String username, @RequestParam String email,
-                                        @RequestParam String password, @RequestParam boolean isCompany) {
+    @PostMapping
+    public ResponseEntity signUpAccount(@RequestParam("email") String email,
+                                        @RequestParam("password") String password, @RequestParam("isCompany") boolean isCompany) {
         try {
             String role = isCompany ? "ROLE_COMPANY" : "ROLE_USER";
-            AccountDto account = mapper.map(accountService.addAccount(username, email, password, role),
+            AccountDto account = mapper.map(accountService.addAccount(email, password, role),
                     AccountDto.class);
             return new ResponseEntity<>(account, HttpStatus.CREATED);
         } catch (EmailExistsException | BadParameterException e) {
@@ -52,12 +56,13 @@ public class AccountController {
     }
 
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    @PutMapping(value = "/accounts")
-    public ResponseEntity UpdateAccount(@RequestParam UUID id, @RequestParam String username,
+    @PutMapping
+    public ResponseEntity updateAccount(@RequestParam UUID id,
                                         @RequestParam String email, @RequestParam String password) {
         try {
-            AccountDto account = mapper.map(accountService.updateAccount(id, username, email, password),
+            AccountDto account = mapper.map(accountService.updateAccount(id, email, password),
                     AccountDto.class);
+            //TODO испрвить на на билдер
             return new ResponseEntity<>(account, HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_MODIFIED);
@@ -65,7 +70,7 @@ public class AccountController {
     }
 
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    @DeleteMapping(value = "/accounts/{id}")
+    @DeleteMapping
     public ResponseEntity deleteAccountById(@PathVariable String id) {
         try {
             accountService.deleteAccount(UUID.fromString(id));
@@ -73,5 +78,12 @@ public class AccountController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/my")
+    public ResponseEntity<?> getProfile(@AuthenticationPrincipal User user) {
+        Account byEmail = accountService.getByEmail(user.getUsername());
+        return ResponseEntity.ok(mapper.map(byEmail, AccountDto.class));
     }
 }

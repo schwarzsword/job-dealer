@@ -2,9 +2,9 @@ spring:
   profiles:
     active: dev
   datasource:
-    url: jdbc:postgresql://localhost:5432/jobdealer
-    username: root
-    password: root
+    url: jdbc:postgresql://localhost:5432/netcracker
+    username: netcracker
+    password: netcracker
     driver-class-name: org.postgresql.Driver
     initialization-mode: always
     hikari:
@@ -23,6 +23,11 @@ spring:
     generate-ddl: true
     show-sql: false
     open-in-view: false
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
 server:
   port: 8080
 
@@ -33,3 +38,6 @@ logging:
   pattern:
     console: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
     file: "%d %p %c{1.} [%t] %m%n"
+
+upload:
+  path: /home/schwarzkv/img

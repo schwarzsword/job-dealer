@@ -1,10 +1,10 @@
 package edu.netcracker.jobdealer.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.UUID;
-import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor

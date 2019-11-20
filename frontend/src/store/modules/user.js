@@ -1,20 +1,23 @@
-import { USER_REQUEST, USER_ERROR, USER_SUCCESS } from '../actions/user'
+import {USER_REQUEST, USER_ERROR, USER_SUCCESS} from '../actions/user'
 import Vue from 'vue'
-import { AUTH_LOGOUT } from '../actions/auth'
+import {AUTH_LOGOUT} from '../actions/auth'
 import axios from 'axios'
 import {urlPort} from "../../tool";
 
-const state = { status: '', profile: {} };
+const state = {status: '', profile: {}};
 
 const getters = {
     getProfile: state => state.profile,
     isProfileLoaded: state => !!state.profile.name,
-}
+    isCompany: state => state.profile.role === "ROLE_COMPANY",
+    isUser: state => state.profile.role === "ROLE_USER",
+    profile: state => state.profile,
+};
 
 const actions = {
     [USER_REQUEST]: ({commit, dispatch}) => {
         commit(USER_REQUEST);
-        axios.get(urlPort("/profile"),{withCredentials: true})
+        urlPort.get("/accounts/my", {withCredentials: true})
             .then(resp => {
                 commit(USER_SUCCESS, resp)
             })
@@ -24,7 +27,7 @@ const actions = {
                 // dispatch(AUTH_LOGOUT)
             })
     },
-}
+};
 
 const mutations = {
     [USER_REQUEST]: (state) => {
@@ -32,7 +35,7 @@ const mutations = {
     },
     [USER_SUCCESS]: (state, resp) => {
         state.status = 'success';
-        Vue.set(state, 'profile', resp)
+        Vue.set(state, 'profile', resp.data)
     },
     [USER_ERROR]: (state) => {
         state.status = 'error'
@@ -40,7 +43,7 @@ const mutations = {
     [AUTH_LOGOUT]: (state) => {
         state.profile = {}
     }
-}
+};
 
 export default {
     state,
