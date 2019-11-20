@@ -1,0 +1,4 @@
+language: java
+install: true
+script:
+  - cd backend && mvn -B verify && cd ..

@@ -2,14 +2,15 @@ package edu.netcracker.jobdealer.entity;
 
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.UUID;
 
 @Data
 @Entity
 @Table
+@NoArgsConstructor
 public class Skills {
     @Id
     @Column(name = "id", nullable = false)
@@ -18,12 +19,6 @@ public class Skills {
     @Basic
     @Column(name = "skill", unique = true)
     private String name;
-
-    @OneToMany(mappedBy = "skill")
-    List<SkillToOwner> owners;
-
-    protected Skills() {
-    }
 
     public Skills(String name) {
         this.name = name;

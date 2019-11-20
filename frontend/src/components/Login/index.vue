@@ -1,22 +1,39 @@
-<template>
-    <div>
-        <form class="login" @submit.prevent="login">
-            <h1>Sign in</h1>
 
-            <label>
-                <input required v-model="username" type="text" placeholder="Email"/>
-            </label>
-            <br/>
-            <label>
-                <input required v-model="password" type="password" placeholder="Password"/>
-            </label>
-            <br/>
-            <button type="submit">Login</button>
-        </form>
+<template>
+    <v-form
+            ref="form"
+            v-model="valid"
+            lazy-validation
+    >
+        <div>Login</div>
+        <v-text-field
+                v-model="username"
+                :rules="emailRules"
+                label="E-mail"
+                required
+        ></v-text-field>
+
+        <v-text-field
+                v-model="password"
+                label="Password"
+                required
+                :type="show1 ? 'text' : 'password'"
+                @click:append="show1 = !show1"
+        ></v-text-field>
+
+        <v-btn
+                :disabled="!valid"
+                color="green"
+                class="mr-4"
+                @click="this.login"
+        >
+            Login
+        </v-btn>
         <div>Have no account? Sign up
             <router-link class="signup" to="/signup">here</router-link>
         </div>
-    </div>
+    </v-form>
+
 </template>
 
 <script>
@@ -26,8 +43,14 @@
         name: 'login',
         data() {
             return {
+                show1: false,
+                valid: true,
                 username: '',
                 password: '',
+                emailRules: [
+                    v => !!v || 'E-mail is required',
+                    v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+                ],
             }
         },
         methods: {
@@ -45,7 +68,7 @@
     .login {
         display: flex;
         flex-direction: column;
-        width: 300px;
+        width: 500px;
         padding: 10px;
     }
 </style>

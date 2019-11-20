@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Transactional
-@Service("submissionService")
+@Service
 public class TaskServiceImpl implements TaskService {
 
     private final TestTaskRepository testTaskRepository;
@@ -52,7 +52,7 @@ public class TaskServiceImpl implements TaskService {
         Optional<Task> byVacancy = testTaskRepository.findByVacancy(vacancy);
         if (byVacancy.isPresent()) {
             return byVacancy.get();
-        } else throw new TaskNotFoundException("Task not found");
+        } else throw new TaskNotFoundException();
     }
 
     @Override
@@ -60,6 +60,6 @@ public class TaskServiceImpl implements TaskService {
         Optional<Task> byVacancy = testTaskRepository.findById(taskId);
         if (byVacancy.isPresent()) {
             return byVacancy.get();
-        } else throw new TaskNotFoundException("Task not found");
+        } else throw new TaskNotFoundException();
     }
 }

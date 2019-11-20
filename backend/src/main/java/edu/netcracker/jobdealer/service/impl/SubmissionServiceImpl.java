@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Transactional
-@Service("taskService")
+@Service
 public class SubmissionServiceImpl implements SubmissionService {
 
     private final TestTaskRepository testTaskRepository;

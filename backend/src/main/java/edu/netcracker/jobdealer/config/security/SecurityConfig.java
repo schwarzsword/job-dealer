@@ -30,20 +30,23 @@ import java.util.ArrayList;
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    public final DataSource dataSource;
+    private final
+    DataSource dataSource;
     private final
     MyUserDetailsService userDetailsService;
     private final
     CustomEntryPoint entryPoint;
-
     private final
     SuccessLoginHandler successLoginHandler;
+    private final
+    MyAuthenticationSuccessHandler myAuthenticationSuccessHandler;
 
-    public SecurityConfig(MyUserDetailsService userDetailsService, DataSource dataSource, CustomEntryPoint entryPoint, SuccessLoginHandler successLoginHandler) {
+    public SecurityConfig(MyUserDetailsService userDetailsService, DataSource dataSource, CustomEntryPoint entryPoint, SuccessLoginHandler successLoginHandler, MyAuthenticationSuccessHandler myAuthenticationSuccessHandler) {
         this.userDetailsService = userDetailsService;
         this.dataSource = dataSource;
         this.entryPoint = entryPoint;
         this.successLoginHandler = successLoginHandler;
+        this.myAuthenticationSuccessHandler = myAuthenticationSuccessHandler;
     }
 
 
@@ -80,6 +83,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationProvider(authenticationProvider())
 
                 .rememberMe()
+//                .authenticationSuccessHandler(myAuthenticationSuccessHandler)
                 .rememberMeCookieName("remember-me-token")
                 .userDetailsService(userDetailsService)
                 .tokenRepository(persistentTokenRepository())

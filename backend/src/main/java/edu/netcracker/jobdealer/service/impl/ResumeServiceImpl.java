@@ -1,81 +1,71 @@
 package edu.netcracker.jobdealer.service.impl;
 
-import edu.netcracker.jobdealer.entity.Account;
+
 import edu.netcracker.jobdealer.entity.Applicant;
 import edu.netcracker.jobdealer.entity.Resume;
-import edu.netcracker.jobdealer.exceptions.ResourceNotFoundException;
+import edu.netcracker.jobdealer.entity.Skills;
+import edu.netcracker.jobdealer.exceptions.ApplicantNotFoundException;
+import edu.netcracker.jobdealer.exceptions.NotImplementedMethodException;
+import edu.netcracker.jobdealer.exceptions.ResumeAlreadyExistsException;
+import edu.netcracker.jobdealer.repository.ApplicantRepository;
 import edu.netcracker.jobdealer.repository.ResumeRepository;
-import edu.netcracker.jobdealer.service.AccountService;
-import edu.netcracker.jobdealer.service.ApplicantService;
+import edu.netcracker.jobdealer.repository.SkillsRepository;
 import edu.netcracker.jobdealer.service.ResumeService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
-@Service("resumeService")
+@Service
 @Transactional
 public class ResumeServiceImpl implements ResumeService {
 
     private final ResumeRepository resumeRepository;
-    private final AccountService accountService;
-    private final ApplicantService applicantService;
+    private final SkillsRepository skillsRepository;
+    private final ApplicantRepository applicantRepository;
 
-    @Autowired
-    public ResumeServiceImpl(final ResumeRepository resumeRepository,
-                             final AccountService accountService,
-                             final ApplicantService applicantService) {
+
+    public ResumeServiceImpl(ResumeRepository resumeRepository,
+                             SkillsRepository skillsRepository,
+                             ApplicantRepository applicantRepository) {
         this.resumeRepository = resumeRepository;
-        this.accountService = accountService;
-        this.applicantService = applicantService;
+        this.skillsRepository = skillsRepository;
+        this.applicantRepository = applicantRepository;
+    }
+
+
+    @Override
+    public Resume add(String resumeName, String firstName,
+                      String lastName, String about,
+                      String avataUrl, int salary,
+                      UUID applicantId, List<String> skillsString)
+            throws ApplicantNotFoundException, ResumeAlreadyExistsException {
+        Applicant applicant = applicantRepository.findById(applicantId).orElseThrow(ApplicantNotFoundException::new);
+        List<Skills> skills = skillsString.stream()
+                .map(e -> skillsRepository.findByName(e)
+                        .orElseGet(() -> skillsRepository
+                                .save(new Skills(e))))
+                .collect(Collectors.toList());
+        if (!resumeRepository.existsByNameAndApplicant(resumeName, applicant)) {
+            Resume resume = resumeRepository.save(
+                    new Resume(resumeName, firstName, lastName, salary, avataUrl, about, applicant, skills));
+            List<Resume> ownedResumes = applicant.getOwnedResumes();
+            ownedResumes.add(resume);
+            applicant.setOwnedResumes(ownedResumes);
+            applicant.setActiveResume(resume);
+            applicantRepository.save(applicant);
+            return resume;
+        } else throw new ResumeAlreadyExistsException();
     }
 
     @Override
-    public List<Resume> getAll() {
-        return resumeRepository.findAll();
+    public Resume update(String resumeName, Resume resume, String email) {
+        throw new NotImplementedMethodException("Method is not implemented");
     }
-
-    @Override
-    public Resume add(Resume resume) {
-        return resumeRepository.saveAndFlush(resume);
-    }
-
-    @Override
-    public Resume update(UUID resumeId, Resume resume) {
-        Resume resumeToUpdate = resumeRepository.findById(resumeId).orElseThrow(
-                () -> {
-                    throw new ResourceNotFoundException("Resume with id " + resumeId.toString() + " is not found");
-                }
-        );
-
-        if (resume.getAbout() != null) {
-            resumeToUpdate.setAbout(resume.getAbout());
-        }
-        if (resume.getFirstName() != null) {
-            resumeToUpdate.setFirstName(resume.getFirstName());
-        }
-        if (resume.getLastName() != null) {
-            resumeToUpdate.setLastName(resume.getLastName());
-        }
-        if (resume.getMiddleName() != null) {
-            resumeToUpdate.setMiddleName(resume.getMiddleName());
-        }
-        if (resume.getAvatarUrl() != null) {
-            resumeToUpdate.setAvatarUrl(resume.getAvatarUrl());
-        }
-        if (resume.getSalary() != null) {
-            resumeToUpdate.setSalary(resume.getSalary());
-        }
-        if (resume.getSkills() != null) {
-            resume.setSkills(resume.getSkills());
-        }
-
-        return resumeRepository.saveAndFlush(resumeToUpdate);
-    }
-
-    @Override
+  
+      @Override
     public void remove(UUID resumeId) {
         Resume resumeToDelete = resumeRepository.findById(resumeId).orElseThrow(
                 () -> {
@@ -86,11 +76,16 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
+    public List<Resume> getAllResumeOfUser(String login) {
+        throw new NotImplementedMethodException("Method is not implemented");
+    }
+  
+      @Override
     public List<Resume> getAllResumeOfUser(UUID userId) {
         Account account = accountService.getById(userId);
         Applicant applicant = applicantService.getByAccount(account);
         return resumeRepository.findAllByOwner(applicant);
     }
 
-
 }
+

@@ -2,55 +2,71 @@ package edu.netcracker.jobdealer.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.dozer.Mapping;
 
 import javax.persistence.*;
 import java.util.List;
 import java.util.UUID;
-
+import java.util.stream.Collectors;
 
 @Data
 @Entity
 @Table
+@NoArgsConstructor
 public class Resume {
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @OneToMany(mappedBy = "owner")
-    List<SkillToOwner> skills;
+    @ManyToMany
+    @JoinTable(
+            name = "resumeSkills",
+            joinColumns = @JoinColumn(name = "resumeId"),
+            inverseJoinColumns = @JoinColumn(name = "skillId"))
+    List<Skills> skills;
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue
     private UUID id;
-    @Basic
-    @Column(name = "resumeName")
-    private String resumeName;
-    @Basic
+    @Column(name = "name")
+    private String name;
     @Column(name = "firstName")
     private String firstName;
-    @Basic
     @Column(name = "lastName")
     private String lastName;
-    @Basic
-    @Column(name = "middleName")
-    private String middleName;
-    @Basic
-    @Column(name = "vacancy")
-    private String vacancy;
-    @Basic
     @Column(name = "salary")
-    private Integer salary;
-    @Basic
+    private int salary;
     @Column(name = "avatarUrl")
     private String avatarUrl;
-    @Basic
     @Column(name = "about")
     private String about;
     @ManyToOne
-    @JoinColumn(name = "ownedResumes", referencedColumnName = "id")
-    private Applicant owner;
+    @JoinColumn(name = "applicantId", referencedColumnName = "id")
+    private Applicant applicant;
 
-    protected Resume() {
-    }
 
     public Resume(Applicant applicant) {
-        this.owner = applicant;
+        this.applicant = applicant;
+    }
+
+    public Resume(String name, String firstName, String lastName, int salary, String avatarUrl,
+                  String about, Applicant applicant, List<Skills> skills) {
+        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.salary = salary;
+        this.avatarUrl = avatarUrl;
+        this.about = about;
+        this.applicant = applicant;
+        this.skills = skills;
+    }
+
+    @Mapping("applicantId")
+    public UUID getApplicant() {
+        return this.applicant.getId();
+    }
+
+    @Mapping("skills")
+    public List<String> getSkillsString() {
+        return this.skills.stream()
+                .map(Skills::getName)
+                .collect(Collectors.toList());
     }
 }

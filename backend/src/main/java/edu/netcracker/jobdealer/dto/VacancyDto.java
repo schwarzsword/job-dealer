@@ -1,22 +1,20 @@
 package edu.netcracker.jobdealer.dto;
 
-import edu.netcracker.jobdealer.entity.Company;
-import edu.netcracker.jobdealer.entity.Skills;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
+@NoArgsConstructor
 public class VacancyDto {
 
-    private Long id;
-    private List<Skills> requestedSkills;
+    private UUID id;
     private String name;
     private String description;
     private Integer money;
-    private Company owner;
-
-    private VacancyDto() {
-    }
+    private List<String> requestedSkills;
+    private String ownerName;
 
 }

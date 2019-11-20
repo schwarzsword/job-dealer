@@ -1,4 +1,7 @@
+import axios from 'axios';
 
-export function urlPort(url) {
-    return 'http://localhost:8080'+url;
-}
+export const urlPort = axios.create({
+    baseURL: "http://localhost:8080",
+    withCredentials: true,
+
+});

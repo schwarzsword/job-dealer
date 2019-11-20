@@ -1,13 +1,20 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from "../components/Home/index"
-import Rules from "../components/Rules/index"
-import About from "../components/About/index";
-import Login from "../components/Login/index";
-import SignUp from "../components/SignUp/index";
-import store from '../store';
+
+import Home from "../components/Home"
+import Rules from "../components/Rules"
+import About from "../components/About";
+import Login from "../components/Login";
+import SignUp from "../components/SignUp";
+import Account from "../components/Account";
+import Applicant from "../components/Applicant";
+import Company from "../components/Company";
+import CompanyPage from "../components/Company/page";
+import store from '../store'
+import Vacancies from "../components/Vacancies"
 import Resume from "../components/Resume/index";
 import ResumeForm from "../components/Resume/resumeForm";
+
 
 Vue.use(Router);
 
@@ -17,7 +24,7 @@ const ifNotAuthenticated = (to, from, next) => {
         return
     }
     next('/')
-}
+};
 
 const ifAuthenticated = (to, from, next) => {
     if (store.getters.isAuthenticated) {
@@ -25,10 +32,11 @@ const ifAuthenticated = (to, from, next) => {
         return
     }
     next('/login')
-}
+};
 
 
 export default new Router({
+    name: 'Router',
     mode: 'history',
     routes: [
         {
@@ -45,6 +53,26 @@ export default new Router({
             path: '/about',
             name: 'about',
             component: About
+        },
+        {
+            path: '/account',
+            name: 'account',
+            component: Account
+        },
+        {
+            path: '/companies',
+            name: 'companies',
+            component: Company
+        },
+        {
+            path: '/companies/:id',
+            name: 'CompanyPage',
+            component: CompanyPage
+        },
+        {
+            path: '/applicants',
+            name: 'applicants',
+            component: Applicant
         },
         {
             path: '/login',
@@ -76,5 +104,10 @@ export default new Router({
         //     component: Profile,
         //     beforeEnter: ifAuthenticated
         // },
+        {
+            path: '/vacancies',
+            name: 'vacancies',
+            component: Vacancies,
+        }
     ]
 })

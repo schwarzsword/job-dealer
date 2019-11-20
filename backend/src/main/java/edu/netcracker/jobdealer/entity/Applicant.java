@@ -1,38 +1,47 @@
 package edu.netcracker.jobdealer.entity;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.dozer.Mapping;
 
 import javax.persistence.*;
 import java.util.List;
 import java.util.UUID;
 
-@Data
 @Entity
 @Table
+@Data
+@NoArgsConstructor
 public class Applicant {
+
     @Id
     @GeneratedValue
     @Column(name = "id")
     private UUID id;
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @OneToOne
-    @JoinColumn(name = "account", referencedColumnName = "id", nullable = false)
-    private Account account;
-    @OneToMany(mappedBy = "owner")
+
+    @ManyToOne
+    @JoinColumn(name = "resumeId", referencedColumnName = "id")
+    private Resume activeResume;
+
+    @OneToMany(mappedBy = "applicant")
     private List<Resume> ownedResumes;
 
     @ManyToMany(mappedBy = "respondents")
-    List<Vacancy> responsedVacancies;
-    @ManyToMany(mappedBy = "submiter")
-    List<Submission> ownedSubmissions;
+    private List<Vacancy> responsedVacancies;
 
-    protected Applicant() {
-    }
+    @OneToMany(mappedBy = "submiter")
+    private List<Submission> ownedSubmissions;
+
+    @OneToOne
+    @JoinColumn(name = "account", referencedColumnName = "id", nullable = false)
+    private Account account;
 
     public Applicant(Account account) {
         this.account = account;
     }
 
+    @Mapping("accountId")
+    public UUID getAccountId() {
+        return account.getId();
+    }
 }
