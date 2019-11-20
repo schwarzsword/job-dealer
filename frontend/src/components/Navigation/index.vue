@@ -1,4 +1,5 @@
 <template>
+
     <div class="header">
         <div class="container">
             <div class="logo">
@@ -18,7 +19,7 @@
             <div class="menu">
                 <ul>
                     <li><router-link class="nav-link" to="/vacancies">Vacancies</router-link></li>
-                    <li><router-link class="nav-link" to="/rules">Resumes</router-link></li>
+                    <li><router-link class="nav-link" to="/resumes">Resumes</router-link></li>
                     <li v-if="isUser">
                         <router-link class="sign_in" to="/profile">My profile</router-link>
                     </li>
@@ -36,6 +37,7 @@
                     <router-link class="sign_in" to="/login">Sign in</router-link>
                 </div>
             </div>
+
         </div>
     </div>
 </template>

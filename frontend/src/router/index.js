@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+
 import Home from "../components/Home"
 import Rules from "../components/Rules"
 import About from "../components/About";
@@ -11,6 +12,9 @@ import Company from "../components/Company";
 import CompanyPage from "../components/Company/page";
 import store from '../store'
 import Vacancies from "../components/Vacancies"
+import Resume from "../components/Resume/index";
+import ResumeForm from "../components/Resume/resumeForm";
+
 
 Vue.use(Router);
 
@@ -82,6 +86,18 @@ export default new Router({
             component: SignUp,
             beforeEnter: ifNotAuthenticated
         },
+        {
+            path: '/resumes',
+            name: 'resume',
+            component: Resume,
+            //beforeEnter: ifAuthenticated
+        },
+        {
+            path: '/resumeForm',
+            name: 'resumeForm',
+            component: ResumeForm,
+            //beforeEnter: ifAuthenticated
+        }
         // {
         //     path: '/profile',
         //     name: 'profile',

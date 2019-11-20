@@ -1,0 +1,35 @@
+spring:
+  profiles:
+    active: test
+  datasource:
+    url: jdbc:h2:mem:test
+    username: SA
+    password:
+    driver-class-name: org.h2.Driver
+    initialization-mode: always
+    hikari:
+      catalog: netcracker
+      schema: public
+  jpa:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
+        dialect: org.hibernate.dialect.PostgreSQL95Dialect
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        ddl-auto: update
+    generate-ddl: true
+#    show-sql: true
+server:
+  port: 8080
+
+logging:
+  level:
+    org.springframework: ERROR
+    edu.netcracker.jobdealer: INFO
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
+    file: "%d %p %c{1.} [%t] %m%n"
+  file: app.log
