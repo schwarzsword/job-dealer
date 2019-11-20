@@ -9,11 +9,11 @@ import edu.netcracker.jobdealer.service.ResumeService;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -32,34 +32,34 @@ public class ResumeController {
         this.mapper = mapper;
     }
   
-      //@Secured("ROLE_USER")
-    @GetMapping(value = "/{userId}/resumes/")
-    public ResponseEntity<?> getAllResumes(@PathVariable("userId") @NotBlank @Valid UUID userId) {
-    //todo сделать хорошо, пофиксить урлы, подумать о безопасности, использовать билдер
-
-    }
-
-    //@Secured("ROLE_USER")
-    @PatchMapping(value = "/{userId}/resumes/")
-    public ResponseEntity<?> createResume(@PathVariable("userId") @NotBlank @Valid UUID userId,
-                                          @RequestBody Resume resume) {
-
-    }
-
-    //@Secured("ROLE_USER")
-    @DeleteMapping(value = "/{userId}/resumes/{resumeId}")
-    public ResponseEntity<?> removeResume(@PathVariable("userId") @NotBlank @Valid UUID userId,
-                                          @PathVariable("resumeId") @NotBlank @Valid UUID resumeId) {
-
-    }
-
-    //@Secured("ROLE_USER")
-    @PatchMapping(value = "/{userId}/resumes/{resumeId}")
-    public ResponseEntity<?> updateResume(@PathVariable("userId") @NotBlank @Valid UUID userId,
-                                          @PathVariable("resumeId") @NotBlank @Valid UUID resumeId,
-                                          @RequestBody Resume resume) {
-
-    }
+//      //@Secured("ROLE_USER")
+//    @GetMapping(value = "/{userId}/resumes/")
+//    public ResponseEntity<?> getAllResumes(@PathVariable("userId") @NotBlank @Valid UUID userId) {
+//    //todo сделать хорошо, пофиксить урлы, подумать о безопасности, использовать билдер
+//
+//    }
+//
+//    //@Secured("ROLE_USER")
+//    @PatchMapping(value = "/{userId}/resumes/")
+//    public ResponseEntity<?> createResume(@PathVariable("userId") @NotBlank @Valid UUID userId,
+//                                          @RequestBody Resume resume) {
+//
+//    }
+//
+//    //@Secured("ROLE_USER")
+//    @DeleteMapping(value = "/{userId}/resumes/{resumeId}")
+//    public ResponseEntity<?> removeResume(@PathVariable("userId") @NotBlank @Valid UUID userId,
+//                                          @PathVariable("resumeId") @NotBlank @Valid UUID resumeId) {
+//
+//    }
+//
+//    //@Secured("ROLE_USER")
+//    @PatchMapping(value = "/{userId}/resumes/{resumeId}")
+//    public ResponseEntity<?> updateResume(@PathVariable("userId") @NotBlank @Valid UUID userId,
+//                                          @PathVariable("resumeId") @NotBlank @Valid UUID resumeId,
+//                                          @RequestBody Resume resume) {
+//
+//    }
 
     @PostMapping(value = "/resumes")
     public ResponseEntity<?> createResume(@RequestParam String resumeName, @RequestParam String firstName,

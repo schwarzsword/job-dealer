@@ -16,8 +16,6 @@ public interface ResumeService {
             throws ApplicantNotFoundException, ResumeAlreadyExistsException;
 
     Resume update(String resumeName, Resume resume, String email);
-
-    void remove(String resumeName, String email);
   
     void remove(UUID resumeId);
 

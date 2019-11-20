@@ -1,11 +1,13 @@
 package edu.netcracker.jobdealer.service.impl;
 
 
+import edu.netcracker.jobdealer.entity.Account;
 import edu.netcracker.jobdealer.entity.Applicant;
 import edu.netcracker.jobdealer.entity.Resume;
 import edu.netcracker.jobdealer.entity.Skills;
 import edu.netcracker.jobdealer.exceptions.ApplicantNotFoundException;
 import edu.netcracker.jobdealer.exceptions.NotImplementedMethodException;
+import edu.netcracker.jobdealer.exceptions.ResourceNotFoundException;
 import edu.netcracker.jobdealer.exceptions.ResumeAlreadyExistsException;
 import edu.netcracker.jobdealer.repository.ApplicantRepository;
 import edu.netcracker.jobdealer.repository.ResumeRepository;
@@ -64,12 +66,13 @@ public class ResumeServiceImpl implements ResumeService {
     public Resume update(String resumeName, Resume resume, String email) {
         throw new NotImplementedMethodException("Method is not implemented");
     }
-  
-      @Override
+
+
+    @Override
     public void remove(UUID resumeId) {
         Resume resumeToDelete = resumeRepository.findById(resumeId).orElseThrow(
                 () -> {
-                    throw new ResourceNotFoundException("Resume with id " + resumeId.toString() + " is not found");
+                    throw new ResourceNotFoundException();
                 }
         );
         resumeRepository.delete(resumeToDelete);
@@ -79,13 +82,7 @@ public class ResumeServiceImpl implements ResumeService {
     public List<Resume> getAllResumeOfUser(String login) {
         throw new NotImplementedMethodException("Method is not implemented");
     }
-  
-      @Override
-    public List<Resume> getAllResumeOfUser(UUID userId) {
-        Account account = accountService.getById(userId);
-        Applicant applicant = applicantService.getByAccount(account);
-        return resumeRepository.findAllByOwner(applicant);
-    }
+
 
 }
 
