@@ -1,3 +1,4 @@
+
 package edu.netcracker.jobdealer.service;
 
 import edu.netcracker.jobdealer.entity.Account;
@@ -30,3 +31,4 @@ public interface AccountService {
     void deleteAccount(UUID id) throws AccountNotFoundException;
 
 }
+

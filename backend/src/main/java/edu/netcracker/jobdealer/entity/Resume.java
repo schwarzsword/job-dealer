@@ -1,5 +1,6 @@
 package edu.netcracker.jobdealer.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.dozer.Mapping;
@@ -14,7 +15,6 @@ import java.util.stream.Collectors;
 @Table
 @NoArgsConstructor
 public class Resume {
-
     @ManyToMany
     @JoinTable(
             name = "resumeSkills",

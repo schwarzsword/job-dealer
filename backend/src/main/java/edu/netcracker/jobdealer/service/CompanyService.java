@@ -16,15 +16,11 @@ public interface CompanyService {
     Company getCompanyById(UUID id);
 
     Company addCompany(String name, Boolean isVerified, String description, String avatarUrl, UUID accountId)
-            throws AccountNotFoundException, AccountIdExistsException;
-    //TODO исправить
-//    Company updateCompany(UUID id, String name, Boolean isVerified, String description, String avatarUrl,
-//                          UUID accountId);
+            throws AccountNotFoundException;
+    Company updateCompany(UUID id, String name, Boolean isVerified, String description, String avatarUrl,
+                          UUID accountId);
+    ResponseEntity deleteCompany(UUID id) throws CompanyNotFoundException;
+    Company getByAccount(Account accountByEmail);
+    List<Company> getCompanies(Integer page, Integer size, String sortBy);
+    }
 
-
-    //читать импл
-//    void deleteCompany(UUID id) throws CompanyNotFoundException;
-    Company getByAccount(Account accountByEmail)throws CompanyNotFoundException;
-
-    Company getByAccountEmail(String email) throws CompanyNotFoundException;
-}

@@ -1,3 +1,4 @@
+
 package edu.netcracker.jobdealer.controller;
 
 import edu.netcracker.jobdealer.dto.ResumeDto;
@@ -29,6 +30,35 @@ public class ResumeController {
     public ResumeController(ResumeService resumeService, Mapper mapper) {
         this.resumeService = resumeService;
         this.mapper = mapper;
+    }
+  
+      //@Secured("ROLE_USER")
+    @GetMapping(value = "/{userId}/resumes/")
+    public ResponseEntity<?> getAllResumes(@PathVariable("userId") @NotBlank @Valid UUID userId) {
+    //todo сделать хорошо, пофиксить урлы, подумать о безопасности, использовать билдер
+
+    }
+
+    //@Secured("ROLE_USER")
+    @PatchMapping(value = "/{userId}/resumes/")
+    public ResponseEntity<?> createResume(@PathVariable("userId") @NotBlank @Valid UUID userId,
+                                          @RequestBody Resume resume) {
+
+    }
+
+    //@Secured("ROLE_USER")
+    @DeleteMapping(value = "/{userId}/resumes/{resumeId}")
+    public ResponseEntity<?> removeResume(@PathVariable("userId") @NotBlank @Valid UUID userId,
+                                          @PathVariable("resumeId") @NotBlank @Valid UUID resumeId) {
+
+    }
+
+    //@Secured("ROLE_USER")
+    @PatchMapping(value = "/{userId}/resumes/{resumeId}")
+    public ResponseEntity<?> updateResume(@PathVariable("userId") @NotBlank @Valid UUID userId,
+                                          @PathVariable("resumeId") @NotBlank @Valid UUID resumeId,
+                                          @RequestBody Resume resume) {
+
     }
 
     @PostMapping(value = "/resumes")

@@ -8,34 +8,40 @@
                 </div>
             </div>
             <div class="find">
-                <input type="input" name="find" placeholder="Search..."/>
-                <div id="select" class="select">
-                    <span id="vacancies" class="item">vacancies</span>
-                    <span id="resumes" class="item">resumes</span>
+                <input id="find" name="find" placeholder="Search" type="input"/>
+                <div class="select" id="select">
+                    <span class="item" id="vacancies">vacancies</span>
+                    <span class="item" id="resumes">resumes</span>
                 </div>
-                <div id="selected" class="selected">vacancies</div>
+                <div class="selected" id="selected">vacancies</div>
+                <div class="histories" id="histories"></div>
             </div>
             <div class="menu">
                 <ul>
-                    <li><router-link class="nav-link" to="/vacancies">Vacancies</router-link></li>
-                    <li><router-link class="nav-link" to="/rules">Resumes</router-link></li>
+                    <li>
+                        <router-link class="nav-link" to="/vacancies">Vacancies</router-link>
+                    </li>
+                    <li>
+                        <router-link class="nav-link" to="/resumes">Resumes</router-link>
+                    </li>
                     <li v-if="isUser">
                         <router-link class="sign_in" to="/profile">My profile</router-link>
                     </li>
                     <li v-if="isCompany">
                         <router-link class="sign_in" to="/company">My profile</router-link>
+
                     </li>
                 </ul>
             </div>
             <div class="user">
-
-                <div v-if="isAuthenticated" @click="logout">
+                <div @click="logout" v-if="isAuthenticated">
                     <router-link class="sign_in" to="/logout">Logout</router-link>
                 </div>
                 <div v-if="!isAuthenticated && !authLoading">
                     <router-link class="sign_in" to="/login">Sign in</router-link>
                 </div>
             </div>
+
         </div>
     </div>
 </template>
@@ -49,11 +55,14 @@
         background-color: #fff;
         /*box-shadow: 0 0 5px 2px rgba(200, 200, 200, .6);*/
     }
+
     .header .container {
         display: block;
         width: 1200px;
         height: inherit;
         line-height: inherit;
+        margin: 0 auto;
+        padding: 0;
     }
 
     /* logo */
@@ -64,6 +73,7 @@
         line-height: inherit;
         float: left;
     }
+
     .header .container .logo .link {
         display: block;
         width: 200px;
@@ -71,6 +81,7 @@
         line-height: inherit;
         float: left;
     }
+
     .header .container .logo .link a {
         display: block;
         width: 200px;
@@ -81,6 +92,7 @@
         background: url("/logo.png") no-repeat center;
         background-size: auto 50px;
     }
+
     .header .container .logo .link a:hover {
         text-decoration: none;
     }
@@ -92,6 +104,7 @@
         height: inherit;
         float: left;
     }
+
     .header .container .menu ul {
         display: block;
         float: left;
@@ -100,6 +113,7 @@
         margin: 0;
         padding: 0;
     }
+
     .header .container .menu ul li {
         display: block;
         float: left;
@@ -107,6 +121,7 @@
         height: inherit;
         line-height: inherit;
     }
+
     .header .container .menu ul li a {
         display: block;
         float: left;
@@ -118,6 +133,7 @@
         border-radius: 30px;
         transition: background-color 0.15s ease 0s;
     }
+
     .header .container .menu ul li a:hover {
         background-color: rgba(0, 0, 0, 0.07);
         text-decoration: none;
@@ -127,22 +143,29 @@
     /* find */
     .header .container .find {
         display: block;
-        width: 400px;
+        width: 500px;
         height: inherit;
         line-height: inherit;
         float: left;
         margin: 0;
+        position: relative;
+        z-index: 11;
     }
+
     .header .container .find input {
-        width: 380px;
+        position: relative;
+        width: 480px;
         height: 40px;
         border: 0;
         border-radius: 20px;
         padding: 0 20px;
         margin: 0 10px;
-        background-color: rgba(0, 0, 0, 0.07);
+        background-color: #eaeef1;
         transition: border-color 0.1s ease-out 0s, border-width, background-color;
+        box-shadow: inset 0 0 2px 0 rgba(0, 0, 0, .1);
+        z-index: 11;
     }
+
     .header .container .find input::placeholder {
         text-align: center;
         color: #000;
@@ -150,10 +173,13 @@
         transition-delay: 2s;
         transition: width 2s ease-in-out;
         transition-duration: 5s;
+        font-size: 16px;
     }
+
     .header .container .find input:focus {
         outline: none;
     }
+
     .header .container .find input:focus::placeholder {
         text-align: left;
         color: #000;
@@ -163,14 +189,15 @@
     .header .container .find .select {
         display: none;
         padding: 0;
-        margin: -45px 0 0 280px;
+        margin: -50px 0 0 400px;
         width: 100px;
-        height: 60px;
+        height: 80px;
         position: absolute;
         background: white;
-        box-shadow: 0 0 5px 1px rgba(0,0,0,.1);
+        box-shadow: 0 0 5px 1px rgba(0, 0, 0, .1);
         border-radius: 10px;
         color: #777;
+        z-index: 12;
     }
 
     .header .container .find .select span.item {
@@ -178,24 +205,41 @@
         padding: 0 10px;
         margin: 0;
         width: 100px;
-        height: 30px;
-        line-height: 30px;
+        height: 40px;
+        line-height: 40px;
         cursor: pointer;
+        font-size: 14px;
     }
+
     .header .container .find .select span.item:hover {
         color: #000;
     }
+
     .header .container .find .selected {
         display: block;
         padding: 0 10px;
-        margin: -45px 0 0 280px;
+        margin: -50px 0 0 400px;
         width: 100px;
-        height: 30px;
-        line-height: 30px;
+        height: 40px;
+        line-height: 40px;
         position: absolute;
         border-radius: 10px;
         color: #999;
         cursor: pointer;
+        font-size: 14px;
+        z-index: 12;
+    }
+
+    .header .container .find .histories {
+        display: none;
+        margin: -40px 0 0 10px;
+        width: 480px;
+        height: 65px;
+        background: #fff;
+        box-shadow: 0 0 5px 1px rgba(0, 0, 0, .1);
+        border-radius: 10px;
+        position: relative;
+        z-index: 10;
     }
 
     /* user */
@@ -208,18 +252,20 @@
         margin: 0;
         text-align: center;
     }
+
     .header .container .user a.sign_in {
         line-height: inherit;
-        color: #000;
-        border: 2px rgba(0, 0, 0, 0.07)	solid;
+        color: rgba(0, 0, 0, 0.6);
+        border: 2px rgba(0, 0, 0, 0.2) solid;
         padding: 5px 20px;
         border-radius: 20px;
     }
+
     .header .container .user a.sign_in:hover {
         text-decoration: none;
         color: rgba(0, 0, 0, 0.9);
         background-color: rgba(0, 0, 0, 0.03);
-        border-color: rgba(0, 0, 0, 0.03);
+        border: 2px rgba(0, 0, 0, 0.2) solid;
     }
 </style>
 
@@ -231,11 +277,12 @@
         name: 'navigation',
         methods: {
             logout: function () {
-                this.$store.dispatch(AUTH_LOGOUT).then(() => this.$router.push('/login'))
+                this.$store.dispatch(AUTH_LOGOUT).then(() => this.$router.push('/'))
             }
 
         },
         computed: {
+
             ...mapGetters(['getProfile', 'isAuthenticated', 'isUser', 'isCompany', 'profile']),
             ...mapState({
                 authLoading: state => state.auth.status === 'loading',
@@ -243,28 +290,62 @@
         },
     }
 
-    window.onload = function() {
+    let selectFlag = false;
+
+    function closeSelect() {
+        document.getElementById('select').style.display = 'none';
+        document.getElementById('selected').style.display = 'block';
+    }
+
+    window.onload = function () {
         let selected = document.querySelector('#selected');
         let select = document.querySelector('#select');
         let vacancies = document.querySelector('#vacancies');
         let resumes = document.querySelector('#resumes');
+        let find = document.querySelector('#find');
+        let histories = document.querySelector('#histories');
 
-        selected.onmouseover = function(e) {
-            document.getElementById('select').style.display = 'block';
-            document.getElementById('selected').style.display = 'none';
+        find.onmouseover = function (e) {
+            addEventListener('click', function (e) {
+                histories.style.display = 'block';
+                find.style.backgroundColor = '#fff';
+                closeSelect();
+            });
         };
 
-        select.onmouseout = function(e) {
-            document.getElementById('select').style.display = 'none';
-            document.getElementById('selected').style.display = 'block';
+        find.onmouseleave = function (e) {
+            addEventListener('click', function (e) {
+                histories.style.display = 'none';
+                find.style.backgroundColor = '#eaeef1';
+            })
         };
 
-        vacancies.onclick = function (e) {
-            document.getElementById('selected').innerText = 'vacancies';
-        };
+        selected.onmouseover = function (e) {
+            select.style.display = 'block';
+            selected.style.display = 'none';
 
-        resumes.onclick = function (e) {
-            document.getElementById('selected').innerText = 'resumes';
+            select.onmouseout = function (e) {
+                window.setTimeout(function (e) {
+                    if (selectFlag === false) {
+                        closeSelect();
+                    }
+                }, 2000);
+                selectFlag = false;
+            };
+
+            select.onmouseover = function (e) {
+                selectFlag = true;
+            };
+
+            vacancies.onclick = function (e) {
+                selected.innerText = 'vacancies';
+            };
+
+            resumes.onclick = function (e) {
+                selected.innerText = 'resumes';
+                closeSelect();
+            };
+
         };
-    }
+    };
 </script>

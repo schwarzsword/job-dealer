@@ -64,14 +64,28 @@ public class ResumeServiceImpl implements ResumeService {
     public Resume update(String resumeName, Resume resume, String email) {
         throw new NotImplementedMethodException("Method is not implemented");
     }
-
-    @Override
-    public void remove(String resumeName, String email) {
-        throw new NotImplementedMethodException("Method is not implemented");
+  
+      @Override
+    public void remove(UUID resumeId) {
+        Resume resumeToDelete = resumeRepository.findById(resumeId).orElseThrow(
+                () -> {
+                    throw new ResourceNotFoundException("Resume with id " + resumeId.toString() + " is not found");
+                }
+        );
+        resumeRepository.delete(resumeToDelete);
     }
 
     @Override
     public List<Resume> getAllResumeOfUser(String login) {
         throw new NotImplementedMethodException("Method is not implemented");
     }
+  
+      @Override
+    public List<Resume> getAllResumeOfUser(UUID userId) {
+        Account account = accountService.getById(userId);
+        Applicant applicant = applicantService.getByAccount(account);
+        return resumeRepository.findAllByOwner(applicant);
+    }
+
 }
+

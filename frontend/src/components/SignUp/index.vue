@@ -18,41 +18,41 @@
                 >
                     <div>Login</div>
                     <v-text-field
-                            v-model="email"
                             :rules="emailRules"
+                            autofocus
                             label="E-mail"
                             required
-                            autofocus
+                            v-model="email"
                     ></v-text-field>
 
                     <v-text-field
-                            v-model="password"
-                            label="Password"
-                            required
                             :type="show1 ? 'text' : 'password'"
                             @click:append="show1 = !show1"
+                            label="Password"
+                            required
+                            v-model="password"
                     ></v-text-field>
 
                     <v-text-field
-                            v-model="password_confirmation"
-                            label="Confirm password"
-                            required
                             :type="show1 ? 'text' : 'password'"
                             @click:append="show2 = !show2"
+                            label="Confirm password"
+                            required
+                            v-model="password_confirmation"
                     ></v-text-field>
 
                     <div id="passError" v-if="!!passError">{{passError}}</div>
 
                     <v-checkbox
-                            v-model="isCompany"
                             :label="'Do you want a company account?'"
+                            v-model="isCompany"
                     ></v-checkbox>
 
                 </v-card>
 
                 <v-btn
-                        color="primary"
                         @click="this.verifyStep1"
+                        color="primary"
                 >
                     Continue
                 </v-btn>
@@ -68,116 +68,116 @@
                         v-if="isCompany"
                 >
                     <v-text-field
-                            v-model="company.name"
+                            autofocus
                             label="Company name"
                             required
-                            autofocus
+                            v-model="company.name"
                     ></v-text-field>
 
                     <v-textarea
-                            name="input-7-1"
                             label="Company description"
-                            v-model="company.description"
+                            name="input-7-1"
                             required
+                            v-model="company.description"
                     ></v-textarea>
 
                     <v-file-input
-                            v-model="file"
-                            label="Select image file..."
-                            accept="image/*"
                             @change="onFileChange"
+                            accept="image/*"
+                            label="Select image file..."
                             required
+                            v-model="file"
                     ></v-file-input>
 
                     <v-btn
-                            color="primary"
                             @click="registerCompany"
+                            color="primary"
                     >
                         Sign up
                     </v-btn>
 
                     <v-btn
-                            color="primary"
                             @click="e1 = 1"
+                            color="primary"
                     >
                         Back
                     </v-btn>
 
                     <router-link class="sign_in" to="/login">Cancel</router-link>
                 </v-card>
-                <v-card v-else
-                        class="mb-12"
+                <v-card class="mb-12"
                         color="grey lighten-1"
-                        height="650px">
+                        height="650px"
+                        v-else>
                     <v-text-field
-                            v-model="resume.resumeName"
+                            autofocus
                             label="Vacancy you apply"
                             required
-                            autofocus
+                            v-model="resume.resumeName"
                     ></v-text-field>
                     <v-text-field
-                            v-model="resume.firstName"
+                            autofocus
                             label="Your name"
                             required
-                            autofocus
+                            v-model="resume.firstName"
                     ></v-text-field>
                     <v-text-field
-                            v-model="resume.lastName"
+                            autofocus
                             label="Your last name"
                             required
-                            autofocus
+                            v-model="resume.lastName"
                     ></v-text-field>
                     <v-text-field
-                            v-model="resume.salary"
-                            label="Salary you wish"
-                            required
                             :rules="salaryRules"
                             autofocus
+                            label="Salary you wish"
+                            required
+                            v-model="resume.salary"
                     ></v-text-field>
                     <v-textarea
-                            name="input-7-1"
                             label="Something about you"
-                            v-model="resume.about"
+                            name="input-7-1"
                             required
+                            v-model="resume.about"
                     ></v-textarea>
                     <v-file-input
-                            v-model="file"
-                            label="Select image file..."
-                            accept="image/*"
                             @change="onFileChange"
+                            accept="image/*"
+                            label="Select image file..."
                             required
+                            v-model="file"
                     ></v-file-input>
                     <v-combobox
-                            v-model="resume.skills"
                             :items="skills"
                             chips
                             clearable
                             label="Your skills"
                             multiple
                             solo
+                            v-model="resume.skills"
                     >
                         <template v-slot:selection="{ attrs, item, select, selected }">
                             <v-chip
-                                    v-bind="attrs"
                                     :input-value="selected"
-                                    close
                                     @click="select"
                                     @click:close="remove(item)"
+                                    close
+                                    v-bind="attrs"
                             >
                                 <strong>{{ item }}</strong>&nbsp;
                             </v-chip>
                         </template>
                     </v-combobox>
                     <v-btn
-                            color="primary"
                             @click="registerUser"
+                            color="primary"
                     >
                         Sign up
                     </v-btn>
 
                     <v-btn
-                            color="primary"
                             @click="e1 = 1"
+                            color="primary"
                     >
                         Back
                     </v-btn>
