@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class Vacancy {
 
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "vacancySkills",
             joinColumns = @JoinColumn(name = "vacancyId"),

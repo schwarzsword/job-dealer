@@ -82,7 +82,7 @@ public class VacancyController {
     @GetMapping(value = "/vacancies")
     public ResponseEntity<?> getVacancies(@RequestParam int limit,
                                           @RequestParam int offset,
-                                          @RequestParam(required = false) int salary,
+                                          @RequestParam(required = false) Integer salary,
                                           @RequestParam(required = false) List<String> skills,
                                           @RequestParam(required = false) String resumeName) {
         try {
