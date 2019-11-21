@@ -4,6 +4,7 @@ import edu.netcracker.jobdealer.dto.CompanyDto;
 import edu.netcracker.jobdealer.exceptions.AccountIdExistsException;
 
 import edu.netcracker.jobdealer.exceptions.AccountNotFoundException;
+import edu.netcracker.jobdealer.exceptions.CompanyNotFoundException;
 import edu.netcracker.jobdealer.service.CompanyService;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,12 +35,17 @@ public class CompanyController {
     }
 
     @GetMapping(value = "/companies")
-    public List<CompanyDto> getCompanies(@RequestParam(defaultValue = "0") Integer page,
-                                         @RequestParam(defaultValue = "10") Integer size,
-                                         @RequestParam(defaultValue = "id") String sortBy) {
-        return companyService.getCompanies(page, size, sortBy).stream()
-                .map(company -> this.mapper.map(company, CompanyDto.class))
-                .collect(Collectors.toList());
+    public ResponseEntity<?> getCompanies(@RequestParam int page, @RequestParam int limit, @RequestParam String sortBy) {
+        try {
+            List<CompanyDto> companies = companyService.getCompanies(page, limit, sortBy).stream()
+                    .map(company -> this.mapper.map(company, CompanyDto.class))
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(companies);
+
+        } catch (CompanyNotFoundException e) {
+            return ResponseEntity.noContent().build();
+        }
     }
 
     @GetMapping(value = "/companies/{id}")

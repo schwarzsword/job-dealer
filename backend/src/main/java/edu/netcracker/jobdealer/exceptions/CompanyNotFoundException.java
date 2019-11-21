@@ -1,11 +1,12 @@
 package edu.netcracker.jobdealer.exceptions;
 
 public class CompanyNotFoundException extends NotFoundException {
+
     public CompanyNotFoundException() {
-        super("Account not found");
+        super("Company not found");
     }
 
-    public CompanyNotFoundException(String companyName) {
-        super("Account with email: " + companyName + " not found");
+    public CompanyNotFoundException(String msg) {
+        super(msg);
     }
 }

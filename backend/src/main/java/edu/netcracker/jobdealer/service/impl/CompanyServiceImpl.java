@@ -50,14 +50,22 @@ public class CompanyServiceImpl implements CompanyService {
         return companyRepository.findAll();
     }
 
-    public List<Company> getCompanies(Integer pageNo, Integer pageSize, String sortBy) {
-        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+    public List<Company> getCompanies(int page, int limit, String sortBy) {
+        if (limit == 0) {
+            limit = 10;
+        }
+
+        if (sortBy == null) {
+            sortBy = "id";
+        }
+
+        Pageable paging = PageRequest.of(page, limit, Sort.by(sortBy));
         Page<Company> pagedResult = companyRepository.findAll(paging);
 
-        if(pagedResult.hasContent()) {
+        if (pagedResult.hasContent()) {
             return pagedResult.getContent();
         } else {
-            return new ArrayList<>();
+            throw new CompanyNotFoundException("Companies are not found");
         }
     }
 
