@@ -49,8 +49,13 @@ public class CompanyController {
     }
 
     @GetMapping(value = "/companies/{id}")
-    public CompanyDto getCompanyById(@PathVariable("id") UUID id) {
-        return mapper.map(companyService.getCompanyById(id), CompanyDto.class);
+    public ResponseEntity<?> getCompanyById(@PathVariable("id") UUID id) {
+        try {
+            CompanyDto company = mapper.map(companyService.getCompanyById(id), CompanyDto.class);
+            return ResponseEntity.ok(company);
+        } catch (CompanyNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping(value = "/companies")
