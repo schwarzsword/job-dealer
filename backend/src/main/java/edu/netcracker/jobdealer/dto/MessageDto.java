@@ -7,8 +7,10 @@ import java.util.UUID;
 
 @Data
 public class MessageDto {
+
     private UUID id;
     private String text;
     private Date date;
-    private String sender;
+    private UUID senderId;
+    private UUID receiverId;
 }
