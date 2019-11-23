@@ -39,7 +39,8 @@ public class CompanyServiceImpl implements CompanyService {
     private final AccountService accountService;
 
     @Autowired
-    public CompanyServiceImpl(CompanyRepository companyRepository, AccountRepository accountRepository, AccountService accountService) {
+    public CompanyServiceImpl(CompanyRepository companyRepository, AccountRepository accountRepository,
+                              AccountService accountService) {
         this.companyRepository = companyRepository;
         this.accountRepository = accountRepository;
         this.accountService = accountService;
@@ -51,14 +52,6 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     public List<Company> getCompanies(int page, int limit, String sortBy) {
-        if (limit == 0) {
-            limit = 10;
-        }
-
-        if (sortBy == null) {
-            sortBy = "id";
-        }
-
         Pageable paging = PageRequest.of(page, limit, Sort.by(sortBy));
         Page<Company> pagedResult = companyRepository.findAll(paging);
 
