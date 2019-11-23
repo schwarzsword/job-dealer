@@ -1,20 +1,77 @@
 package edu.netcracker.jobdealer.service;
 
 import edu.netcracker.jobdealer.entity.Message;
-import edu.netcracker.jobdealer.exceptions.AccountNotFoundException;
 
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Message service interface for managing messages.
+ */
 public interface MessageService {
-    Message sendMessage(String text, String srcEmail, UUID receiver) throws AccountNotFoundException;
 
-    List<Message> getUserMessages(String email);
+    /**
+     * Gets a list of messages by the identifier of the interlocutor
+     * and can receive by limit and offset
+     *
+     * @see UUID
+     * @see Message
+     *
+     * @param senderId sender identifier
+     * @param receiverId receiver identifier
+     * @param offset offset for message list
+     * @param limit limit for message list
+     * @return List of messages
+     */
+    public List<Message> getMessages(UUID senderId, UUID receiverId, int offset, int limit);
 
+    /**
+     * Gets a message by identifier
+     *
+     * @see Message
+     *
+     * @param messageId Message identifier
+     * @return Message object
+     */
+    public Message getMessage(UUID messageId);
 
-    //May be this is not necessary
+    /**
+     * Sends a message from sender to receiver by identifier
+     *
+     * @see UUID
+     *
+     * @param text Message body
+     * @param senderId Sender uuid
+     * @param receiverId Receiver uuid
+     * @return Message object
+     */
+    public Message sendMessage(String text, UUID senderId, UUID receiverId);
 
-//    void deleteMessage(UUID mesId, String ownerEmail) throws MessageNotFoundException, NoPermissionException;
-//
-//    Message getMessage(UUID mesId) throws MessageNotFoundException;
+    /**
+     * Sends a message from sender to receiver by Account
+     *
+     * @see Message
+     *
+     * @param message Message object
+     * @return Message object
+     */
+    public Message sendMessage(Message message);
+
+    /**
+     * Updates the message by identifier
+     *
+     * @see UUID
+     * @see Message
+     *
+     * @param id Message uuid
+     * @param text Message body
+     * @return Message object
+     */
+    public Message updateMessage(UUID id, String text);
+
+    /**
+     * Deletes the message by identifier
+     * @param id Message uuid
+     */
+    public void deleteMessage(UUID id);
 }
