@@ -21,9 +21,6 @@
                     <li>
                         <router-link class="nav-link" to="/vacancies">Vacancies</router-link>
                     </li>
-                    <li>
-                        <router-link class="nav-link" to="/resumes">Resumes</router-link>
-                    </li>
                     <li v-if="isUser">
                         <router-link class="sign_in" to="/profile">My profile</router-link>
                     </li>

@@ -82,6 +82,45 @@ public class VacancyServiceImpl implements VacancyService {
         return new ArrayList<Vacancy>(vacancies);
     }
 
+    @Override
+    public List<Vacancy> sortAndReturn(List<String> skills, Integer salary,
+                                       String resumeName, int offset, int limit,
+                                       Integer sortBy, Boolean sortAsc)
+            throws SkillNotFoundException, BadParameterException {
+        List<Vacancy> vacancies = applyConditions(skills, salary, resumeName);
+        switch (sortBy) {
+            case 1:
+                if (sortAsc) {
+                    vacancies.sort(Comparator.comparing(Vacancy::getName));
+                } else {
+                    vacancies.sort(Comparator.comparing(Vacancy::getName).reversed());
+                }
+                break;
+            case 2:
+                if (sortAsc) {
+                    vacancies.sort(Comparator.comparing(Vacancy::getMoney));
+                } else {
+                    vacancies.sort(Comparator.comparing(Vacancy::getMoney).reversed());
+                }
+                break;
+            case 3:
+                if (sortAsc) {
+                    vacancies.sort(Comparator.comparing(Vacancy::getOwnerName));
+                } else {
+                    vacancies.sort(Comparator.comparing(Vacancy::getOwnerName).reversed());
+                }
+                break;
+            default:
+                vacancies.sort(Comparator.comparing(Vacancy::getName));
+        }
+        return getPage(vacancies, offset, limit);
+    }
+
+    @Override
+    public int getSize() {
+        return vacancyRepository.findAll().size();
+    }
+
 
     @Override
     public Vacancy addVacancy(String name, String description, Integer money,

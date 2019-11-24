@@ -201,7 +201,7 @@
             return {
                 e1: 0,
                 file: null,
-                imageUrl: null,
+                fileBytes: null,
                 show1: false,
                 show2: false,
                 email: "",
@@ -236,11 +236,14 @@
         },
         methods: {
             onFileChange() {
+
                 let reader = new FileReader();
+                reader.readAsArrayBuffer(this.file);
                 reader.onload = () => {
-                    this.imageUrl = reader.result
+                    this.fileBytes = new Uint8Array(reader.result);
                 };
-                reader.readAsDataURL(this.file)
+
+
             },
             remove(item) {
                 this.chips.splice(this.chips.indexOf(item), 1)
@@ -267,10 +270,11 @@
                         let params = new FormData();
                         params.append('name', this.company.name);
                         params.append('description', this.company.description);
-                        params.append('file', this.file ? this.file : null);
+                        params.append('fileData', this.fileBytes);
                         params.append('accountId', this.accountId);
                         urlPort.post('/companies', params, {headers: {ContentType: 'multipart/form-data'}})
                             .then(resp => {
+                                console.log(resp.data);
                                 this.$router.push('/login');
                             })
                             .catch(err => {
@@ -302,7 +306,7 @@
                                 params.append('lastName', this.resume.lastName);
                                 params.append('salary', this.resume.salary);
                                 params.append('about', this.resume.about);
-                                params.append('file', this.file ? this.file : null);
+                                params.append('fileData', this.fileBytes);
                                 params.append('skills', this.resume.skills);
                                 urlPort.post('/resumes', params, {headers: {ContentType: 'multipart/form-data'}})
                                     .then(resp => {

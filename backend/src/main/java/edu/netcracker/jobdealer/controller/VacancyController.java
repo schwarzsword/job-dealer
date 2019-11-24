@@ -4,6 +4,7 @@ import edu.netcracker.jobdealer.dto.VacancyDto;
 import edu.netcracker.jobdealer.entity.Account;
 import edu.netcracker.jobdealer.entity.Company;
 import edu.netcracker.jobdealer.entity.Vacancy;
+import edu.netcracker.jobdealer.exceptions.BadParameterException;
 import edu.netcracker.jobdealer.exceptions.CompanyNotFoundException;
 import edu.netcracker.jobdealer.exceptions.NoPermissionException;
 import edu.netcracker.jobdealer.exceptions.SkillNotFoundException;
@@ -84,18 +85,25 @@ public class VacancyController {
                                           @RequestParam int offset,
                                           @RequestParam(required = false) Integer salary,
                                           @RequestParam(required = false) List<String> skills,
-                                          @RequestParam(required = false) String resumeName) {
+                                          @RequestParam(required = false) String resumeName,
+                                          @RequestParam(required = false) Integer sortBy,
+                                          @RequestParam(required = false) Boolean sortAsc) {
         try {
-            List<Vacancy> vacancies = vacancyService.applyConditions(skills, salary, resumeName);
-            List<Vacancy> page = vacancyService.getPage(vacancies, offset, limit);
-            if (page != null) {
-                return ResponseEntity.ok(page.stream()
+            List<Vacancy> vacancies = vacancyService.sortAndReturn(skills, salary, resumeName, offset, limit, sortBy, sortAsc);
+            if (vacancies != null) {
+                return ResponseEntity.ok(vacancies.stream()
                         .map(e -> mapper.map(e, VacancyDto.class))
                         .collect(Collectors.toList()));
             } else return ResponseEntity.noContent().build();
         } catch (SkillNotFoundException e) {
             return ResponseEntity.status(404).body(e.getMessage());
+        } catch (BadParameterException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
         }
+    }
 
+    @GetMapping(value = "vacancies/size")
+    public ResponseEntity<?> getSize() {
+        return ResponseEntity.ok(vacancyService.getSize());
     }
 }

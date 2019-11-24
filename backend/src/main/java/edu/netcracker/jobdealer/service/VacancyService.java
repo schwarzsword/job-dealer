@@ -3,10 +3,7 @@ package edu.netcracker.jobdealer.service;
 
 import edu.netcracker.jobdealer.entity.Company;
 import edu.netcracker.jobdealer.entity.Vacancy;
-import edu.netcracker.jobdealer.exceptions.CompanyNotFoundException;
-import edu.netcracker.jobdealer.exceptions.NoPermissionException;
-import edu.netcracker.jobdealer.exceptions.SkillNotFoundException;
-import edu.netcracker.jobdealer.exceptions.VacancyNotFoundException;
+import edu.netcracker.jobdealer.exceptions.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -29,5 +26,12 @@ public interface VacancyService {
     List<Vacancy> getPage(List<Vacancy> inp, int offset, int limit);
 
     public List<Vacancy> applyConditions(List<String> skills, Integer salary, String resumeName) throws SkillNotFoundException;
+
+    public int getSize();
+
+    public List<Vacancy> sortAndReturn(List<String> skills, Integer salary,
+                                       String resumeName, int offset, int limit,
+                                       Integer sortBy, Boolean sortAsc)
+            throws SkillNotFoundException, BadParameterException;
 
 }
