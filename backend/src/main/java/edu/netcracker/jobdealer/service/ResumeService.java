@@ -17,7 +17,7 @@ public interface ResumeService {
 
     Resume update(String resumeName, Resume resume, String email);
   
-    void remove(UUID resumeId);
+//    void remove(UUID resumeId);
 
     List<Resume> getAllResumeOfUser(String login);
 }

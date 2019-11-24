@@ -68,15 +68,15 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
 
-    @Override
-    public void remove(UUID resumeId) {
-        Resume resumeToDelete = resumeRepository.findById(resumeId).orElseThrow(
-                () -> {
-                    throw new ResourceNotFoundException();
-                }
-        );
-        resumeRepository.delete(resumeToDelete);
-    }
+//    @Override
+//    public void remove(UUID resumeId) {
+//        Resume resumeToDelete = resumeRepository.findById(resumeId).orElseThrow(
+//                () -> {
+//                    throw new ResourceNotFoundException();
+//                }
+//        );
+//        resumeRepository.delete(resumeToDelete);
+//    }
 
     @Override
     public List<Resume> getAllResumeOfUser(String login) {
