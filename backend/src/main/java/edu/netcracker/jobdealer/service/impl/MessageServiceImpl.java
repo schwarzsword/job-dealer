@@ -1,5 +1,6 @@
 package edu.netcracker.jobdealer.service.impl;
 
+import edu.netcracker.jobdealer.entity.Account;
 import edu.netcracker.jobdealer.entity.Message;
 import edu.netcracker.jobdealer.exceptions.AccountNotFoundException;
 import edu.netcracker.jobdealer.exceptions.MessageNotFoundException;
@@ -32,13 +33,15 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<Message> getMessages(UUID senderId, UUID receiverId, int offset, int limit) {
-
+    public List<Message> getMessages(UUID senderId, UUID receiverId, Integer offset, Integer limit) {
         if (!accountRepository.existsById(senderId)) {
             throw new AccountNotFoundException("Sender by id=" + senderId + " not found");
         } else if (!accountRepository.existsById(receiverId)) {
             throw new AccountNotFoundException("Receiver by id=" + receiverId + " not found");
         }
+
+        offset = offset != null ? offset : 0;
+        limit = limit != null ? limit : 1;
 
         Page<Message> page = messageRepository.findAll(
                 PageRequest.of(offset, limit, Sort.by(Sort.Direction.DESC, "date")));
@@ -67,13 +70,13 @@ public class MessageServiceImpl implements MessageService {
             throw new AccountNotFoundException("Sender by id=" + senderId + " not found");
         } else if (!accountRepository.existsById(receiverId)) {
             throw new AccountNotFoundException("Receiver by id=" + receiverId + " not found");
-        } else if (text != null && !text.equals("")) {
+        } else if (text == null || text.equals("")) {
             throw new IllegalArgumentException();
         } else {
             Message message = new Message();
             message.setText(text);
-            message.setSender(senderId);
-            message.setReceiver(receiverId);
+            message.setSender(new Account(senderId, null, null, null));
+            message.setReceiver(new Account(receiverId, null, null, null));
             message.setDate(new Date());
             messageRepository.save(message);
             return message;
@@ -82,18 +85,20 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public Message sendMessage(Message message) throws AccountNotFoundException, IllegalArgumentException {
-        if (!accountRepository.existsById(message.getReceiver())) {
-            throw new AccountNotFoundException("Receiver account not found");
+        if (!accountRepository.existsById(message.getSender())) {
+            throw new AccountNotFoundException("Sender by id=" + message.getSender() + " not found");
+        } else if (!accountRepository.existsById(message.getReceiver())) {
+            throw new AccountNotFoundException("Receiver account by id=" + message.getReceiver() + " not found");
         } else if (message.getText() == null || message.getText().equals("")) {
             throw new IllegalArgumentException();
         } else {
             Message senderMessage = new Message();
-            message.setText(message.getText());
-            message.setSender(message.getSender());
-            message.setReceiver(message.getReceiver());
-            message.setDate(new Date());
+            senderMessage.setText(message.getText());
+            senderMessage.setSender(new Account(message.getSender(), null, null, null));
+            senderMessage.setReceiver(new Account(message.getReceiver(), null, null, null));
+            senderMessage.setDate(new Date());
             messageRepository.save(senderMessage);
-            return message;
+            return senderMessage;
         }
     }
 

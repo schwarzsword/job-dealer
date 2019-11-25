@@ -23,7 +23,7 @@ public interface MessageService {
      * @param limit limit for message list
      * @return List of messages
      */
-    public List<Message> getMessages(UUID senderId, UUID receiverId, int offset, int limit);
+    List<Message> getMessages(UUID senderId, UUID receiverId, Integer offset, Integer limit);
 
     /**
      * Gets a message by identifier
@@ -33,7 +33,7 @@ public interface MessageService {
      * @param messageId Message identifier
      * @return Message object
      */
-    public Message getMessage(UUID messageId);
+    Message getMessage(UUID messageId);
 
     /**
      * Sends a message from sender to receiver by identifier
@@ -45,7 +45,7 @@ public interface MessageService {
      * @param receiverId Receiver uuid
      * @return Message object
      */
-    public Message sendMessage(String text, UUID senderId, UUID receiverId);
+    Message sendMessage(String text, UUID senderId, UUID receiverId);
 
     /**
      * Sends a message from sender to receiver by Account
@@ -55,7 +55,7 @@ public interface MessageService {
      * @param message Message object
      * @return Message object
      */
-    public Message sendMessage(Message message);
+    Message sendMessage(Message message);
 
     /**
      * Updates the message by identifier
@@ -67,11 +67,11 @@ public interface MessageService {
      * @param text Message body
      * @return Message object
      */
-    public Message updateMessage(UUID id, String text);
+    Message updateMessage(UUID id, String text);
 
     /**
      * Deletes the message by identifier
      * @param id Message uuid
      */
-    public void deleteMessage(UUID id);
+    void deleteMessage(UUID id);
 }

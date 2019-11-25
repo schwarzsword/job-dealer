@@ -35,14 +35,6 @@ public class Message {
     @JoinColumn(name = "receiverId", referencedColumnName = "id")
     private Account receiver;
 
-    public void setSender(UUID sender) {
-        this.sender.setId(sender);
-    }
-
-    public void setReceiver(UUID receiver) {
-        this.receiver.setId(receiver);
-    }
-
     @Mapping("senderId")
     public UUID getSender() {
         return sender.getId();
