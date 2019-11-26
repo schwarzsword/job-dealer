@@ -25,13 +25,14 @@ public interface VacancyService {
 
     List<Vacancy> getPage(List<Vacancy> inp, int offset, int limit);
 
-    public List<Vacancy> applyConditions(List<String> skills, Integer salary, String resumeName) throws SkillNotFoundException;
+    public List<Vacancy> applyConditions(List<String> skills, Integer salary, String vacancyName, String companyName) throws SkillNotFoundException;
 
-    public int getSize();
+    public int getSize(List<String> skills, Integer salary, String vacancyName, String companyName);
 
     public List<Vacancy> sortAndReturn(List<String> skills, Integer salary,
-                                       String resumeName, int offset, int limit,
-                                       Integer sortBy, Boolean sortAsc)
+                                       String vacancyName, String companyName,
+                                       int offset, int limit,
+                                       String sortBy)
             throws SkillNotFoundException, BadParameterException;
 
 }

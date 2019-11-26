@@ -25,8 +25,8 @@ import java.awt.image.DataBufferByte;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -122,6 +122,11 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public Company getByAccountEmail(String email) throws CompanyNotFoundException {
         return companyRepository.findByAccountEmail(email).orElseThrow(CompanyNotFoundException::new);
+    }
+
+    @Override
+    public List<String> getCompanyNames() {
+        return companyRepository.findAll().stream().map(Company::getName).distinct().collect(Collectors.toList());
     }
 
     private byte[] extractBytes(String imageName) throws IOException {

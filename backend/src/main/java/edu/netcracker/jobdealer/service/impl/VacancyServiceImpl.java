@@ -57,8 +57,8 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
-    public List<Vacancy> applyConditions(List<String> skills, Integer salary, String resumeName) throws SkillNotFoundException, BadParameterException {
-        if (skills == null && salary == null && resumeName == null)
+    public List<Vacancy> applyConditions(List<String> skills, Integer salary, String vacancyName, String companyName) throws SkillNotFoundException, BadParameterException {
+        if (skills == null && salary == null && vacancyName == null && companyName == null)
             throw new BadParameterException("Can't search with empty parameters");
         Set<Vacancy> vacancies = new HashSet<Vacancy>(vacancyRepository.findAll());
         if (skills != null) {
@@ -75,8 +75,12 @@ public class VacancyServiceImpl implements VacancyService {
             Set<Vacancy> allByMoneyIsGreaterThanEqual = vacancyRepository.findAllByMoneyIsGreaterThanEqual(salary);
             vacancies.retainAll(allByMoneyIsGreaterThanEqual);
         }
-        if (resumeName != null) {
-            Set<Vacancy> allByNameLike = vacancyRepository.findAllByNameLike(resumeName);
+        if (vacancyName != null) {
+            Set<Vacancy> allByNameLike = vacancyRepository.findAllByNameLike(vacancyName);
+            vacancies.retainAll(allByNameLike);
+        }
+        if (companyName != null) {
+            Set<Vacancy> allByNameLike = vacancyRepository.findAllByOwner_NameLike(vacancyName);
             vacancies.retainAll(allByNameLike);
         }
         return new ArrayList<Vacancy>(vacancies);
@@ -84,41 +88,36 @@ public class VacancyServiceImpl implements VacancyService {
 
     @Override
     public List<Vacancy> sortAndReturn(List<String> skills, Integer salary,
-                                       String resumeName, int offset, int limit,
-                                       Integer sortBy, Boolean sortAsc)
+                                       String vacancyName, String companyName, int offset, int limit,
+                                       String sortBy)
             throws SkillNotFoundException, BadParameterException {
-        List<Vacancy> vacancies = applyConditions(skills, salary, resumeName);
+        List<Vacancy> vacancies = applyConditions(skills, salary, vacancyName, companyName);
         switch (sortBy) {
-            case 1:
-                if (sortAsc) {
-                    vacancies.sort(Comparator.comparing(Vacancy::getName));
-                } else {
-                    vacancies.sort(Comparator.comparing(Vacancy::getName).reversed());
-                }
+            case "Vacancy name descending":
+                vacancies.sort(Comparator.comparing(Vacancy::getName).reversed());
                 break;
-            case 2:
-                if (sortAsc) {
-                    vacancies.sort(Comparator.comparing(Vacancy::getMoney));
-                } else {
-                    vacancies.sort(Comparator.comparing(Vacancy::getMoney).reversed());
-                }
+            case "Salary ascending":
+                vacancies.sort(Comparator.comparing(Vacancy::getMoney));
                 break;
-            case 3:
-                if (sortAsc) {
-                    vacancies.sort(Comparator.comparing(Vacancy::getOwnerName));
-                } else {
-                    vacancies.sort(Comparator.comparing(Vacancy::getOwnerName).reversed());
-                }
+            case "Salary descending":
+                vacancies.sort(Comparator.comparing(Vacancy::getMoney).reversed());
+                break;
+            case "Company name ascending":
+                vacancies.sort(Comparator.comparing(Vacancy::getOwnerName));
+                break;
+            case "Company name descending":
+                vacancies.sort(Comparator.comparing(Vacancy::getOwnerName).reversed());
                 break;
             default:
                 vacancies.sort(Comparator.comparing(Vacancy::getName));
         }
         return getPage(vacancies, offset, limit);
+
     }
 
     @Override
-    public int getSize() {
-        return vacancyRepository.findAll().size();
+    public int getSize(List<String> skills, Integer salary, String vacancyName, String companyName) {
+        return applyConditions(skills, salary, vacancyName, companyName).size();
     }
 
 

@@ -85,11 +85,11 @@ public class VacancyController {
                                           @RequestParam int offset,
                                           @RequestParam(required = false) Integer salary,
                                           @RequestParam(required = false) List<String> skills,
-                                          @RequestParam(required = false) String resumeName,
-                                          @RequestParam(required = false) Integer sortBy,
-                                          @RequestParam(required = false) Boolean sortAsc) {
+                                          @RequestParam(required = false) String vacancyName,
+                                          @RequestParam(required = false) String companyName,
+                                          @RequestParam(required = false) String sortBy) {
         try {
-            List<Vacancy> vacancies = vacancyService.sortAndReturn(skills, salary, resumeName, offset, limit, sortBy, sortAsc);
+            List<Vacancy> vacancies = vacancyService.sortAndReturn(skills, salary, vacancyName, companyName, offset, limit, sortBy);
             if (vacancies != null) {
                 return ResponseEntity.ok(vacancies.stream()
                         .map(e -> mapper.map(e, VacancyDto.class))
@@ -103,7 +103,14 @@ public class VacancyController {
     }
 
     @GetMapping(value = "vacancies/size")
-    public ResponseEntity<?> getSize() {
-        return ResponseEntity.ok(vacancyService.getSize());
+    public ResponseEntity<?> getSize(@RequestParam(required = false) Integer salary,
+                                     @RequestParam(required = false) List<String> skills,
+                                     @RequestParam(required = false) String vacancyName,
+                                     @RequestParam(required = false) String companyName) {
+        try {
+            return ResponseEntity.ok(vacancyService.getSize(skills, salary, vacancyName, companyName));
+        } catch (BadParameterException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
