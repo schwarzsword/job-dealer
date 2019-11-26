@@ -71,7 +71,7 @@ export default new Router({
         },
         {
             path: '/company',
-            name: 'CompanyProfile',
+            name: 'companyProfile',
             component: CompanyProfile
         },
         {

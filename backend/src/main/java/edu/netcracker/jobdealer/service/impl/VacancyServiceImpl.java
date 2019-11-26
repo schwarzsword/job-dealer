@@ -122,36 +122,33 @@ public class VacancyServiceImpl implements VacancyService {
 
 
     @Override
-    public Vacancy addVacancy(String name, String description, Integer money,
-                              List<String> skills, Company company) throws CompanyNotFoundException {
-        List<Skills> requestedSkills = skills.stream()
-                .map(e -> skillsRepository.findByName(e)
-                        .orElseGet(() -> skillsRepository
-                                .save(new Skills(e))))
-                .collect(Collectors.toList());
-        return vacancyRepository.save(new Vacancy(name, description, money, requestedSkills, company));
-    }
-
-    @Override
-    public Vacancy addVacancy(String name, String description, Integer money, List<String> skills, String email) throws CompanyNotFoundException {
+    public Vacancy addOrUpdateVacancy(String name, String description, Integer money,
+                                      List<String> skills, String email, String id) throws CompanyNotFoundException {
         Company company = companyRepository.findByAccountEmail(email).orElseThrow(CompanyNotFoundException::new);
         List<Skills> requestedSkills = skills.stream()
                 .map(e -> skillsRepository.findByName(e)
                         .orElseGet(() -> skillsRepository
                                 .save(new Skills(e))))
                 .collect(Collectors.toList());
-        return vacancyRepository.save(new Vacancy(name, description, money, requestedSkills, company));
+        if (id.equals("null")) {
+            return vacancyRepository.save(new Vacancy(name, description, money, requestedSkills, company));
+        } else {
+            Vacancy vacancy = vacancyRepository.findById(UUID.fromString(id)).orElseThrow(VacancyNotFoundException::new);
+            vacancy.setName(name);
+            vacancy.setOwner(company);
+            vacancy.setDescription(description);
+            vacancy.setMoney(money);
+            vacancy.setRequestedSkills(requestedSkills);
+            return vacancyRepository.save(vacancy);
+        }
     }
 
     @Override
-    public void remove(UUID vacancyId, Company company) throws VacancyNotFoundException, NoPermissionException {
-        Optional<Vacancy> byId = vacancyRepository.findById(vacancyId);
-        if (byId.isPresent()) {
-            Vacancy vacancy = byId.get();
-            if (vacancy.getOwner().equals(company)) {
-                vacancyRepository.delete(vacancy);
-            } else throw new NoPermissionException("You can't delete this vacancy");
-        } else throw new VacancyNotFoundException("Vacancy not found");
+    public void remove(UUID vacancyId, String email) throws VacancyNotFoundException, NoPermissionException {
+        Vacancy vacancy = vacancyRepository.findById(vacancyId).orElseThrow(VacancyNotFoundException::new);
+        if (email.equals(vacancy.getOwner().getAccount().getEmail())) {
+            vacancyRepository.delete(vacancy);
+        } else throw new NoPermissionException();
     }
 
 

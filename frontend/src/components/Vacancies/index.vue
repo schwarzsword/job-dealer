@@ -5,16 +5,19 @@
 
             <v-text-field
                     v-model="filters.vacancyName"
-                    label="Vacancy"/>
+                    label="Vacancy"
+                    @change="checkNull"/>
             <v-text-field
                     type="number"
                     maxva
-                    v-model="filters.salary"
-                    label="Minimum salary"/>
+                    v-model="filters.money"
+                    label="Minimum salary"
+                    @change="checkNull"/>
             <v-autocomplete
                     label="Company"
                     :items="companyNames"
                     v-model="filters.companyName"
+                    @change="checkNull"
             ></v-autocomplete>
             <v-combobox
                     :items="skills"
@@ -22,7 +25,7 @@
                     clearable
                     label="Skills"
                     multiple
-                    v-model="filters.skills"
+                    v-model="filters.requestedSkills"
             >
                 <template v-slot:selection="{ attrs, item, select, selected }">
                     <v-chip
@@ -62,9 +65,10 @@
                         <v-select
                                 :items="items"
                                 v-model="savedFilters.sortBy"
+                                @change="upload"
                         ></v-select>
                     </div>
-                    <v-dialog v-model="dialog" max-width="500px">
+                    <v-dialog v-model="dialog" max-width="1100px">
                         <v-card>
                             <v-card-title>
                                 <span class="headline">Vacancy</span>
@@ -154,21 +158,24 @@
                     ownerName: '',
                 },
                 filters: {
-                    salary: null,
-                    skills: null,
+                    money: null,
+                    requestedSkills: null,
                     vacancyName: null,
                     companyName: null,
                 },
                 savedFilters: {
-                    salary: null,
-                    skills: null,
+                    money: null,
+                    requestedSkills: null,
                     vacancyName: null,
                     companyName: null,
                     sortBy: "Salary descending",
                 },
                 rules: {
-                    salaryRules: [
+                    moneyRules: [
                         v => /[0-9]/.test(v) || 'It should be a number',
+                    ],
+                    requiredRules: [
+                        v => !!v || 'Field is required',
                     ],
                 },
             }
@@ -181,6 +188,13 @@
                     this.editedIndex = -1;
                 }, 300)
             },
+
+            checkNull() {
+                this.filters.companyName === "" ? this.filters.companyName = null : false;
+                this.filters.money === "" ? this.filters.money = null : false;
+                this.filters.vacancyName === "" ? this.filters.vacancyName = null : false;
+            },
+
             editItem(item) {
                 this.editedIndex = this.vacancies.indexOf(item);
                 this.editedItem = Object.assign({}, item);
@@ -192,8 +206,8 @@
             },
 
             remove(item) {
-                this.filters.skills.splice(this.filters.skills.indexOf(item), 1);
-                this.filters.skills = [...this.filters.skills]
+                this.filters.requestedSkills.splice(this.filters.requestedSkills.indexOf(item), 1);
+                this.filters.requestedSkills = [...this.filters.requestedSkills]
             },
 
             right() {
@@ -212,8 +226,8 @@
 
             applyFilters() {
                 this.savedFilters.vacancyName = this.filters.vacancyName;
-                this.savedFilters.salary = this.filters.salary;
-                this.savedFilters.skills = this.filters.skills;
+                this.savedFilters.money = this.filters.money;
+                this.savedFilters.requestedSkills = this.filters.requestedSkills;
                 this.savedFilters.companyName = this.filters.companyName;
                 this.upload();
             },
@@ -221,8 +235,8 @@
             upload() {
                 urlPort.get('/vacancies/size', {
                     params: {
-                        "salary": this.savedFilters.salary,
-                        'skills': this.savedFilters.skills,
+                        "money": this.savedFilters.money,
+                        'requestedSkills': this.savedFilters.requestedSkills,
                         'vacancyName': this.savedFilters.vacancyName,
                         'companyName': this.savedFilters.companyName
                     }
@@ -232,8 +246,8 @@
                         params: {
                             'limit': this.limit,
                             'offset': this.offset,
-                            "salary": this.savedFilters.salary,
-                            'skills': this.savedFilters.skills,
+                            "money": this.savedFilters.money,
+                            'requestedSkills': this.savedFilters.requestedSkills,
                             'vacancyName': this.savedFilters.vacancyName,
                             'companyName': this.savedFilters.companyName,
                             'sortBy': this.savedFilters.sortBy

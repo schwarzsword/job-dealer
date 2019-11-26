@@ -1,13 +1,8 @@
 package edu.netcracker.jobdealer.controller;
 
 import edu.netcracker.jobdealer.dto.VacancyDto;
-import edu.netcracker.jobdealer.entity.Account;
-import edu.netcracker.jobdealer.entity.Company;
 import edu.netcracker.jobdealer.entity.Vacancy;
-import edu.netcracker.jobdealer.exceptions.BadParameterException;
-import edu.netcracker.jobdealer.exceptions.CompanyNotFoundException;
-import edu.netcracker.jobdealer.exceptions.NoPermissionException;
-import edu.netcracker.jobdealer.exceptions.SkillNotFoundException;
+import edu.netcracker.jobdealer.exceptions.*;
 import edu.netcracker.jobdealer.service.AccountService;
 import edu.netcracker.jobdealer.service.CompanyService;
 import edu.netcracker.jobdealer.service.VacancyService;
@@ -42,12 +37,13 @@ public class VacancyController {
     }
 
     @Secured("ROLE_COMPANY")
-    @PostMapping(value = "/my/vacancies")
-    public ResponseEntity<?> createVacancy(@RequestParam String name, @RequestParam String description,
-                                           @RequestParam int money, @RequestParam List<String> requestedSkills,
-                                           @AuthenticationPrincipal User user) {
+    @PostMapping(value = "/vacancies")
+    public ResponseEntity<?> createOrUpdateVacancy(@RequestParam String name, @RequestParam String description,
+                                                   @RequestParam int money, @RequestParam List<String> requestedSkills,
+                                                   @AuthenticationPrincipal User user,
+                                                   @RequestParam(required = false) String id) {
         try {
-            Vacancy vacancy = vacancyService.addVacancy(name, description, money, requestedSkills, user.getUsername());
+            Vacancy vacancy = vacancyService.addOrUpdateVacancy(name, description, money, requestedSkills, user.getUsername(), id);
             return ResponseEntity.ok(
                     mapper.map(vacancy, VacancyDto.class));
         } catch (CompanyNotFoundException ex) {
@@ -56,22 +52,22 @@ public class VacancyController {
     }
 
     @Secured("ROLE_COMPANY")
-    @DeleteMapping(value = "/my/vacancies/{vacancyId}")
+    @DeleteMapping(value = "/vacancies/{vacancyId}")
     public ResponseEntity<?> deleteVacancy(@PathVariable("vacancyId") UUID vacancyId,
                                            @AuthenticationPrincipal User user) {
         try {
-            Account byEmail = accountService.getByEmail(user.getUsername());
-            Company byAccount = companyService.getByAccount(byEmail);
-            vacancyService.remove(vacancyId, byAccount);
+            vacancyService.remove(vacancyId, user.getUsername());
             return ResponseEntity.noContent().build();
-        } catch (CompanyNotFoundException | NoPermissionException ex) {
-            return ResponseEntity.status(401).body("You have no permission to create vacancies");
+        } catch (VacancyNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (NoPermissionException e) {
+            return ResponseEntity.status(401).body(e.getMessage());
         }
     }
 
 
     @Secured("ROLE_COMPANY")
-    @GetMapping("/my")
+    @GetMapping("/my/vacancies")
     public ResponseEntity<?> getAllCompanyVacancies(@AuthenticationPrincipal User user) {
         List<VacancyDto> vacancies = vacancyService.getVacanciesByCompanyEmail(user.getUsername())
                 .stream()
@@ -83,13 +79,13 @@ public class VacancyController {
     @GetMapping(value = "/vacancies")
     public ResponseEntity<?> getVacancies(@RequestParam int limit,
                                           @RequestParam int offset,
-                                          @RequestParam(required = false) Integer salary,
-                                          @RequestParam(required = false) List<String> skills,
+                                          @RequestParam(required = false) Integer money,
+                                          @RequestParam(required = false) List<String> requestedSkills,
                                           @RequestParam(required = false) String vacancyName,
                                           @RequestParam(required = false) String companyName,
                                           @RequestParam(required = false) String sortBy) {
         try {
-            List<Vacancy> vacancies = vacancyService.sortAndReturn(skills, salary, vacancyName, companyName, offset, limit, sortBy);
+            List<Vacancy> vacancies = vacancyService.sortAndReturn(requestedSkills, money, vacancyName, companyName, offset, limit, sortBy);
             if (vacancies != null) {
                 return ResponseEntity.ok(vacancies.stream()
                         .map(e -> mapper.map(e, VacancyDto.class))
@@ -102,13 +98,13 @@ public class VacancyController {
         }
     }
 
-    @GetMapping(value = "vacancies/size")
-    public ResponseEntity<?> getSize(@RequestParam(required = false) Integer salary,
-                                     @RequestParam(required = false) List<String> skills,
+    @GetMapping(value = "/vacancies/size")
+    public ResponseEntity<?> getSize(@RequestParam(required = false) Integer money,
+                                     @RequestParam(required = false) List<String> requestedSkills,
                                      @RequestParam(required = false) String vacancyName,
                                      @RequestParam(required = false) String companyName) {
         try {
-            return ResponseEntity.ok(vacancyService.getSize(skills, salary, vacancyName, companyName));
+            return ResponseEntity.ok(vacancyService.getSize(requestedSkills, money, vacancyName, companyName));
         } catch (BadParameterException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

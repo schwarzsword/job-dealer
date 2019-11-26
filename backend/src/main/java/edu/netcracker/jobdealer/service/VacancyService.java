@@ -15,11 +15,11 @@ public interface VacancyService {
 
     List<Vacancy> getVacanciesByCompany(Company company);
 
-    Vacancy addVacancy(String name, String description, Integer money, List<String> skills, Company company) throws CompanyNotFoundException;
+    Vacancy addOrUpdateVacancy(String name, String description,
+                               Integer money, List<String> skills, String email,
+                               String id) throws CompanyNotFoundException;
 
-    Vacancy addVacancy(String name, String description, Integer money, List<String> skills, String email) throws CompanyNotFoundException;
-
-    void remove(UUID vacancyId, Company company) throws VacancyNotFoundException, NoPermissionException;
+    void remove(UUID vacancyId, String email) throws VacancyNotFoundException, NoPermissionException;
 
     List<Vacancy> getVacanciesByCompanyEmail(String email);
 
