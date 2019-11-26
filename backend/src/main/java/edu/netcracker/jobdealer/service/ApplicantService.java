@@ -1,9 +1,11 @@
 package edu.netcracker.jobdealer.service;
 
+import edu.netcracker.jobdealer.entity.Account;
 import edu.netcracker.jobdealer.entity.Applicant;
 import edu.netcracker.jobdealer.exceptions.AccountAlreadyInUseException;
 import edu.netcracker.jobdealer.exceptions.AccountByIdNotFoundException;
 import edu.netcracker.jobdealer.exceptions.ApplicantNotFoundException;
+import edu.netcracker.jobdealer.exceptions.CompanyNotFoundException;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -20,4 +22,6 @@ public interface ApplicantService {
     Applicant updateApplicant(String firstName, String lastName, String middleName, UUID accountId);
 
     ResponseEntity deleteApplicant(UUID id) throws ApplicantNotFoundException;
+
+    public Applicant getByAccount(Account accountByEmail) throws ApplicantNotFoundException;
 }

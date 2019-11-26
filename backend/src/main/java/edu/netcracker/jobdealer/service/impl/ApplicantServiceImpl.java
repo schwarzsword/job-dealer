@@ -2,10 +2,8 @@ package edu.netcracker.jobdealer.service.impl;
 
 import edu.netcracker.jobdealer.entity.Account;
 import edu.netcracker.jobdealer.entity.Applicant;
-import edu.netcracker.jobdealer.exceptions.AccountAlreadyInUseException;
-import edu.netcracker.jobdealer.exceptions.AccountByIdNotFoundException;
-import edu.netcracker.jobdealer.exceptions.ApplicantNotFoundException;
-import edu.netcracker.jobdealer.exceptions.NotImplementedMethodException;
+import edu.netcracker.jobdealer.entity.Company;
+import edu.netcracker.jobdealer.exceptions.*;
 import edu.netcracker.jobdealer.repository.AccountRepository;
 import edu.netcracker.jobdealer.repository.ApplicantRepository;
 import edu.netcracker.jobdealer.service.ApplicantService;
@@ -56,5 +54,10 @@ public class ApplicantServiceImpl implements ApplicantService {
     @Override
     public ResponseEntity deleteApplicant(UUID id) throws ApplicantNotFoundException {
         throw new NotImplementedMethodException("Method is not implemented");
+    }
+
+    @Override
+    public Applicant getByAccount(Account accountByEmail) throws ApplicantNotFoundException {
+        return applicantRepository.findByAccount(accountByEmail).orElseThrow(CompanyNotFoundException::new);
     }
 }

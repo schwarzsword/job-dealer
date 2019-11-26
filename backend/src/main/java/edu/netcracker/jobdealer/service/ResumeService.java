@@ -1,6 +1,7 @@
 package edu.netcracker.jobdealer.service;
 
 import edu.netcracker.jobdealer.entity.Resume;
+import edu.netcracker.jobdealer.entity.Skills;
 import edu.netcracker.jobdealer.exceptions.ApplicantNotFoundException;
 import edu.netcracker.jobdealer.exceptions.ResumeAlreadyExistsException;
 
@@ -15,8 +16,16 @@ public interface ResumeService {
                       UUID applicantId, List<String> skillsString)
             throws ApplicantNotFoundException, ResumeAlreadyExistsException;
 
-    Resume update(String resumeName, Resume resume, String email);
-  
+    Resume update(UUID resumeId,
+                  String resumeName,
+                  String firstName,
+                  String lastName,
+                  String about,
+                  String avatarUrl,
+                  int salary,
+                  List<Skills> skillsString);
+
+
     void remove(UUID resumeId);
 
     List<Resume> getAllResumeOfUser(String login);
