@@ -10,6 +10,7 @@ import Account from "../components/Account";
 import Applicant from "../components/Applicant";
 import Company from "../components/Company";
 import CompanyPage from "../components/Company/page";
+import Message from "../components/Message"
 import store from '../store'
 import Vacancies from "../components/Vacancies"
 import Resume from "../components/Resume/index";
@@ -91,6 +92,7 @@ export default new Router({
             name: 'resume',
             component: Resume,
             //beforeEnter: ifAuthenticated
+            props: (route) => ({ query: route.query.q })
         },
         {
             path: '/resumeForm',
@@ -102,6 +104,11 @@ export default new Router({
             path: '/vacancies',
             name: 'vacancies',
             component: Vacancies,
+        },
+        {
+            path: '/my/messages',
+            name: 'messages',
+            component: Message,
         }
     ]
 })
