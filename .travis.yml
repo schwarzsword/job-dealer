@@ -1,7 +1,16 @@
 language: java
+
+before_install:
+  - npm install -g @vue/cli
+
 install: true
+
 services:
   - postgresql
+
+cache:
+  directories:
+    - $HOME/.m2
 
 before_script:
   - psql -c 'create database jobdealer;' -U postgres
@@ -9,3 +18,10 @@ before_script:
 script:
   - cd ./backend/ && mvn clean install && cd ..
   - docker-compose build
+
+notifications:
+  email:
+    recipients:
+      - egnaf@yahoo.com
+    on_success: always
+    on_failure: always
