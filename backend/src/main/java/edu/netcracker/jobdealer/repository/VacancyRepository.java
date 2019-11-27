@@ -16,7 +16,7 @@ public interface VacancyRepository extends JpaRepository<Vacancy, UUID> {
 
     Optional<Vacancy> findById(UUID vacancyId);
 
-    Set<Vacancy> findAllByMoneyIsGreaterThanEqual(int money);
+    Set<Vacancy> findDistinctByMoneyIsGreaterThanEqual(int money);
 
     List<Vacancy> findAllByMoneyIsLessThanEqual(int money);
 
@@ -24,7 +24,7 @@ public interface VacancyRepository extends JpaRepository<Vacancy, UUID> {
 
     List<Vacancy> findAllByOwner_Account_Email(String email);
 
-    Set<Vacancy> findAllByRequestedSkillsContains(Skills skill);
+    Set<Vacancy> findDistinctByRequestedSkillsContains(Skills skill);
 
     Vacancy findByNameAndOwner(String name, Company owner);
 
@@ -40,7 +40,7 @@ public interface VacancyRepository extends JpaRepository<Vacancy, UUID> {
 
     void deleteByNameAndOwnerAccountEmail(String name, String email);
 
-    Set<Vacancy> findAllByNameLike(String regex);
+    Set<Vacancy> findDistinctByNameLike(String regex);
 
-    Set<Vacancy> findAllByOwner_NameLike(String regex);
+    Set<Vacancy> findDistinctByOwner(Company owner);
 }

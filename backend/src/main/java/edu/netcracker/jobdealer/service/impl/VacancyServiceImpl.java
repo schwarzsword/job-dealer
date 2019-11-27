@@ -61,26 +61,27 @@ public class VacancyServiceImpl implements VacancyService {
         if (skills == null && salary == null && vacancyName == null && companyName == null)
             throw new BadParameterException("Can't search with empty parameters");
         Set<Vacancy> vacancies = new HashSet<Vacancy>(vacancyRepository.findAll());
-        if (skills != null) {
+        if (skills.size() != 0) {
             List<Skills> requestedSkills = skills.stream()
                     .map(e -> skillsRepository.findByName(e)
                             .orElseThrow(SkillNotFoundException::new))
                     .collect(Collectors.toList());
             requestedSkills.forEach(e -> {
-                Set<Vacancy> allByRequestedSkillsContains = vacancyRepository.findAllByRequestedSkillsContains(e);
+                Set<Vacancy> allByRequestedSkillsContains = vacancyRepository.findDistinctByRequestedSkillsContains(e);
                 vacancies.retainAll(allByRequestedSkillsContains);
             });
         }
         if (salary != null) {
-            Set<Vacancy> allByMoneyIsGreaterThanEqual = vacancyRepository.findAllByMoneyIsGreaterThanEqual(salary);
+            Set<Vacancy> allByMoneyIsGreaterThanEqual = vacancyRepository.findDistinctByMoneyIsGreaterThanEqual(salary);
             vacancies.retainAll(allByMoneyIsGreaterThanEqual);
         }
         if (vacancyName != null) {
-            Set<Vacancy> allByNameLike = vacancyRepository.findAllByNameLike(vacancyName);
+            Set<Vacancy> allByNameLike = vacancyRepository.findDistinctByNameLike(vacancyName);
             vacancies.retainAll(allByNameLike);
         }
         if (companyName != null) {
-            Set<Vacancy> allByNameLike = vacancyRepository.findAllByOwner_NameLike(vacancyName);
+            Company company = companyRepository.findFirstByName(companyName).orElseThrow(CompanyNotFoundException::new);
+            Set<Vacancy> allByNameLike = vacancyRepository.findDistinctByOwner(company);
             vacancies.retainAll(allByNameLike);
         }
         return new ArrayList<Vacancy>(vacancies);

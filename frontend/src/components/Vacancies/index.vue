@@ -5,8 +5,7 @@
 
             <v-text-field
                     v-model="filters.vacancyName"
-                    label="Vacancy"
-                    @change="checkNull"/>
+                    label="Vacancy"/>
             <v-text-field
                     type="number"
                     maxva
@@ -16,9 +15,7 @@
             <v-autocomplete
                     label="Company"
                     :items="companyNames"
-                    v-model="filters.companyName"
-                    @change="checkNull"
-            ></v-autocomplete>
+                    v-model="filters.companyName"/>
             <v-combobox
                     :items="skills"
                     chips
@@ -158,16 +155,16 @@
                     ownerName: '',
                 },
                 filters: {
-                    money: null,
-                    requestedSkills: null,
-                    vacancyName: null,
-                    companyName: null,
+                    money: 0,
+                    requestedSkills: [],
+                    vacancyName: "",
+                    companyName: "",
                 },
                 savedFilters: {
-                    money: null,
-                    requestedSkills: null,
-                    vacancyName: null,
-                    companyName: null,
+                    money: 0,
+                    requestedSkills: [],
+                    vacancyName: "",
+                    companyName: "",
                     sortBy: "Salary descending",
                 },
                 rules: {
@@ -190,9 +187,7 @@
             },
 
             checkNull() {
-                this.filters.companyName === "" ? this.filters.companyName = null : false;
-                this.filters.money === "" ? this.filters.money = null : false;
-                this.filters.vacancyName === "" ? this.filters.vacancyName = null : false;
+                this.filters.money === "" ? this.filters.money = 0 : false;
             },
 
             editItem(item) {
@@ -233,26 +228,24 @@
             },
 
             upload() {
-                urlPort.get('/vacancies/size', {
-                    params: {
-                        "money": this.savedFilters.money,
-                        'requestedSkills': this.savedFilters.requestedSkills,
-                        'vacancyName': this.savedFilters.vacancyName,
-                        'companyName': this.savedFilters.companyName
-                    }
-                }).then(resp => {
+                let params = new URLSearchParams({
+                    'limit': this.limit,
+                    'offset': this.offset,
+                    "money": this.savedFilters.money,
+                    'sortBy': this.savedFilters.sortBy
+                });
+                if (this.savedFilters.requestedSkills.size !== 0) {
+                    params.append('requestedSkills', this.savedFilters.requestedSkills)
+                }
+                if (this.savedFilters.companyName !== ""){
+                    params.append('companyName', this.savedFilters.companyName)
+                }
+                if (this.savedFilters.vacancyName !== ""){
+                    params.append('vacancyName', this.savedFilters.vacancyName)
+                }
+                urlPort.get('/vacancies/size', {params}).then(resp => {
                     this.totalSize = resp.data;
-                    urlPort.get('/vacancies', {
-                        params: {
-                            'limit': this.limit,
-                            'offset': this.offset,
-                            "money": this.savedFilters.money,
-                            'requestedSkills': this.savedFilters.requestedSkills,
-                            'vacancyName': this.savedFilters.vacancyName,
-                            'companyName': this.savedFilters.companyName,
-                            'sortBy': this.savedFilters.sortBy
-                        }
-                    }).then(resp => {
+                    urlPort.get('/vacancies', {params}).then(resp => {
                         this.vacancies = resp.data;
                     }).catch(err => {
 
