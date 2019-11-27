@@ -1,4 +1,11 @@
 language: java
 install: true
+services:
+  - postgresql
+
+before_script:
+  - psql -c 'create database jobdealer;' -U postgres
+
 script:
-  - cd backend && mvn -B verify && cd ..
+  - cd ./backend/ && mvn clean install && cd ..
+  - docker-compose build
