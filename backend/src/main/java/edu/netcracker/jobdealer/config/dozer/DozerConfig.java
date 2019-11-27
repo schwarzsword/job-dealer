@@ -1,4 +1,4 @@
-package edu.netcracker.jobdealer.config.mapping;
+package edu.netcracker.jobdealer.config.dozer;
 
 import org.dozer.DozerBeanMapper;
 import org.springframework.context.annotation.Bean;
@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Configuration
-public class MappingConfiguration {
+public class DozerConfig {
 
     @Bean(name = "org.dozer.Mapper")
     public DozerBeanMapper dozerBean() {

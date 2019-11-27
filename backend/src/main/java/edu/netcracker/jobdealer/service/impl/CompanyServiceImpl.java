@@ -43,7 +43,8 @@ public class CompanyServiceImpl implements CompanyService {
     private String path;
 
     @Autowired
-    public CompanyServiceImpl(CompanyRepository companyRepository, AccountRepository accountRepository, AccountService accountService) {
+    public CompanyServiceImpl(CompanyRepository companyRepository, AccountRepository accountRepository,
+                              AccountService accountService) {
         this.companyRepository = companyRepository;
         this.accountRepository = accountRepository;
         this.accountService = accountService;
@@ -54,14 +55,14 @@ public class CompanyServiceImpl implements CompanyService {
         return companyRepository.findAll();
     }
 
-    public List<Company> getCompanies(Integer pageNo, Integer pageSize, String sortBy) {
-        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+    public List<Company> getCompanies(int page, int limit, String sortBy) {
+        Pageable paging = PageRequest.of(page, limit, Sort.by(sortBy));
         Page<Company> pagedResult = companyRepository.findAll(paging);
 
         if (pagedResult.hasContent()) {
             return pagedResult.getContent();
         } else {
-            return new ArrayList<>();
+            throw new CompanyNotFoundException("Companies are not found");
         }
     }
 

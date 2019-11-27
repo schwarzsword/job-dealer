@@ -1,34 +1,34 @@
-[![Build Status](https://travis-ci.org/schwarzsword/nc.task.svg)](https://travis-ci.org/schwarzsword/nc.task)
+[![Build Status](https://travis-ci.org/schwarzsword/job-dealer.svg)](https://travis-ci.org/schwarzsword/job-dealer)
 
 # job-dealer
 
-## Installation
+## Install
 To create services and launch in docker containers, run `start.sh`.
 ```bash
-$ bash ./start.sh
+$ bash start.sh
 ```
 
-## Technologies
-#### Backend
-- Spring boot
-- Spring Data JPA
+## Stack
+- Oracle JDK 8
+- Spring boot 2.2.0
+- Spring Data
 - Spring Security
-- Postgres
-- Jackson
-- Lombok
-- Dozer
+- Postgres 9.4
+- Dozer 5.5.1
 - Swagger 2
-- Maven
-- OpenJDK 8
-
-#### Frontend
-- Node
-- Npm
-- Vue/Vuex
+- Lombok 1.18.10
+- Maven 3.6.1
+- NPM
+- Node.js
+- Vue.js
+- Vuetify
+- Axios
 - Webpack
 - Bootstrap 4
 - Javascript
-- HTML/CSS
+- HTML, CSS, Javascript
+- Docker
+- Nginx
 
 ## Contribute
 For any problems, comments, or feedback please create an issue 

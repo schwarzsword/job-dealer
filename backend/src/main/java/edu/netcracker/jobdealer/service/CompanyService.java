@@ -23,10 +23,9 @@ public interface CompanyService {
 
     Company getByAccount(Account accountByEmail);
 
-    List<Company> getCompanies(Integer page, Integer size, String sortBy);
+    List<Company> getCompanies(int page, int size, String sortBy);
 
     Company getByAccountEmail(String email);
 
     List<String> getCompanyNames();
 }
-

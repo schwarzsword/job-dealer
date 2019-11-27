@@ -3,15 +3,7 @@
         <navigation/>
         <div class="wrapper">
             <div class="container">
-                <div class="left-sidebar">
-                    <!--Left-->
-                </div>
-                <div class="content">
-                    <router-view/>
-                </div>
-                <div class="right-sidebar">
-                    <RightSidebar/>
-                </div>
+                <router-view/>
             </div>
         </div>
         <Footer/>
@@ -41,8 +33,12 @@
 </script>
 
 <style>
+    body {
+        font-family: "Roboto", sans-serif;
+    }
     a {
         color: #3E5F8A;
+        text-decoration: none;
     }
 
     a:hover {

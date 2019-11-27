@@ -3,6 +3,7 @@ package edu.netcracker.jobdealer.controller;
 import edu.netcracker.jobdealer.dto.CompanyDto;
 import edu.netcracker.jobdealer.exceptions.AccountIdExistsException;
 import edu.netcracker.jobdealer.exceptions.AccountNotFoundException;
+import edu.netcracker.jobdealer.exceptions.CompanyNotFoundException;
 import edu.netcracker.jobdealer.service.CompanyService;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +29,17 @@ public class CompanyController {
     }
 
     @GetMapping(value = "/companies")
-    public List<CompanyDto> getCompanies(@RequestParam(defaultValue = "0") Integer page,
-                                         @RequestParam(defaultValue = "10") Integer size,
-                                         @RequestParam(defaultValue = "id") String sortBy) {
-        return companyService.getCompanies(page, size, sortBy).stream()
-                .map(company -> this.mapper.map(company, CompanyDto.class))
-                .collect(Collectors.toList());
+    public ResponseEntity<?> getCompanies(@RequestParam int page, @RequestParam int limit, @RequestParam String sortBy) {
+        try {
+            List<CompanyDto> companies = companyService.getCompanies(page, limit, sortBy).stream()
+                    .map(company -> this.mapper.map(company, CompanyDto.class))
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(companies);
+
+        } catch (CompanyNotFoundException e) {
+            return ResponseEntity.noContent().build();
+        }
     }
 
     @GetMapping(value = "/companies/names")
@@ -42,8 +48,13 @@ public class CompanyController {
     }
 
     @GetMapping(value = "/companies/{id}")
-    public CompanyDto getCompanyById(@PathVariable("id") UUID id) {
-        return mapper.map(companyService.getCompanyById(id), CompanyDto.class);
+    public ResponseEntity<?> getCompanyById(@PathVariable("id") UUID id) {
+        try {
+            CompanyDto company = mapper.map(companyService.getCompanyById(id), CompanyDto.class);
+            return ResponseEntity.ok(company);
+        } catch (CompanyNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping(value = "/companies")

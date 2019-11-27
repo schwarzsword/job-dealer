@@ -26,8 +26,7 @@ public interface ResumeService {
                   String avatarUrl,
                   int salary,
                   List<Skills> skillsString);
-
-
+  
     void remove(UUID resumeId);
 
     List<Resume> getAllResumeOfUser(String login);

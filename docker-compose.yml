@@ -1,17 +1,35 @@
 version: '3'
 services:
-  database:
-    restart: always
+  postgres:
+    container_name: postgres
     image: postgres:latest
     ports:
-      - "6564:5432"
+      - "5432:5432"
     environment:
       - POSTGRES_DB=jobdealer
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
-
   backend:
-    restart: always
-    build: ./backend/
+    container_name: backend
+    build: ./backend
     ports:
-      - "6565:8080"
+      - "8080:8080"
+    depends_on:
+      - postgres
+  frontend:
+    container_name: frontend
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+  nginx:
+    container_name: nginx
+    image: proxy
+    build: ./.nginx
+    depends_on:
+      - backend
+      - frontend
+    ports:
+      - 80:80
+      - 443:443
