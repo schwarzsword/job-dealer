@@ -57,63 +57,99 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
-    public List<Vacancy> applyConditions(List<String> skills, Integer salary, String resumeName) throws SkillNotFoundException, BadParameterException {
-        if (skills == null && salary == null && resumeName == null)
+    public List<Vacancy> applyConditions(List<String> skills, Integer salary, String vacancyName, String companyName) throws SkillNotFoundException, BadParameterException {
+        if (skills == null && salary == null && vacancyName == null && companyName == null)
             throw new BadParameterException("Can't search with empty parameters");
         Set<Vacancy> vacancies = new HashSet<Vacancy>(vacancyRepository.findAll());
-        if (skills != null) {
+        if (skills.size() != 0) {
             List<Skills> requestedSkills = skills.stream()
                     .map(e -> skillsRepository.findByName(e)
                             .orElseThrow(SkillNotFoundException::new))
                     .collect(Collectors.toList());
             requestedSkills.forEach(e -> {
-                Set<Vacancy> allByRequestedSkillsContains = vacancyRepository.findAllByRequestedSkillsContains(e);
+                Set<Vacancy> allByRequestedSkillsContains = vacancyRepository.findDistinctByRequestedSkillsContains(e);
                 vacancies.retainAll(allByRequestedSkillsContains);
             });
         }
         if (salary != null) {
-            Set<Vacancy> allByMoneyIsGreaterThanEqual = vacancyRepository.findAllByMoneyIsGreaterThanEqual(salary);
+            Set<Vacancy> allByMoneyIsGreaterThanEqual = vacancyRepository.findDistinctByMoneyIsGreaterThanEqual(salary);
             vacancies.retainAll(allByMoneyIsGreaterThanEqual);
         }
-        if (resumeName != null) {
-            Set<Vacancy> allByNameLike = vacancyRepository.findAllByNameLike(resumeName);
+        if (vacancyName != null) {
+            Set<Vacancy> allByNameLike = vacancyRepository.findDistinctByNameContains(vacancyName);
+            vacancies.retainAll(allByNameLike);
+        }
+        if (companyName != null) {
+            Company company = companyRepository.findFirstByName(companyName).orElseThrow(CompanyNotFoundException::new);
+            Set<Vacancy> allByNameLike = vacancyRepository.findDistinctByOwner(company);
             vacancies.retainAll(allByNameLike);
         }
         return new ArrayList<Vacancy>(vacancies);
     }
 
-
     @Override
-    public Vacancy addVacancy(String name, String description, Integer money,
-                              List<String> skills, Company company) throws CompanyNotFoundException {
-        List<Skills> requestedSkills = skills.stream()
-                .map(e -> skillsRepository.findByName(e)
-                        .orElseGet(() -> skillsRepository
-                                .save(new Skills(e))))
-                .collect(Collectors.toList());
-        return vacancyRepository.save(new Vacancy(name, description, money, requestedSkills, company));
+    public List<Vacancy> sortAndReturn(List<String> skills, Integer salary,
+                                       String vacancyName, String companyName, int offset, int limit,
+                                       String sortBy)
+            throws SkillNotFoundException, BadParameterException {
+        List<Vacancy> vacancies = applyConditions(skills, salary, vacancyName, companyName);
+        switch (sortBy) {
+            case "Vacancy name descending":
+                vacancies.sort(Comparator.comparing(Vacancy::getName).reversed());
+                break;
+            case "Salary ascending":
+                vacancies.sort(Comparator.comparing(Vacancy::getMoney));
+                break;
+            case "Salary descending":
+                vacancies.sort(Comparator.comparing(Vacancy::getMoney).reversed());
+                break;
+            case "Company name ascending":
+                vacancies.sort(Comparator.comparing(Vacancy::getOwnerName));
+                break;
+            case "Company name descending":
+                vacancies.sort(Comparator.comparing(Vacancy::getOwnerName).reversed());
+                break;
+            default:
+                vacancies.sort(Comparator.comparing(Vacancy::getName));
+        }
+        return getPage(vacancies, offset, limit);
+
     }
 
     @Override
-    public Vacancy addVacancy(String name, String description, Integer money, List<String> skills, String email) throws CompanyNotFoundException {
+    public int getSize(List<String> skills, Integer salary, String vacancyName, String companyName) {
+        return applyConditions(skills, salary, vacancyName, companyName).size();
+    }
+
+
+    @Override
+    public Vacancy addOrUpdateVacancy(String name, String description, Integer money,
+                                      List<String> skills, String email, String id) throws CompanyNotFoundException {
         Company company = companyRepository.findByAccountEmail(email).orElseThrow(CompanyNotFoundException::new);
         List<Skills> requestedSkills = skills.stream()
                 .map(e -> skillsRepository.findByName(e)
                         .orElseGet(() -> skillsRepository
                                 .save(new Skills(e))))
                 .collect(Collectors.toList());
-        return vacancyRepository.save(new Vacancy(name, description, money, requestedSkills, company));
+        if (id.equals("null")) {
+            return vacancyRepository.save(new Vacancy(name, description, money, requestedSkills, company));
+        } else {
+            Vacancy vacancy = vacancyRepository.findById(UUID.fromString(id)).orElseThrow(VacancyNotFoundException::new);
+            vacancy.setName(name);
+            vacancy.setOwner(company);
+            vacancy.setDescription(description);
+            vacancy.setMoney(money);
+            vacancy.setRequestedSkills(requestedSkills);
+            return vacancyRepository.save(vacancy);
+        }
     }
 
     @Override
-    public void remove(UUID vacancyId, Company company) throws VacancyNotFoundException, NoPermissionException {
-        Optional<Vacancy> byId = vacancyRepository.findById(vacancyId);
-        if (byId.isPresent()) {
-            Vacancy vacancy = byId.get();
-            if (vacancy.getOwner().equals(company)) {
-                vacancyRepository.delete(vacancy);
-            } else throw new NoPermissionException("You can't delete this vacancy");
-        } else throw new VacancyNotFoundException("Vacancy not found");
+    public void remove(UUID vacancyId, String email) throws VacancyNotFoundException, NoPermissionException {
+        Vacancy vacancy = vacancyRepository.findById(vacancyId).orElseThrow(VacancyNotFoundException::new);
+        if (email.equals(vacancy.getOwner().getAccount().getEmail())) {
+            vacancyRepository.delete(vacancy);
+        } else throw new NoPermissionException();
     }
 
 

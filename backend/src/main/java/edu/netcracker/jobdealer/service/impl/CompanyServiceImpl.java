@@ -11,21 +11,22 @@ import edu.netcracker.jobdealer.repository.CompanyRepository;
 import edu.netcracker.jobdealer.service.AccountService;
 import edu.netcracker.jobdealer.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.security.auth.login.AccountNotFoundException;
-import java.util.ArrayList;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.awt.image.WritableRaster;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -37,6 +38,9 @@ public class CompanyServiceImpl implements CompanyService {
     private final CompanyRepository companyRepository;
     private final AccountRepository accountRepository;
     private final AccountService accountService;
+
+    @Value("${upload.path}")
+    private String path;
 
     @Autowired
     public CompanyServiceImpl(CompanyRepository companyRepository, AccountRepository accountRepository, AccountService accountService) {
@@ -54,7 +58,7 @@ public class CompanyServiceImpl implements CompanyService {
         Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
         Page<Company> pagedResult = companyRepository.findAll(paging);
 
-        if(pagedResult.hasContent()) {
+        if (pagedResult.hasContent()) {
             return pagedResult.getContent();
         } else {
             return new ArrayList<>();
@@ -73,18 +77,23 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public Company addCompany(String name, Boolean isVerified, String description, String avatarUrl, UUID accountId)
-            throws AccountByIdNotFoundException, AccountIdExistsException {
+    public Company addCompany(String name, Boolean isVerified, String description, byte[] fileData, UUID accountId)
+            throws AccountByIdNotFoundException, AccountIdExistsException, IOException {
         if (!companyRepository.existsByAccount_Id(accountId)) {
             Account byId = accountService.getById(accountId);
-            return companyRepository.save(new Company(name, false, description, avatarUrl, byId));
+            byte[] n = "null".getBytes();
+            if (Arrays.equals(n, fileData)) {
+                fileData = extractBytes(path);
+            }
+            return companyRepository.save(new Company(name, false, description, fileData, byId));
         } else throw new AccountIdExistsException();
     }
 
     @Override
-    public Company updateCompany(UUID id, String name, Boolean isVerified, String description, String avatarUrl, UUID accountId) {
+    public Company updateCompany(UUID id, String name, Boolean isVerified, String description, byte[] fileData, UUID accountId) {
         throw new NotImplementedMethodException("");
     }
+
 
     //TODO исправить
 //    @Override
@@ -113,5 +122,19 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public Company getByAccountEmail(String email) throws CompanyNotFoundException {
         return companyRepository.findByAccountEmail(email).orElseThrow(CompanyNotFoundException::new);
+    }
+
+    @Override
+    public List<String> getCompanyNames() {
+        return companyRepository.findAll().stream().map(Company::getName).distinct().collect(Collectors.toList());
+    }
+
+    private byte[] extractBytes(String imageName) throws IOException {
+        File imgPath = new File(imageName);
+        BufferedImage bufferedImage = ImageIO.read(imgPath);
+        WritableRaster raster = bufferedImage.getRaster();
+        DataBufferByte data = (DataBufferByte) raster.getDataBuffer();
+
+        return (data.getData());
     }
 }

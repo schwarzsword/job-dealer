@@ -1,7 +1,6 @@
 package edu.netcracker.jobdealer.service.impl;
 
 
-import edu.netcracker.jobdealer.entity.Account;
 import edu.netcracker.jobdealer.entity.Applicant;
 import edu.netcracker.jobdealer.entity.Resume;
 import edu.netcracker.jobdealer.entity.Skills;
@@ -10,12 +9,18 @@ import edu.netcracker.jobdealer.repository.ApplicantRepository;
 import edu.netcracker.jobdealer.repository.ResumeRepository;
 import edu.netcracker.jobdealer.repository.SkillsRepository;
 import edu.netcracker.jobdealer.service.ResumeService;
-import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.awt.image.WritableRaster;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
+
 
 @Service
 @Transactional
@@ -34,22 +39,28 @@ public class ResumeServiceImpl implements ResumeService {
         this.applicantRepository = applicantRepository;
     }
 
+    @Value("${upload.path}")
+    private String path;
+
 
     @Override
     public Resume add(String resumeName, String firstName,
                       String lastName, String about,
-                      String avataUrl, int salary,
+                      byte[] fileData, int salary,
                       UUID applicantId, List<String> skillsString)
-            throws ApplicantNotFoundException, ResumeAlreadyExistsException {
+            throws ApplicantNotFoundException, ResumeAlreadyExistsException, IOException {
         Applicant applicant = applicantRepository.findById(applicantId).orElseThrow(ApplicantNotFoundException::new);
         List<Skills> skills = skillsString.stream()
                 .map(e -> skillsRepository.findByName(e)
-                        .orElseGet(() -> skillsRepository
-                                .save(new Skills(e))))
+                        .orElseThrow(SkillNotFoundException::new))
                 .collect(Collectors.toList());
+        byte[] n = "null".getBytes();
+        if (Arrays.equals(n, fileData)) {
+            fileData = extractBytes(path);
+        }
         if (!resumeRepository.existsByNameAndApplicant(resumeName, applicant)) {
             Resume resume = resumeRepository.save(
-                    new Resume(resumeName, firstName, lastName, salary, avataUrl, about, applicant, skills));
+                    new Resume(resumeName, firstName, lastName, salary, fileData, about, applicant, skills));
             List<Resume> ownedResumes = applicant.getOwnedResumes();
             ownedResumes.add(resume);
             applicant.setOwnedResumes(ownedResumes);
@@ -116,7 +127,14 @@ public class ResumeServiceImpl implements ResumeService {
     public List<Resume> getAllResumeOfUser(String login) {
         throw new NotImplementedMethodException("Method is not implemented");
     }
+//todo перенести в класс Util
+    private byte[] extractBytes(String imageName) throws IOException {
+        File imgPath = new File(imageName);
+        BufferedImage bufferedImage = ImageIO.read(imgPath);
+        WritableRaster raster = bufferedImage.getRaster();
+        DataBufferByte data = (DataBufferByte) raster.getDataBuffer();
 
-
+        return (data.getData());
+    }
 }
 
