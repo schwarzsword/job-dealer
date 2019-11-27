@@ -72,27 +72,27 @@
     let find = document.querySelector('#find');
     let histories = document.querySelector('#histories');
 
-    find.onmouseover = function (e) {
-      addEventListener('click', function (e) {
+    find.onmouseover = function () {
+      addEventListener('click', function () {
         histories.style.display = 'block';
         find.style.backgroundColor = '#fff';
         closeSelect();
       });
     };
 
-    find.onmouseleave = function (e) {
-      addEventListener('click', function (e) {
+    find.onmouseleave = function () {
+      addEventListener('click', function () {
         histories.style.display = 'none';
         find.style.backgroundColor = '#f3f3f3';
       })
     };
 
-    selected.onmouseover = function (e) {
+    selected.onmouseover = function () {
       select.style.display = 'block';
       selected.style.display = 'none';
 
-      select.onmouseout = function (e) {
-        window.setTimeout(function (e) {
+      select.onmouseout = function () {
+        window.setTimeout(function () {
           if (selectFlag === false) {
             closeSelect();
           }
@@ -100,16 +100,16 @@
         selectFlag = false;
       };
 
-      select.onmouseover = function (e) {
+      select.onmouseover = function () {
         selectFlag = true;
       };
 
-      vacancies.onclick = function (e) {
+      vacancies.onclick = function () {
         selected.innerText = 'vacancies';
         // search_button.setAttribute('href', '/vacancies');
       };
 
-      resumes.onclick = function (e) {
+      resumes.onclick = function () {
         selected.innerText = 'resumes';
         // search_button.setAttribute('href', '/resumes');
         closeSelect();
@@ -124,12 +124,6 @@
         }
       });
     })();
-
-    function one() {
-      document.getElementById('search').onclick = function(e) {
-        alert(1);
-      }
-    }
   }
 </script>
 
@@ -400,6 +394,7 @@
     text-align: center;
   }
 
+  /*
   .header .container .user a.sign_in {
     line-height: inherit;
     color: rgba(0, 0, 0, 0.6);
@@ -414,4 +409,5 @@
     background-color: rgba(0, 0, 0, 0.03);
     border: 2px rgba(0, 0, 0, 0.2) solid;
   }
+  */
 </style>
