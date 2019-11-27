@@ -26,6 +26,7 @@
         width: 100%;
         font-size: 14px;
         line-height: 22px;
+        color: #6c757d;
     }
     .footer .container {
         display: table;
@@ -36,5 +37,9 @@
     .footer .container a {
         font-size: 14px;
         padding: 5px;
+        color: #6c757d;
+    }
+    .footer .container a:hover {
+        text-decoration: underline;
     }
 </style>

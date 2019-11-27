@@ -12,7 +12,8 @@
     </div>
     <div class="content">
       <div class="window">
-        ...
+        <MessageItem/>
+        <MessageItem/>
       </div>
     </div>
     <div class="right-sidebar">
@@ -24,10 +25,11 @@
 <script>
   import axios from 'axios';
   import {urlPort} from "../../tool";
+  import MessageItem from "./Item";
 
   export default {
     name: 'Message',
-
+    components: {MessageItem},
     data() {
       return {
         companies: [],
@@ -91,7 +93,7 @@
     width: calc(100% - 27px);
     margin: 5px 5px 5px 20px;
     border-radius: 5px;
-    border: 1px solid #f3f3f3;
+    border: 1px solid #f0f0f0;
   }
   .left-sidebar .actions .action {
     display: table;
