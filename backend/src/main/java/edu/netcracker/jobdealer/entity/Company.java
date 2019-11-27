@@ -19,7 +19,7 @@ public class Company {
     @GeneratedValue
     private UUID id;
 
-    @Column(name = "name")
+    @Column(name = "name", unique = true, nullable = false)
     private String name;
 
     @Column(name = "isVerified")
@@ -28,8 +28,8 @@ public class Company {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "avatarUrl")
-    private String avatarUrl;
+    @Column(name = "fileData")
+    private byte[] fileData;
 
     @OneToOne
     @JoinColumn(name = "account", referencedColumnName = "id", nullable = false)
@@ -38,20 +38,20 @@ public class Company {
     @OneToMany
     private List<Vacancy> vacancies;
 
-    public Company(UUID id, String name, Boolean verified, String description, String avatarUrl, Account account) {
+    public Company(UUID id, String name, Boolean verified, String description,  byte[] fileData, Account account) {
         this.id = id;
         this.name = name;
         this.verified = verified;
         this.description = description;
-        this.avatarUrl = avatarUrl;
+        this.fileData = fileData;
         this.account = account;
     }
 
-    public Company(String name, Boolean verified, String description, String avatarUrl, Account account) {
+    public Company(String name, Boolean verified, String description, byte[] fileData, Account account) {
         this.name = name;
         this.verified = verified;
         this.description = description;
-        this.avatarUrl = avatarUrl;
+        this.fileData = fileData;
         this.account = account;
     }
 
@@ -59,4 +59,5 @@ public class Company {
     public UUID getAccountId() {
         return this.account.getId();
     }
+
 }

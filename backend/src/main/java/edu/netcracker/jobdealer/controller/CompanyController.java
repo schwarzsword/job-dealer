@@ -2,18 +2,14 @@ package edu.netcracker.jobdealer.controller;
 
 import edu.netcracker.jobdealer.dto.CompanyDto;
 import edu.netcracker.jobdealer.exceptions.AccountIdExistsException;
-
 import edu.netcracker.jobdealer.exceptions.AccountNotFoundException;
 import edu.netcracker.jobdealer.exceptions.CompanyNotFoundException;
 import edu.netcracker.jobdealer.service.CompanyService;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
@@ -25,8 +21,6 @@ public class CompanyController {
     private final Mapper mapper;
     private final CompanyService companyService;
 
-    @Value("${upload.path}")
-    private String path;
 
     @Autowired
     public CompanyController(Mapper mapper, CompanyService companyService) {
@@ -48,6 +42,11 @@ public class CompanyController {
         }
     }
 
+    @GetMapping(value = "/companies/names")
+    public ResponseEntity<?> getCompanies() {
+        return ResponseEntity.ok(companyService.getCompanyNames());
+    }
+
     @GetMapping(value = "/companies/{id}")
     public ResponseEntity<?> getCompanyById(@PathVariable("id") UUID id) {
         try {
@@ -60,22 +59,13 @@ public class CompanyController {
 
     @PostMapping(value = "/companies")
     public ResponseEntity<?> addCompany(@RequestParam String name, @RequestParam String description,
-                                        @RequestParam("file") MultipartFile file, @RequestParam UUID accountId) {
+                                        @RequestParam byte[] fileData, @RequestParam UUID accountId) {
 
-        //todo добавить проверку, если файл null то дальше прокидывать дефолтный урл картинки, которую мы положим заранее
 
-         //todo решить, где хранить файлы
-
-        File uploadDir = new File(path);
-        if (!uploadDir.exists()) {
-            uploadDir.mkdir();
-        }
-        String avatarUrl = UUID.randomUUID().toString() + "." + file.getOriginalFilename();
         try {
-            file.transferTo(new File(path + "/" + avatarUrl));
             CompanyDto company = mapper
                     .map(companyService
-                            .addCompany(name, false, description, avatarUrl, accountId), CompanyDto.class);
+                            .addCompany(name, false, description, fileData, accountId), CompanyDto.class);
             return ResponseEntity.ok(company);
         } catch (AccountNotFoundException e) {
             return ResponseEntity.status(404).body(e.getMessage());

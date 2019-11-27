@@ -42,4 +42,4 @@ logging:
     file: "%d %p %c{1.} [%t] %m%n"
 
 upload:
-  path: /home/schwarzkv/img
+  path: "./src/main/resources/default.jpg"

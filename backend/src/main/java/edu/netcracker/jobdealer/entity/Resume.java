@@ -1,6 +1,5 @@
 package edu.netcracker.jobdealer.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.dozer.Mapping;
@@ -33,8 +32,8 @@ public class Resume {
     private String lastName;
     @Column(name = "salary")
     private int salary;
-    @Column(name = "avatarUrl")
-    private String avatarUrl;
+    @Column(name = "fileData")
+    private byte[] fileData;
     @Column(name = "about")
     private String about;
     @ManyToOne
@@ -46,13 +45,13 @@ public class Resume {
         this.applicant = applicant;
     }
 
-    public Resume(String name, String firstName, String lastName, int salary, String avatarUrl,
+    public Resume(String name, String firstName, String lastName, int salary, byte[] fileData,
                   String about, Applicant applicant, List<Skills> skills) {
         this.name = name;
         this.firstName = firstName;
         this.lastName = lastName;
         this.salary = salary;
-        this.avatarUrl = avatarUrl;
+        this.fileData = fileData;
         this.about = about;
         this.applicant = applicant;
         this.skills = skills;

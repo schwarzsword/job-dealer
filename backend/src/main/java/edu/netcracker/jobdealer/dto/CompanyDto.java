@@ -15,6 +15,6 @@ public class CompanyDto {
     private String name;
     private boolean isVerified;
     private String description;
-    private String avatarUrl;
+    private byte[] fileData;
     private UUID accountId;
 }

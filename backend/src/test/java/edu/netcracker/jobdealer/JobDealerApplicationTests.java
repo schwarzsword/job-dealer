@@ -158,7 +158,7 @@ public class JobDealerApplicationTests {
 
     @Test
     public void vacancyTestByMoney() {
-        Set<Vacancy> money = vacancyRepository.findAllByMoneyIsGreaterThanEqual(100);
+        Set<Vacancy> money = vacancyRepository.findDistinctByMoneyIsGreaterThanEqual(100);
         money.forEach(e -> log.info("vacancy: " + e.getName()));
         log.info("total vacancies found by money: " + money.size());
         assertEquals(1, ((Set) money).size());
