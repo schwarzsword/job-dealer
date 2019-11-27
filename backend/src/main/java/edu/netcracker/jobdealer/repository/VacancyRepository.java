@@ -40,7 +40,7 @@ public interface VacancyRepository extends JpaRepository<Vacancy, UUID> {
 
     void deleteByNameAndOwnerAccountEmail(String name, String email);
 
-    Set<Vacancy> findDistinctByNameLike(String regex);
+    Set<Vacancy> findDistinctByNameContains(String regex);
 
     Set<Vacancy> findDistinctByOwner(Company owner);
 }

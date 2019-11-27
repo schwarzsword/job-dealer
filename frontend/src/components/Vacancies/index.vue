@@ -201,6 +201,7 @@
             },
 
             remove(item) {
+                confirm()
                 this.filters.requestedSkills.splice(this.filters.requestedSkills.indexOf(item), 1);
                 this.filters.requestedSkills = [...this.filters.requestedSkills]
             },

@@ -76,7 +76,7 @@ public class VacancyServiceImpl implements VacancyService {
             vacancies.retainAll(allByMoneyIsGreaterThanEqual);
         }
         if (vacancyName != null) {
-            Set<Vacancy> allByNameLike = vacancyRepository.findDistinctByNameLike(vacancyName);
+            Set<Vacancy> allByNameLike = vacancyRepository.findDistinctByNameContains(vacancyName);
             vacancies.retainAll(allByNameLike);
         }
         if (companyName != null) {
