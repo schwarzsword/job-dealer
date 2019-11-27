@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
@@ -58,22 +59,22 @@ public class ResumeController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
     }
-
-    @PreAuthorize("isAuthenticated()")
-    @DeleteMapping(value = "/my/resumes/{resumeId}")
-    public ResponseEntity<?> removeResume(@PathVariable("resumeId") @NotBlank @Valid UUID resumeId) {
-        try {
-            resumeService.remove(resumeId);
-            return ResponseEntity.noContent().build();
-        } catch (ApplicantNotFoundException | NoPermissionException ex) {
-            return ResponseEntity.status(401).body("You have no permission to delete resumes");
-        }
-    }
+//todo: implement
+//    @PreAuthorize("isAuthenticated()")
+//    @DeleteMapping(value = "/my/resumes/{resumeId}")
+//    public ResponseEntity<?> removeResume(@PathVariable("resumeId") @Valid UUID resumeId) {
+//        try {
+//            resumeService.remove(resumeId);
+//            return ResponseEntity.noContent().build();
+//        } catch (ApplicantNotFoundException | NoPermissionException ex) {
+//            return ResponseEntity.status(401).body("You have no permission to delete resumes");
+//        }
+//    }
 
     @PreAuthorize("isAuthenticated()")
     @PatchMapping(value = "/my/resumes/{resumeId}")
     public ResponseEntity<?> updateResume(@RequestParam UUID userId,
-                                          @PathVariable("resumeId") @NotBlank @Valid UUID resumeId,
+                                          @PathVariable @Valid UUID resumeId,
                                           @RequestParam String resumeName,
                                           @RequestParam String firstName,
                                           @RequestParam String lastName,

@@ -20,6 +20,7 @@ import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -70,6 +71,7 @@ public class ResumeServiceImpl implements ResumeService {
         } else throw new ResumeAlreadyExistsException();
     }
 
+    //todo avatarUrl -> fileData[]
     @Override
     public Resume update(UUID resumeId,
                          String resumeName,
@@ -95,17 +97,17 @@ public class ResumeServiceImpl implements ResumeService {
             if (!resumeToUpdate.getAbout().equals(about)) {
                 resumeToUpdate.setAbout(about);
             }
-            if (!resumeToUpdate.getAvatarUrl().equals(avatarUrl)) {
-                resumeToUpdate.setAvatarUrl(avatarUrl);
-            }
+//            if (!resumeToUpdate.getAvatarUrl().equals(avatarUrl)) {
+//                resumeToUpdate.setAvatarUrl(avatarUrl);
+//            }
             if (!(resumeToUpdate.getSalary() == salary)) {
                 resumeToUpdate.setSalary(salary);
             }
 
 
-            Set<Skills> updatedSkillString = resumeToUpdate.getSkills().stream().collect(Collectors.toSet());
-            updatedSkillString.addAll(skillsString.stream().collect(Collectors.toSet()));
-            resumeToUpdate.setSkills(updatedSkillString.stream().collect(Collectors.toList()));
+            Set<Skills> updatedSkillString = new HashSet<>(resumeToUpdate.getSkills());
+            updatedSkillString.addAll(new HashSet<>(skillsString));
+            resumeToUpdate.setSkills(new ArrayList<>(updatedSkillString));
             return resumeToUpdate;
         } else {
             throw new ResumeNotFoundException();
@@ -127,7 +129,8 @@ public class ResumeServiceImpl implements ResumeService {
     public List<Resume> getAllResumeOfUser(String login) {
         throw new NotImplementedMethodException("Method is not implemented");
     }
-//todo перенести в класс Util
+
+    //todo перенести в класс Util
     private byte[] extractBytes(String imageName) throws IOException {
         File imgPath = new File(imageName);
         BufferedImage bufferedImage = ImageIO.read(imgPath);
