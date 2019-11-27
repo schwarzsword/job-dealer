@@ -19,10 +19,8 @@ import java.awt.image.DataBufferByte;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
+import java.util.*;
+
 
 @Service
 @Transactional
@@ -73,8 +71,45 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
-    public Resume update(String resumeName, Resume resume, String email) {
-        throw new NotImplementedMethodException("Method is not implemented");
+    public Resume update(UUID resumeId,
+                         String resumeName,
+                         String firstName,
+                         String lastName,
+                         String about,
+                         String avatarUrl,
+                         int salary,
+                         List<Skills> skillsString) {
+        Optional<Resume> optionalResumeToUpdate = resumeRepository.findById(resumeId);
+
+        if (optionalResumeToUpdate.isPresent()) {
+            Resume resumeToUpdate = optionalResumeToUpdate.get();
+            if (!resumeToUpdate.getName().equals(resumeName)) {
+                resumeToUpdate.setName(resumeName);
+            }
+            if (!resumeToUpdate.getFirstName().equals(firstName)) {
+                resumeToUpdate.setFirstName(firstName);
+            }
+            if (!resumeToUpdate.getLastName().equals(lastName)) {
+                resumeToUpdate.setLastName(lastName);
+            }
+            if (!resumeToUpdate.getAbout().equals(about)) {
+                resumeToUpdate.setAbout(about);
+            }
+            if (!resumeToUpdate.getAvatarUrl().equals(avatarUrl)) {
+                resumeToUpdate.setAvatarUrl(avatarUrl);
+            }
+            if (!(resumeToUpdate.getSalary() == salary)) {
+                resumeToUpdate.setSalary(salary);
+            }
+
+
+            Set<Skills> updatedSkillString = resumeToUpdate.getSkills().stream().collect(Collectors.toSet());
+            updatedSkillString.addAll(skillsString.stream().collect(Collectors.toSet()));
+            resumeToUpdate.setSkills(updatedSkillString.stream().collect(Collectors.toList()));
+            return resumeToUpdate;
+        } else {
+            throw new ResumeNotFoundException();
+        }
     }
 
 
@@ -92,7 +127,7 @@ public class ResumeServiceImpl implements ResumeService {
     public List<Resume> getAllResumeOfUser(String login) {
         throw new NotImplementedMethodException("Method is not implemented");
     }
-
+//todo перенести в класс Util
     private byte[] extractBytes(String imageName) throws IOException {
         File imgPath = new File(imageName);
         BufferedImage bufferedImage = ImageIO.read(imgPath);
