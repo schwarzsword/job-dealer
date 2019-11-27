@@ -4,8 +4,7 @@ jdk:
   - openjdk8
 
 before_install:
-  - npm install -g @vue/cli
-  - npm install @vue/cli-service
+  - npm install -g @vue/cli-upgrade @vue/cli-service-global
 
 install: true
 

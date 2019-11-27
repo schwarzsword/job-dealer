@@ -1,5 +1,4 @@
 FROM node:lts-alpine
-RUN npm install
 RUN npm install -g http-server
 WORKDIR /app/frontend
 COPY package*.json ./
