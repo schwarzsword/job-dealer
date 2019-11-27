@@ -27,7 +27,7 @@ public interface ResumeService {
                   int salary,
                   List<Skills> skillsString);
   
-    void remove(UUID resumeId);
+//    void remove(UUID resumeId);
 
     List<Resume> getAllResumeOfUser(String login);
 }
