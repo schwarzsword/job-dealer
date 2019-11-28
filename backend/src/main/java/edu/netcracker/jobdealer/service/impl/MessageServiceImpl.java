@@ -33,9 +33,9 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<Message> getMessages(UUID senderId, UUID receiverId, Integer offset, Integer limit) {
-        if (!accountRepository.existsById(senderId)) {
-            throw new AccountNotFoundException("Sender by id=" + senderId + " not found");
+    public List<Message> getMessages(String username, UUID receiverId, Integer offset, Integer limit) {
+        if (!accountRepository.existsByEmail(username)) {
+            throw new AccountNotFoundException("Sender by id=" + username + " not found");
         } else if (!accountRepository.existsById(receiverId)) {
             throw new AccountNotFoundException("Receiver by id=" + receiverId + " not found");
         }
@@ -64,8 +64,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Message sendMessage(String text, UUID senderId, UUID receiverId) throws AccountNotFoundException,
-            IllegalArgumentException {
+    public Message sendMessage(String text, UUID senderId, UUID receiverId) {
         if (!accountRepository.existsById(senderId)) {
             throw new AccountNotFoundException("Sender by id=" + senderId + " not found");
         } else if (!accountRepository.existsById(receiverId)) {
@@ -103,7 +102,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Message updateMessage(UUID id, String text) throws IllegalArgumentException, MessageNotFoundException {
+    public Message updateMessage(UUID id, String text) {
         if (text == null || text.equals("")) {
             throw new IllegalArgumentException();
         } else {
@@ -118,7 +117,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void deleteMessage(UUID id) throws MessageNotFoundException {
+    public void deleteMessage(UUID id) {
         if (!messageRepository.existsById(id)) {
             throw new MessageNotFoundException("Message by id=" + id + " not found");
         } else {

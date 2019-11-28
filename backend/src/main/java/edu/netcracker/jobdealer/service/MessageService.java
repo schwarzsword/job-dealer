@@ -17,13 +17,13 @@ public interface MessageService {
      * @see UUID
      * @see Message
      *
-     * @param senderId sender identifier
+     * @param username sender identifier name
      * @param receiverId receiver identifier
      * @param offset offset for message list
      * @param limit limit for message list
      * @return List of messages
      */
-    List<Message> getMessages(UUID senderId, UUID receiverId, Integer offset, Integer limit);
+    List<Message> getMessages(String username, UUID receiverId, Integer offset, Integer limit);
 
     /**
      * Gets a message by identifier
