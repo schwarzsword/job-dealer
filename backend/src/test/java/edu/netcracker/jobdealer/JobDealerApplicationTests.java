@@ -1,8 +1,10 @@
 package edu.netcracker.jobdealer;
 
 import edu.netcracker.jobdealer.controller.MessageController;
+import edu.netcracker.jobdealer.dto.Filters;
 import edu.netcracker.jobdealer.entity.*;
 import edu.netcracker.jobdealer.repository.*;
+import edu.netcracker.jobdealer.service.JsonService;
 import edu.netcracker.jobdealer.service.MessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.dozer.Mapper;
@@ -16,10 +18,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -60,37 +59,40 @@ public class JobDealerApplicationTests {
     @Autowired
     VacancyRepository vacancyRepository;
 
-    @Before
-    public void prepare() {
-        Account userAccount = new Account("4", "4", "ROLE_USER");
-        accountRepository.save(userAccount);
-        Account companyAccount = new Account("5", "5", "ROLE_COMPANY");
-        accountRepository.save(companyAccount);
-        Applicant applicant = new Applicant(userAccount);
-        applicantRepository.save(applicant);
-        Company company = new Company();
-        company.setAccount(companyAccount);
-        companyRepository.save(company);
-//        Message message = new Message("hello world", userAccount, companyAccount);
-//        messageRepository.save(message);
-        Resume resume = new Resume(applicant);
-        resume.setFirstName("schwarz");
-        resume.setName("qwe");
-        resumeRepository.save(resume);
-        Review review1 = new Review("good", userAccount, companyAccount);
-        review1.setRating(10);
-        reviewRepository.save(review1);
-        Skills skill1 = new Skills("java");
-        Skills skill2 = new Skills("javascript");
-        skillsRepository.save(skill1);
-        skillsRepository.save(skill2);
-        Vacancy vacancy = new Vacancy("java dev", "java dev", 100, Arrays.asList(skill1, skill2), company);
-        vacancyRepository.save(vacancy);
-        Task task = new Task("task", "write smth", vacancy);
-        testTaskRepository.save(task);
-        Submission submission = new Submission("txt.txt", task, applicant);
-        submissionRepository.save(submission);
-    }
+    @Autowired
+    JsonService jsonService;
+
+//    @Before
+//    public void prepare() {
+//        Account userAccount = new Account("4", "4", "ROLE_USER");
+//        accountRepository.save(userAccount);
+//        Account companyAccount = new Account("5", "5", "ROLE_COMPANY");
+//        accountRepository.save(companyAccount);
+//        Applicant applicant = new Applicant(userAccount);
+//        applicantRepository.save(applicant);
+//        Company company = new Company();
+//        company.setAccount(companyAccount);
+//        companyRepository.save(company);
+////        Message message = new Message("hello world", userAccount, companyAccount);
+////        messageRepository.save(message);
+//        Resume resume = new Resume(applicant);
+//        resume.setFirstName("schwarz");
+//        resume.setName("qwe");
+//        resumeRepository.save(resume);
+//        Review review1 = new Review("good", userAccount, companyAccount);
+//        review1.setRating(10);
+//        reviewRepository.save(review1);
+//        Skills skill1 = new Skills("java");
+//        Skills skill2 = new Skills("javascript");
+//        skillsRepository.save(skill1);
+//        skillsRepository.save(skill2);
+//        Vacancy vacancy = new Vacancy("java dev", "java dev", 100, Arrays.asList(skill1, skill2), company);
+//        vacancyRepository.save(vacancy);
+//        Task task = new Task("task", "write smth", vacancy);
+//        testTaskRepository.save(task);
+//        Submission submission = new Submission("txt.txt", task, applicant);
+//        submissionRepository.save(submission);
+//    }
 
     @Test
     public void registrationTest() {
@@ -178,19 +180,32 @@ public class JobDealerApplicationTests {
         assertEquals("txt.txt", java_dev.getFilename());
     }
 
+    @Test
+    public void jsonTest(){
+        ArrayList<String> arr = new ArrayList<>();
+        arr.add("js");
+        arr.add("java");
 
-    @After
-    public void finish() {
-        submissionRepository.deleteByTaskAndSubmiterAccountEmail(testTaskRepository.findByVacancy(vacancyRepository.findByNameAndOwnerAccountEmail("java dev", "5")).get(), "4");
-        testTaskRepository.deleteByVacancy(vacancyRepository.findByNameAndOwnerAccountEmail("java dev", "5"));
-        vacancyRepository.deleteByNameAndOwnerAccountEmail("java dev", "5");
-        skillsRepository.deleteAllByNameContaining("java");
-        reviewRepository.deleteAllByReviewDestEmail("5");
-        resumeRepository.deleteAllByApplicantAccountEmail("4");
-//        messageRepository.deleteAllByMessageDestEmail("5");
-        applicantRepository.deleteByAccountEmail("4");
-        companyRepository.deleteByAccountEmail("4");
-        accountRepository.deleteByEmail("4");
-        accountRepository.deleteByEmail("5");
+        String s = jsonService.toJson(new Filters(123, 1, 122, arr, "qwe", "q", "Salary", true));
+        System.out.println(s);
+
+        Filters filters = jsonService.parseFilters("{\"limit\":20,\"offset\":0,\"money\":\"123\",\"requestedSkills\":[\"java\",\"js\"],\"vacancyName\":\"123\",\"companyName\":\"123\",\"sortBy\":\"Salary\",\"descending\":true}");
+        System.out.println(filters);
     }
+
+
+//    @After
+//    public void finish() {
+//        submissionRepository.deleteByTaskAndSubmiterAccountEmail(testTaskRepository.findByVacancy(vacancyRepository.findByNameAndOwnerAccountEmail("java dev", "5")).get(), "4");
+//        testTaskRepository.deleteByVacancy(vacancyRepository.findByNameAndOwnerAccountEmail("java dev", "5"));
+//        vacancyRepository.deleteByNameAndOwnerAccountEmail("java dev", "5");
+//        skillsRepository.deleteAllByNameContaining("java");
+//        reviewRepository.deleteAllByReviewDestEmail("5");
+//        resumeRepository.deleteAllByApplicantAccountEmail("4");
+////        messageRepository.deleteAllByMessageDestEmail("5");
+//        applicantRepository.deleteByAccountEmail("4");
+//        companyRepository.deleteByAccountEmail("4");
+//        accountRepository.deleteByEmail("4");
+//        accountRepository.deleteByEmail("5");
+//    }
 }

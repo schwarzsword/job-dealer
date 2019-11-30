@@ -38,7 +38,7 @@ public class Company {
     @OneToMany
     private List<Vacancy> vacancies;
 
-    public Company(UUID id, String name, Boolean verified, String description,  byte[] fileData, Account account) {
+    public Company(UUID id, String name, Boolean verified, String description, byte[] fileData, Account account) {
         this.id = id;
         this.name = name;
         this.verified = verified;

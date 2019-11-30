@@ -19,14 +19,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.awt.image.WritableRaster;
-import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static edu.netcracker.jobdealer.util.FileWorker.extractBytes;
 
 @Service
 @Transactional
@@ -130,12 +130,5 @@ public class CompanyServiceImpl implements CompanyService {
         return companyRepository.findAll().stream().map(Company::getName).distinct().collect(Collectors.toList());
     }
 
-    private byte[] extractBytes(String imageName) throws IOException {
-        File imgPath = new File(imageName);
-        BufferedImage bufferedImage = ImageIO.read(imgPath);
-        WritableRaster raster = bufferedImage.getRaster();
-        DataBufferByte data = (DataBufferByte) raster.getDataBuffer();
 
-        return (data.getData());
-    }
 }

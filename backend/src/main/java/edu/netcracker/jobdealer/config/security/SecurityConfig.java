@@ -38,20 +38,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     CustomEntryPoint entryPoint;
     private final
     SuccessLoginHandler successLoginHandler;
-    private final
-    MyAuthenticationSuccessHandler myAuthenticationSuccessHandler;
 
-    public SecurityConfig(MyUserDetailsService userDetailsService, DataSource dataSource, CustomEntryPoint entryPoint, SuccessLoginHandler successLoginHandler, MyAuthenticationSuccessHandler myAuthenticationSuccessHandler) {
+    public SecurityConfig(MyUserDetailsService userDetailsService,
+                          DataSource dataSource, CustomEntryPoint entryPoint,
+                          SuccessLoginHandler successLoginHandler) {
         this.userDetailsService = userDetailsService;
         this.dataSource = dataSource;
         this.entryPoint = entryPoint;
         this.successLoginHandler = successLoginHandler;
-        this.myAuthenticationSuccessHandler = myAuthenticationSuccessHandler;
     }
 
 
     @Autowired
-    public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
+    public void configureGlobalSecurity(AuthenticationManagerBuilder auth) {
         auth
                 .authenticationProvider(authenticationProvider());
     }

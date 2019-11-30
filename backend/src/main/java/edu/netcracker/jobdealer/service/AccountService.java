@@ -1,4 +1,3 @@
-
 package edu.netcracker.jobdealer.service;
 
 import edu.netcracker.jobdealer.entity.Account;

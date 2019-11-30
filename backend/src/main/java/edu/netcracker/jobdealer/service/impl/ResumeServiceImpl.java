@@ -13,14 +13,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.awt.image.WritableRaster;
-import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static edu.netcracker.jobdealer.util.FileWorker.extractBytes;
 
 
 @Service
@@ -30,7 +27,8 @@ public class ResumeServiceImpl implements ResumeService {
     private final ResumeRepository resumeRepository;
     private final SkillsRepository skillsRepository;
     private final ApplicantRepository applicantRepository;
-
+    @Value("${upload.path}")
+    private String path;
 
     public ResumeServiceImpl(ResumeRepository resumeRepository,
                              SkillsRepository skillsRepository,
@@ -39,10 +37,6 @@ public class ResumeServiceImpl implements ResumeService {
         this.skillsRepository = skillsRepository;
         this.applicantRepository = applicantRepository;
     }
-
-    @Value("${upload.path}")
-    private String path;
-
 
     @Override
     public Resume add(String resumeName, String firstName,
@@ -130,14 +124,5 @@ public class ResumeServiceImpl implements ResumeService {
         throw new NotImplementedMethodException("Method is not implemented");
     }
 
-    //todo перенести в класс Util
-    private byte[] extractBytes(String imageName) throws IOException {
-        File imgPath = new File(imageName);
-        BufferedImage bufferedImage = ImageIO.read(imgPath);
-        WritableRaster raster = bufferedImage.getRaster();
-        DataBufferByte data = (DataBufferByte) raster.getDataBuffer();
-
-        return (data.getData());
-    }
 }
 

@@ -28,15 +28,20 @@
                             <v-card-text>
                                 <v-container>
 
-                                    <v-text-field v-model="editedItem.name" label="Vacancy name"
-                                                  :rules="rules.requiredRules"></v-text-field>
+                                    <v-text-field
+                                            v-model="editedItem.name" label="Vacancy name"
+                                            outlined
+                                            :rules="rules.requiredRules"></v-text-field>
                                     <v-text-field v-model="editedItem.money" label="Salary"
+                                                  outlined
                                                   :rules="rules.salaryRules"></v-text-field>
-                                    <v-textarea v-model="editedItem.description" :rules="rules.requiredRules"
+                                    <v-textarea outlined
+                                                v-model="editedItem.description" :rules="rules.requiredRules"
                                                 label="Vacancy description"></v-textarea>
                                     <v-combobox
                                             :items="skills"
                                             chips
+                                            outlined
                                             clearable
                                             label="Skills"
                                             multiple

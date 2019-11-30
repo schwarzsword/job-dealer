@@ -17,7 +17,7 @@ public interface ResumeService {
                       UUID applicantId, List<String> skillsString)
             throws ApplicantNotFoundException, ResumeAlreadyExistsException, IOException;
 
-//todo переделать avatarUrl -> fileData[]
+    //todo переделать avatarUrl -> fileData[]
     Resume update(UUID resumeId,
                   String resumeName,
                   String firstName,
@@ -26,7 +26,7 @@ public interface ResumeService {
                   String avatarUrl,
                   int salary,
                   List<Skills> skillsString);
-  
+
 //    void remove(UUID resumeId);
 
     List<Resume> getAllResumeOfUser(String login);

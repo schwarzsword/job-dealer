@@ -2,7 +2,6 @@ package edu.netcracker.jobdealer.service.impl;
 
 import edu.netcracker.jobdealer.entity.Account;
 import edu.netcracker.jobdealer.entity.Applicant;
-import edu.netcracker.jobdealer.entity.Company;
 import edu.netcracker.jobdealer.exceptions.*;
 import edu.netcracker.jobdealer.repository.AccountRepository;
 import edu.netcracker.jobdealer.repository.ApplicantRepository;

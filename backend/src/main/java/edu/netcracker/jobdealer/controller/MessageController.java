@@ -28,7 +28,7 @@ public class MessageController {
 
     @GetMapping("/messages")
     public List<MessageDto> getMessages(@RequestParam UUID senderId, @RequestParam UUID receiverId,
-                                     @Nullable @RequestParam Integer offset, @Nullable @RequestParam Integer limit) {
+                                        @Nullable @RequestParam Integer offset, @Nullable @RequestParam Integer limit) {
         List<MessageDto> messages = messageService.getMessages(senderId, receiverId, offset, limit).stream()
                 .map(message -> mapper.map(message, MessageDto.class))
                 .collect(Collectors.toList());
@@ -38,7 +38,7 @@ public class MessageController {
 
     @GetMapping("/messages/{id}")
     public MessageDto getMessage(@PathVariable UUID id) {
-        MessageDto message =  mapper.map(messageService.getMessage(id), MessageDto.class);
+        MessageDto message = mapper.map(messageService.getMessage(id), MessageDto.class);
         log.debug(message.toString());
         return message;
     }

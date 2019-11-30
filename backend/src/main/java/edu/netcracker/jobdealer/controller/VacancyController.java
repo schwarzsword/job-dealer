@@ -3,8 +3,6 @@ package edu.netcracker.jobdealer.controller;
 import edu.netcracker.jobdealer.dto.VacancyDto;
 import edu.netcracker.jobdealer.entity.Vacancy;
 import edu.netcracker.jobdealer.exceptions.*;
-import edu.netcracker.jobdealer.service.AccountService;
-import edu.netcracker.jobdealer.service.CompanyService;
 import edu.netcracker.jobdealer.service.VacancyService;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,20 +22,15 @@ public class VacancyController {
 
     private final VacancyService vacancyService;
     private final Mapper mapper;
-    private final CompanyService companyService;
-    private final AccountService accountService;
 
     @Autowired
-    public VacancyController(VacancyService vacancyService, Mapper mapper,
-                             CompanyService companyService, AccountService accountService) {
+    public VacancyController(VacancyService vacancyService, Mapper mapper) {
         this.vacancyService = vacancyService;
         this.mapper = mapper;
-        this.companyService = companyService;
-        this.accountService = accountService;
     }
 
     @Secured("ROLE_COMPANY")
-    @PostMapping(value = "/vacancies")
+    @PostMapping(value = "vacancies")
     public ResponseEntity<?> createOrUpdateVacancy(@RequestParam String name, @RequestParam String description,
                                                    @RequestParam int money, @RequestParam List<String> requestedSkills,
                                                    @AuthenticationPrincipal User user,
@@ -77,15 +70,9 @@ public class VacancyController {
     }
 
     @GetMapping(value = "/vacancies")
-    public ResponseEntity<?> getVacancies(@RequestParam int limit,
-                                          @RequestParam int offset,
-                                          @RequestParam(required = false) Integer money,
-                                          @RequestParam(required = false) List<String> requestedSkills,
-                                          @RequestParam(required = false) String vacancyName,
-                                          @RequestParam(required = false) String companyName,
-                                          @RequestParam(required = false) String sortBy) {
+    public ResponseEntity<?> getVacancies(@RequestParam String filters) {
         try {
-            List<Vacancy> vacancies = vacancyService.sortAndReturn(requestedSkills, money, vacancyName, companyName, offset, limit, sortBy);
+            List<Vacancy> vacancies = vacancyService.sortAndReturn(filters);
             if (vacancies != null) {
                 return ResponseEntity.ok(vacancies.stream()
                         .map(e -> mapper.map(e, VacancyDto.class))
@@ -99,12 +86,9 @@ public class VacancyController {
     }
 
     @GetMapping(value = "/vacancies/size")
-    public ResponseEntity<?> getSize(@RequestParam(required = false) Integer money,
-                                     @RequestParam(required = false) List<String> requestedSkills,
-                                     @RequestParam(required = false) String vacancyName,
-                                     @RequestParam(required = false) String companyName) {
+    public ResponseEntity<?> getSize(@RequestParam String filters) {
         try {
-            return ResponseEntity.ok(vacancyService.getSize(requestedSkills, money, vacancyName, companyName));
+            return ResponseEntity.ok(vacancyService.getSize(filters));
         } catch (BadParameterException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

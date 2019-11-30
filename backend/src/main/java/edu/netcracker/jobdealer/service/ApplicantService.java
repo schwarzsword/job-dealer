@@ -5,7 +5,6 @@ import edu.netcracker.jobdealer.entity.Applicant;
 import edu.netcracker.jobdealer.exceptions.AccountAlreadyInUseException;
 import edu.netcracker.jobdealer.exceptions.AccountByIdNotFoundException;
 import edu.netcracker.jobdealer.exceptions.ApplicantNotFoundException;
-import edu.netcracker.jobdealer.exceptions.CompanyNotFoundException;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
