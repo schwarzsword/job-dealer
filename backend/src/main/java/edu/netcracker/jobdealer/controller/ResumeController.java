@@ -1,11 +1,13 @@
 
 package edu.netcracker.jobdealer.controller;
 
-import edu.netcracker.jobdealer.dto.MessageDto;
 import edu.netcracker.jobdealer.dto.ResumeDto;
-import edu.netcracker.jobdealer.dto.VacancyDto;
-import edu.netcracker.jobdealer.entity.*;
-import edu.netcracker.jobdealer.exceptions.*;
+import edu.netcracker.jobdealer.entity.Resume;
+import edu.netcracker.jobdealer.entity.Skills;
+import edu.netcracker.jobdealer.exceptions.ApplicantNotFoundException;
+import edu.netcracker.jobdealer.exceptions.CompanyNotFoundException;
+import edu.netcracker.jobdealer.exceptions.ResumeAlreadyExistsException;
+import edu.netcracker.jobdealer.exceptions.ResumeNotFoundException;
 import edu.netcracker.jobdealer.service.AccountService;
 import edu.netcracker.jobdealer.service.ApplicantService;
 import edu.netcracker.jobdealer.service.ResumeService;
@@ -16,11 +18,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -83,13 +80,8 @@ public class ResumeController {
                                           @RequestParam int salary,
                                           @RequestParam List<Skills> skills,
                                           @RequestBody Resume resume) {
-        try {
             Resume updatedResume = resumeService.update(resumeId, resumeName, firstName, lastName, about, avatarUrl, salary, skills);
             return ResponseEntity.ok(updatedResume);
-        } catch (ResumeNotFoundException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
-        }
-
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -106,6 +98,20 @@ public class ResumeController {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (ApplicantNotFoundException e) {
             return ResponseEntity.status(404).body(e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/resumes")
+    public ResponseEntity<?> getResumes(@RequestParam int page, @RequestParam int limit, @RequestParam String sortBy) {
+        try {
+            List<ResumeDto> resumes = resumeService.getResumes(page, limit, sortBy).stream()
+                    .map(resume -> this.mapper.map(resume, ResumeDto.class))
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(resumes);
+
+        } catch (CompanyNotFoundException e) {
+            return ResponseEntity.noContent().build();
         }
     }
 }

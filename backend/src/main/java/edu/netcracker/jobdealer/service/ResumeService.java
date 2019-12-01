@@ -30,5 +30,6 @@ public interface ResumeService {
 //    void remove(UUID resumeId);
 
     List<Resume> getAllResumeOfUser(String login);
+    List<Resume> getResumes(int page, int limit, String sortBy);
 }
 

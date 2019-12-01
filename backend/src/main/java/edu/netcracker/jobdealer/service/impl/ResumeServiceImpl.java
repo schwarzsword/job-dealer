@@ -10,6 +10,10 @@ import edu.netcracker.jobdealer.repository.ResumeRepository;
 import edu.netcracker.jobdealer.repository.SkillsRepository;
 import edu.netcracker.jobdealer.service.ResumeService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -109,6 +113,23 @@ public class ResumeServiceImpl implements ResumeService {
             updatedSkillString.addAll(new HashSet<>(skillsString));
             resumeToUpdate.setSkills(new ArrayList<>(updatedSkillString));
             return resumeToUpdate;
+        } else {
+            throw new ResumeNotFoundException();
+        }
+    }
+
+    @Override
+    public List<Resume> getResumes(int page, int limit, String sortBy) {
+        Pageable paging;
+        if (sortBy == null) {
+            paging = PageRequest.of(page, limit);
+        } else {
+            paging = PageRequest.of(page, limit, Sort.by(sortBy));
+        }
+        Page<Resume> pagedResult = resumeRepository.findAll(paging);
+
+        if (pagedResult.hasContent()) {
+            return pagedResult.getContent();
         } else {
             throw new ResumeNotFoundException();
         }
