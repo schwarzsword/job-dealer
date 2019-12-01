@@ -36,6 +36,14 @@ public class Resume {
     private byte[] fileData;
     @Column(name = "about")
     private String about;
+    @Column(name = "country")
+    private String country;
+    @Column(name = "city")
+    private String city;
+    @Column(name = "experience")
+    private Boolean experience;
+    @Column(name = "driverLicence")
+    private Boolean driverLicence;
     @ManyToOne
     @JoinColumn(name = "applicantId", referencedColumnName = "id")
     private Applicant applicant;

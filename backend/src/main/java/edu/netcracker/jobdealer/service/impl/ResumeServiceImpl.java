@@ -1,9 +1,7 @@
 package edu.netcracker.jobdealer.service.impl;
 
 
-import edu.netcracker.jobdealer.entity.Applicant;
-import edu.netcracker.jobdealer.entity.Resume;
-import edu.netcracker.jobdealer.entity.Skills;
+import edu.netcracker.jobdealer.entity.*;
 import edu.netcracker.jobdealer.exceptions.*;
 import edu.netcracker.jobdealer.repository.ApplicantRepository;
 import edu.netcracker.jobdealer.repository.ResumeRepository;
@@ -159,6 +157,96 @@ public class ResumeServiceImpl implements ResumeService {
         DataBufferByte data = (DataBufferByte) raster.getDataBuffer();
 
         return (data.getData());
+    }
+
+    @Override
+    public List<Resume> getPage(List<Resume> resumes, int offset, int limit) {
+        int size = resumes.size();
+        if (size > offset) {
+            return resumes.subList(offset, limit > (size - offset) ? size : (limit + offset));
+        } else return null;
+    }
+
+    @Override
+    public List<Resume> sortAndReturn(String country,
+                                      String city,
+                                      int salaryMin,
+                                      int salaryMax,
+                                      boolean experience,
+                                      boolean driverLicence,
+                                      int offset,
+                                      int limit,
+                                      String sortBy) {
+        List<Resume> vacancies = applyConditions(country, city, salaryMax, experience, driverLicence);
+        switch (sortBy) {
+            case "Vacancy name descending":
+                vacancies.sort(Comparator.comparing(Resume::getName).reversed());
+                break;
+            case "Salary ascending":
+                vacancies.sort(Comparator.comparing(Resume::getSalary));
+                break;
+            case "Salary descending":
+                vacancies.sort(Comparator.comparing(Resume::getSalary).reversed());
+                break;
+            case "City name ascending":
+                vacancies.sort(Comparator.comparing(Resume::getCity));
+                break;
+            case "City name descending":
+                vacancies.sort(Comparator.comparing(Resume::getCity).reversed());
+                break;
+            case "Country name ascending":
+                vacancies.sort(Comparator.comparing(Resume::getCountry));
+                break;
+            case "Country name descending":
+                vacancies.sort(Comparator.comparing(Resume::getCountry).reversed());
+                break;
+            case "Experience":
+                vacancies.sort(Comparator.comparing(Resume::getExperience));
+                break;
+            case "DriverLicence":
+                vacancies.sort(Comparator.comparing(Resume::getDriverLicence));
+                break;
+            default:
+                vacancies.sort(Comparator.comparing(Resume::getName));
+        }
+        return getPage(vacancies, offset, limit);
+    }
+
+    @Override
+    public List<Resume> applyConditions(String country,
+                                         String city,
+                                         Integer salary,
+                                         Boolean experience,
+                                         Boolean driverLicence) {
+        if (country == null && salary == null && city == null && experience == null && driverLicence == null)
+            throw new BadParameterException("Can't search with empty parameters");
+        Set<Resume> resumes = new HashSet<Resume>(resumeRepository.findAll());
+        if (salary != null) {
+            Set<Resume> allByMoneyIsGreaterThanEqual = resumeRepository.findAllBySalaryIsGreaterThanEqual(salary);
+            resumes.retainAll(allByMoneyIsGreaterThanEqual);
+        }
+
+        if (country != null) {
+            Set<Resume> allByNameLike = resumeRepository.findByCountry(country);
+            resumes.retainAll(allByNameLike);
+        }
+
+        if (city != null) {
+            Set<Resume> allByNameLike = resumeRepository.findByCity(city);
+            resumes.retainAll(allByNameLike);
+        }
+
+        if (experience != null) {
+            Set<Resume> allByNameLike = resumeRepository.findByExperience(experience);
+            resumes.retainAll(allByNameLike);
+        }
+
+        if (driverLicence != null) {
+            Set<Resume> allByNameLike = resumeRepository.findByDriverLicence(driverLicence);
+            resumes.retainAll(allByNameLike);
+        }
+
+        return new ArrayList<>(resumes);
     }
 }
 
