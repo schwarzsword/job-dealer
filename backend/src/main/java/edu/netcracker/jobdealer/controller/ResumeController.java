@@ -82,7 +82,7 @@ public class ResumeController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping(value = "my/resumes")
+    @PostMapping(value = "/my/resumes")
     public ResponseEntity<?> createResume(@RequestParam String resumeName, @RequestParam String firstName,
                                           @RequestParam String lastName, @RequestParam String about,
                                           @RequestParam byte[] fileData, @RequestParam UUID applicantId,
