@@ -15,8 +15,7 @@ public interface CompanyService {
 
     Company getCompanyById(UUID id);
 
-    Company addCompany(String name, Boolean isVerified, String description, byte[] fileData, UUID accountId)
-            throws AccountByIdNotFoundException, AccountIdExistsException, IOException;
+    Company addCompany(String companyData);
 
     Company updateCompany(UUID id, String name, Boolean isVerified, String description, byte[] fileData,
                           UUID accountId);

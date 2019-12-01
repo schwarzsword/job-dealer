@@ -16,7 +16,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.security.auth.login.AccountNotFoundException;
 import java.util.UUID;
 
 @RestController
@@ -44,14 +43,15 @@ public class AccountController {
 
     @PostMapping
     public ResponseEntity signUpAccount(@RequestParam("email") String email,
-                                        @RequestParam("password") String password, @RequestParam("isCompany") boolean isCompany) {
+                                        @RequestParam("password") String password,
+                                        @RequestParam("isCompany") boolean isCompany) {
         try {
             String role = isCompany ? "ROLE_COMPANY" : "ROLE_USER";
             AccountDto account = mapper.map(accountService.addAccount(email, password, role),
                     AccountDto.class);
-            return new ResponseEntity<>(account, HttpStatus.CREATED);
+            return ResponseEntity.status(HttpStatus.CREATED).body(account);
         } catch (EmailExistsException | BadParameterException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
@@ -72,11 +72,7 @@ public class AccountController {
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @DeleteMapping
     public ResponseEntity deleteAccountById(@PathVariable String id) {
-        try {
-            accountService.deleteAccount(UUID.fromString(id));
-        } catch (AccountNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+        accountService.deleteAccount(UUID.fromString(id));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

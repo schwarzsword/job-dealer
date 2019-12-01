@@ -89,13 +89,9 @@ public class ResumeController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "my/resumes")
-    public ResponseEntity<?> createResume(@RequestParam String resumeName, @RequestParam String firstName,
-                                          @RequestParam String lastName, @RequestParam String about,
-                                          @RequestParam byte[] fileData, @RequestParam UUID applicantId,
-                                          @RequestParam List<String> skills, @RequestParam int salary) {
-
+    public ResponseEntity<?> createResume(@RequestParam String resumeData) {
         try {
-            Resume add = resumeService.add(resumeName, firstName, lastName, about, fileData, salary, applicantId, skills);
+            Resume add = resumeService.add(resumeData);
             return ResponseEntity.ok(mapper.map(add, ResumeDto.class));
         } catch (ResumeAlreadyExistsException | IOException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

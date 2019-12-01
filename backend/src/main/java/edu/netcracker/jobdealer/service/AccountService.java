@@ -1,11 +1,7 @@
 package edu.netcracker.jobdealer.service;
 
 import edu.netcracker.jobdealer.entity.Account;
-import edu.netcracker.jobdealer.exceptions.AccountByEmailNotFoundException;
-import edu.netcracker.jobdealer.exceptions.AccountByIdNotFoundException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import javax.security.auth.login.AccountNotFoundException;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,13 +9,13 @@ public interface AccountService {
 
     List<Account> getAllAccounts();
 
-    Account getByEmail(String email) throws AccountByEmailNotFoundException;
+    Account getByEmail(String email);
 
-    Account getById(UUID id) throws AccountByIdNotFoundException;
+    Account getById(UUID id);
 
-    Account getUserByEmail(String email) throws UsernameNotFoundException;
+    Account getUserByEmail(String email);
 
-    Account changePassword(String email, String newPass) throws UsernameNotFoundException;
+    Account changePassword(String email, String newPass);
 
     Account getAccount(String id);
 
@@ -27,7 +23,7 @@ public interface AccountService {
 
     Account updateAccount(UUID id, String email, String password);
 
-    void deleteAccount(UUID id) throws AccountNotFoundException;
+    void deleteAccount(UUID id);
 
 }
 

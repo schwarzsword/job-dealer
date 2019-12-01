@@ -23,15 +23,17 @@
                                 autofocus
                                 label="E-mail"
                                 required
-                                v-model="email"
+                                v-model="account.email"
                         ></v-text-field>
+
+                        <div class="error--text" v-if="errors.step1Error">{{errors.step1Error}}</div>
 
                         <v-text-field
                                 :type="show1 ? 'text' : 'password'"
                                 @click:append="show1 = !show1"
                                 label="Password"
                                 required
-                                v-model="password"
+                                v-model="account.password"
                         ></v-text-field>
 
                         <v-text-field
@@ -39,21 +41,21 @@
                                 @click:append="show2 = !show2"
                                 label="Confirm password"
                                 required
-                                v-model="password_confirmation"
+                                v-model="account.password_confirmation"
+                                :rules="rules.confirmPassRules"
                         ></v-text-field>
-
-                        <div id="passError" v-if="!!passError">{{passError}}</div>
 
                         <v-checkbox
                                 :label="'Do you want a company account?'"
-                                v-model="isCompany"
+                                v-model="account.isCompany"
                         ></v-checkbox>
 
                     </v-card>
 
                     <v-btn
-                            @click="this.verifyStep1"
+                            @click="this.next"
                             color="primary"
+                            :disabled="!(account.email && account.password && account.password_confirmation)"
                     >
                         Continue
                     </v-btn>
@@ -66,28 +68,29 @@
                             class="mb-12"
                             color="grey lighten-1"
                             height="350px"
-                            v-if="isCompany"
+                            v-if="account.isCompany"
                     >
                         <v-text-field
                                 autofocus
                                 label="Company name"
                                 :rules="rules.requiredRules"
                                 v-model="company.name"
-                        ></v-text-field>
-
+                        />
+                        <div class="error--text" v-if="errors.companyNameError">{{errors.companyNameError}}</div>
                         <v-textarea
                                 label="Company description"
                                 name="input-7-1"
                                 :rules="rules.requiredRules"
                                 v-model="company.description"
-                        ></v-textarea>
+                        />
 
                         <v-file-input
+                                disabled
                                 @change="onFileChange"
                                 accept="image/*"
                                 label="Select image file..."
                                 v-model="file"
-                        ></v-file-input>
+                        />
 
                         <v-btn
                                 @click="registerCompany"
@@ -113,38 +116,40 @@
                                 autofocus
                                 label="Vacancy you apply"
                                 :rules="rules.requiredRules"
-                                v-model="resume.resumeName"
-                        ></v-text-field>
+                                v-model="resume.name"
+                        />
                         <v-text-field
                                 autofocus
                                 label="Your name"
                                 :rules="rules.requiredRules"
                                 v-model="resume.firstName"
-                        ></v-text-field>
+                        />
                         <v-text-field
                                 autofocus
                                 label="Your last name"
                                 :rules="rules.requiredRules"
                                 v-model="resume.lastName"
-                        ></v-text-field>
+                        />
                         <v-text-field
+                                type="number"
                                 :rules="rules.salaryRules"
                                 autofocus
                                 label="Salary you wish"
                                 v-model="resume.salary"
-                        ></v-text-field>
+                        />
                         <v-textarea
                                 label="Something about you"
                                 name="input-7-1"
                                 :rules="rules.requiredRules"
                                 v-model="resume.about"
-                        ></v-textarea>
+                        />
                         <v-file-input
+                                disabled
                                 @change="onFileChange"
                                 accept="image/*"
                                 label="Select image file..."
                                 v-model="file"
-                        ></v-file-input>
+                        />
                         <v-combobox
                                 :items="skills"
                                 chips
@@ -193,6 +198,7 @@
 <script>
 
     import {urlPort} from "../../tool";
+    import {AUTH_REQUEST} from "../../store/actions/auth";
 
     export default {
         data() {
@@ -202,27 +208,33 @@
                 fileBytes: null,
                 show1: false,
                 show2: false,
-                email: "",
-                password: "",
-                password_confirmation: "",
-                isCompany: false,
-                passError: "",
-                err: "",
-                accountId: null,
+                errors: {
+                    step1Error: "",
+                    companyNameError: "",
+                },
                 company: {
                     name: "",
                     description: "",
+                    fileData: null,
+                    accountId: null,
                 },
-                applicantId: null,
+                account: {
+                    email: "",
+                    password: "",
+                    password_confirmation: "",
+                    isCompany: false,
+                },
                 resume: {
-                    resumeName: "",
+                    name: "",
                     firstName: "",
                     lastName: "",
                     salary: "",
                     about: "",
-                    skills: []
+                    skills: [],
+                    applicantId: null,
+                    fileData: null
                 },
-                skills: ['test', "qwe"],
+                skills: [],
                 rules: {
                     emailRules: [
                         v => !!v || 'E-mail is required',
@@ -233,6 +245,9 @@
                     ],
                     requiredRules: [
                         v => !!v || 'Field is required',
+                    ],
+                    confirmPassRules: [
+                        v => v === this.account.password || 'Passwords must be similar'
                     ]
                 },
             }
@@ -252,79 +267,67 @@
                 this.resume.skills.splice(this.resume.skills.indexOf(item), 1);
                 this.resume.skills = [...this.resume.skills]
             },
-            verifyStep1: function () {
-                if (this.email) {
-                    if (this.password === this.password_confirmation) {
-                        this.passError = "";
-                        this.e1 = 2;
-                    } else {
-                        this.passError = "Passwords must be similar";
-                    }
-                }
+            next: function () {
+                this.e1 = 2
             },
             registerCompany: function () {
                 let params = new URLSearchParams();
-                params.append('email', this.email);
-                params.append('password', this.password);
-                params.append('isCompany', true);
+                params.append('email', this.account.email);
+                params.append('password', this.account.password);
+                params.append('isCompany', this.account.isCompany);
                 urlPort.post('/accounts', params)
                     .then(resp => {
-                        this.accountId = resp.data.id;
+                        this.company.accountId = resp.data.id;
+                        this.company.fileData = this.fileBytes;
                         let params = new FormData();
-                        params.append('name', this.company.name);
-                        params.append('description', this.company.description);
-                        params.append('fileData', this.fileBytes);
-                        params.append('accountId', this.accountId);
+                        params.append('companyData', JSON.stringify(this.company));
                         urlPort.post('/companies', params, {headers: {ContentType: 'multipart/form-data'}})
                             .then(resp => {
-                                console.log(resp.data);
-                                this.$router.push('/login');
+                                const {email, password} = this.account;
+                                this.$store.dispatch(AUTH_REQUEST, {email, password}).then(() => {
+                                    this.$router.push('/');
+                                });
                             })
                             .catch(err => {
-                                //TODO сделать обработку ошибок
-                                console.log(err)
+                                this.errors.step1Error = "This email already in use";
                             })
                     }).catch(err => {
-                    //TODO тут тоже
+                    this.errors.step1Error = "This email already in use";
                     this.e1 = 1;
                 })
             },
             registerUser: function () {
                 let params = new URLSearchParams();
-                params.append('email', this.email);
-                params.append('password', this.password);
-                params.append('isCompany', false);
+                params.append('email', this.account.email);
+                params.append('password', this.account.password);
+                params.append('isCompany', this.account.isCompany);
                 urlPort.post('/accounts', params)
                     .then(resp => {
-                        this.accountId = resp.data.id;
                         let params = new URLSearchParams();
-                        params.append('accountId', this.accountId);
+                        params.append('accountId', resp.data.id);
                         urlPort.post('/applicants', params)
                             .then(resp => {
-                                this.applicantId = resp.data.id;
+                                this.resume.applicantId = resp.data.id;
+                                const {email, password} = this.account;
+                                this.$store.dispatch(AUTH_REQUEST, {email, password}).then(() => {
+                                });
+                                this.resume.fileData = this.fileBytes;
                                 let params = new FormData();
-                                params.append('applicantId', this.applicantId);
-                                params.append('resumeName', this.resume.resumeName);
-                                params.append('firstName', this.resume.firstName);
-                                params.append('lastName', this.resume.lastName);
-                                params.append('salary', this.resume.salary);
-                                params.append('about', this.resume.about);
-                                params.append('fileData', this.fileBytes);
-                                params.append('skills', this.resume.skills);
-                                urlPort.post('/resumes', params, {headers: {ContentType: 'multipart/form-data'}})
+                                params.append('resumeData', JSON.stringify(this.resume));
+                                urlPort.post('/my/resumes', params, {headers: {ContentType: 'multipart/form-data'}})
                                     .then(resp => {
-                                        this.$router.push('/login')
+                                        this.$router.push('/');
                                     })
                                     .catch(err => {
                                         //TODO добавить обработку ошибок
                                     })
                             })
                             .catch(err => {
-                                //TODO сделать обработку ошибок
-                                console.log(err)
+                                this.errors.step1Error = "This email already in use";
+                                this.e1 = 1;
                             })
                     }).catch(err => {
-                    //TODO тут тоже
+                    this.errors.step1Error = "This email already in use";
                     this.e1 = 1;
                 })
             },
