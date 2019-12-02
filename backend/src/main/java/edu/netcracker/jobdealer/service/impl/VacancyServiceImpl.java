@@ -2,6 +2,7 @@ package edu.netcracker.jobdealer.service.impl;
 
 
 import edu.netcracker.jobdealer.dto.Filters;
+import edu.netcracker.jobdealer.dto.VacancyDto;
 import edu.netcracker.jobdealer.entity.Company;
 import edu.netcracker.jobdealer.entity.Skills;
 import edu.netcracker.jobdealer.entity.Vacancy;
@@ -119,6 +120,11 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
+    public Vacancy getVacancy(UUID vacancyId) {
+        return vacancyRepository.findById(vacancyId).orElseThrow(VacancyNotFoundException::new);
+    }
+
+    @Override
     public int getSize(String filtersStr) {
         Filters filters = jsonService.parseFilters(filtersStr);
         return applyConditions(filters).size();
@@ -126,22 +132,22 @@ public class VacancyServiceImpl implements VacancyService {
 
 
     @Override
-    public Vacancy addOrUpdateVacancy(String name, String description, Integer money,
-                                      List<String> skills, String email, String id) throws CompanyNotFoundException {
+    public Vacancy addOrUpdateVacancy(String vacancyData, String email) {
+        VacancyDto vacancyDto = jsonService.parseVacancyDto(vacancyData);
         Company company = companyRepository.findByAccountEmail(email).orElseThrow(CompanyNotFoundException::new);
-        List<Skills> requestedSkills = skills.stream()
+        List<Skills> requestedSkills = vacancyDto.getRequestedSkills().stream()
                 .map(e -> skillsRepository.findByName(e)
                         .orElseGet(() -> skillsRepository
                                 .save(new Skills(e))))
                 .collect(Collectors.toList());
-        if (id.equals("null")) {
-            return vacancyRepository.save(new Vacancy(name, description, money, requestedSkills, company));
+        if (vacancyDto.getId() == null) {
+            return vacancyRepository.save(new Vacancy(vacancyDto.getName(), vacancyDto.getDescription(), vacancyDto.getMoney(), requestedSkills, company));
         } else {
-            Vacancy vacancy = vacancyRepository.findById(UUID.fromString(id)).orElseThrow(VacancyNotFoundException::new);
-            vacancy.setName(name);
+            Vacancy vacancy = vacancyRepository.findById(vacancyDto.getId()).orElseThrow(VacancyNotFoundException::new);
+            vacancy.setName(vacancyDto.getName());
             vacancy.setOwner(company);
-            vacancy.setDescription(description);
-            vacancy.setMoney(money);
+            vacancy.setDescription(vacancyDto.getDescription());
+            vacancy.setMoney(vacancyDto.getMoney());
             vacancy.setRequestedSkills(requestedSkills);
             return vacancyRepository.save(vacancy);
         }

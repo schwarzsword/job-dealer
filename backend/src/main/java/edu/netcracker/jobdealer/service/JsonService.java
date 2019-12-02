@@ -1,8 +1,6 @@
 package edu.netcracker.jobdealer.service;
 
-import edu.netcracker.jobdealer.dto.CompanyDto;
-import edu.netcracker.jobdealer.dto.Filters;
-import edu.netcracker.jobdealer.dto.ResumeDto;
+import edu.netcracker.jobdealer.dto.*;
 
 public interface JsonService {
     String toJson(Object o);
@@ -12,4 +10,8 @@ public interface JsonService {
     ResumeDto parseResumeDto(String s);
 
     CompanyDto parseCompanyDto(String s);
+
+    VacancyDto parseVacancyDto(String s);
+
+    TaskDto parseTaskDto(String s);
 }

@@ -17,9 +17,7 @@ public interface VacancyService {
 
     List<Vacancy> getVacanciesByCompany(Company company);
 
-    Vacancy addOrUpdateVacancy(String name, String description,
-                               Integer money, List<String> skills, String email,
-                               String id);
+    Vacancy addOrUpdateVacancy(String vacancyData, String email);
 
     void remove(UUID vacancyId, String email);
 
@@ -27,11 +25,13 @@ public interface VacancyService {
 
     List<Vacancy> getPage(List<Vacancy> inp, int offset, int limit);
 
-    public List<Vacancy> applyConditions(Filters filters);
+    List<Vacancy> applyConditions(Filters filters);
 
-    public int getSize(String filters);
+    int getSize(String filters);
 
-    public List<Vacancy> sortAndReturn(String filters)
-            throws SkillNotFoundException, BadParameterException;
+    List<Vacancy> sortAndReturn(String filters);
+
+    Vacancy getVacancy(UUID vacancyId);
+
 
 }

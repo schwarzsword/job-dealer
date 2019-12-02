@@ -31,12 +31,10 @@ public class VacancyController {
 
     @Secured("ROLE_COMPANY")
     @PostMapping(value = "vacancies")
-    public ResponseEntity<?> createOrUpdateVacancy(@RequestParam String name, @RequestParam String description,
-                                                   @RequestParam int money, @RequestParam List<String> requestedSkills,
-                                                   @AuthenticationPrincipal User user,
-                                                   @RequestParam(required = false) String id) {
+    public ResponseEntity<?> createOrUpdateVacancy(@RequestParam String vacancyData,
+                                                   @AuthenticationPrincipal User user) {
         try {
-            Vacancy vacancy = vacancyService.addOrUpdateVacancy(name, description, money, requestedSkills, user.getUsername(), id);
+            Vacancy vacancy = vacancyService.addOrUpdateVacancy(vacancyData, user.getUsername());
             return ResponseEntity.ok(
                     mapper.map(vacancy, VacancyDto.class));
         } catch (CompanyNotFoundException ex) {
@@ -92,5 +90,10 @@ public class VacancyController {
         } catch (BadParameterException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @GetMapping(value = "/vacancies/{id}")
+    public ResponseEntity<?> getVacancy(@PathVariable UUID id) {
+        return ResponseEntity.ok(mapper.map(vacancyService.getVacancy(id), VacancyDto.class));
     }
 }

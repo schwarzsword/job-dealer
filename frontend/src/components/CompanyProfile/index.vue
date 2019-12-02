@@ -31,13 +31,14 @@
                                     <v-text-field
                                             v-model="editedItem.name" label="Vacancy name"
                                             outlined
-                                            :rules="rules.requiredRules"></v-text-field>
+                                            :rules="rules.requiredRules"/>
                                     <v-text-field v-model="editedItem.money" label="Salary"
                                                   outlined
-                                                  :rules="rules.salaryRules"></v-text-field>
+                                                  type="number"
+                                                  :rules="rules.salaryRules"/>
                                     <v-textarea outlined
                                                 v-model="editedItem.description" :rules="rules.requiredRules"
-                                                label="Vacancy description"></v-textarea>
+                                                label="Vacancy description"/>
                                     <v-combobox
                                             :items="skills"
                                             chips
@@ -59,8 +60,19 @@
                                             </v-chip>
                                         </template>
                                     </v-combobox>
+                                    <v-checkbox v-model="editedItem.withTask" label="Add test task?"></v-checkbox>
 
-
+                                </v-container>
+                                <v-container v-if="editedItem.withTask">
+                                    <v-text-field
+                                            outlined
+                                            v-model="task.name"
+                                            label="Task name"
+                                            :rules="rules.requiredRules"/>
+                                    <v-textarea outlined
+                                                v-model="task.description"
+                                                :rules="rules.requiredRules"
+                                                label="Task description"/>
                                 </v-container>
                             </v-card-text>
 
@@ -109,6 +121,19 @@
                     {text: 'Salary', value: 'money'},
                     {text: 'Actions', value: 'action', sortable: false},
                 ],
+                task: {
+                    id: null,
+                    name: "",
+                    description: "",
+                    vacancyId: null,
+                },
+                defaultTask: {
+                    id: null,
+                    name: "",
+                    description: "",
+                    vacancyId: null
+                },
+
                 vacancies: [],
                 editedIndex: -1,
                 editedItem: {
@@ -117,6 +142,8 @@
                     money: 0,
                     requestedSkills: [],
                     description: '',
+                    ownerName: '',
+                    withTask: false,
                 },
                 defaultItem: {
                     id: null,
@@ -124,6 +151,8 @@
                     money: 0,
                     requestedSkills: [],
                     description: '',
+                    ownerName: '',
+                    withTask: false,
                 },
                 skills: [],
                 rules: {
@@ -174,6 +203,12 @@
             editItem(item) {
                 this.editedIndex = this.vacancies.indexOf(item);
                 this.editedItem = Object.assign({}, item);
+                urlPort.get('/vacancies/' + item.id + '/task').then(
+                    resp => {
+                        this.task = resp.data;
+                        this.editedItem.withTask = true;
+                    }
+                );
                 this.dialog = true
             },
 
@@ -188,6 +223,7 @@
                 this.dialog = false;
                 setTimeout(() => {
                     this.editedItem = Object.assign({}, this.defaultItem);
+                    this.task = Object.assign({}, this.defaultTask);
                     this.editedIndex = -1
                 }, 300)
             },
@@ -197,25 +233,30 @@
                     Object.assign(this.vacancies[this.editedIndex], this.editedItem);
                 } else {
                     this.vacancies.push(this.editedItem);
-                    let params = new URLSearchParams();
-                    params.append("id", this.editedItem.id);
-                    params.append("requestedSkills", this.editedItem.requestedSkills);
-                    params.append("money", this.editedItem.money);
-                    params.append("description", this.editedItem.description);
-                    params.append("name", this.editedItem.name);
-                    urlPort.post('/vacancies', params).then(resp => {
-
-                    }).catch(err => {
-
-                    })
                 }
+                let params = new URLSearchParams();
+                params.append("vacancyData", JSON.stringify(this.editedItem));
+                let w = this.editedItem.withTask;
+                let task = this.task;
+                let vacId = this.editedItem.id;
+                urlPort.post('/vacancies', params).then(resp => {
+                    if (w) {
+                        task.vacancyId=resp.data.id;
+                        let params = new URLSearchParams();
+                        params.append("taskData", JSON.stringify(task));
+                        urlPort.post('/vacancies/' + vacId + '/task', params)
+                    }
+                }).catch(err => {
+
+                });
                 this.close()
             },
             remove(item) {
                 this.editedItem.requestedSkills.splice(this.editedItem.requestedSkills.indexOf(item), 1);
                 this.editedItem.requestedSkills = [...this.editedItem.requestedSkills]
             },
-        },
+        }
+        ,
     }
 
 </script>

@@ -12,6 +12,7 @@ import edu.netcracker.jobdealer.service.ResumeService;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
@@ -66,7 +67,7 @@ public class ResumeController {
 //        }
 //    }
 
-    @PreAuthorize("isAuthenticated()")
+    @Secured("ROLE_USER")
     @PatchMapping(value = "/my/resumes/{resumeId}")
     public ResponseEntity<?> updateResume(@RequestParam UUID userId,
                                           @PathVariable @Valid UUID resumeId,
@@ -87,7 +88,7 @@ public class ResumeController {
 
     }
 
-    @PreAuthorize("isAuthenticated()")
+    @Secured("ROLE_USER")
     @PostMapping(value = "my/resumes")
     public ResponseEntity<?> createResume(@RequestParam String resumeData) {
         try {

@@ -85,7 +85,6 @@
                         />
 
                         <v-file-input
-                                disabled
                                 @change="onFileChange"
                                 accept="image/*"
                                 label="Select image file..."
@@ -144,7 +143,6 @@
                                 v-model="resume.about"
                         />
                         <v-file-input
-                                disabled
                                 @change="onFileChange"
                                 accept="image/*"
                                 label="Select image file..."
@@ -197,7 +195,7 @@
 
 <script>
 
-    import {urlPort} from "../../tool";
+    import {base64ArrayBuffer, urlPort} from "../../tool";
     import {AUTH_REQUEST} from "../../store/actions/auth";
 
     export default {
@@ -253,12 +251,13 @@
             }
         },
         methods: {
-            onFileChange() {
+            onFileChange: function () {
 
                 let reader = new FileReader();
                 reader.readAsArrayBuffer(this.file);
+
                 reader.onload = () => {
-                    this.fileBytes = new Uint8Array(reader.result);
+                    this.fileBytes = base64ArrayBuffer(reader.result)
                 };
 
 

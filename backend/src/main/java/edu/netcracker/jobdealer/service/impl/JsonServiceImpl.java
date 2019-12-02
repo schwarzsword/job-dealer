@@ -3,9 +3,7 @@ package edu.netcracker.jobdealer.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
-import edu.netcracker.jobdealer.dto.CompanyDto;
-import edu.netcracker.jobdealer.dto.Filters;
-import edu.netcracker.jobdealer.dto.ResumeDto;
+import edu.netcracker.jobdealer.dto.*;
 import edu.netcracker.jobdealer.service.JsonService;
 import org.springframework.stereotype.Service;
 
@@ -51,6 +49,30 @@ public class JsonServiceImpl implements JsonService {
         objectMapper.registerModule(new Hibernate5Module());
         try {
             return objectMapper.readValue(s, CompanyDto.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public VacancyDto parseVacancyDto(String s) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new Hibernate5Module());
+        try {
+            return objectMapper.readValue(s, VacancyDto.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public TaskDto parseTaskDto(String s) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new Hibernate5Module());
+        try {
+            return objectMapper.readValue(s, TaskDto.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return null;

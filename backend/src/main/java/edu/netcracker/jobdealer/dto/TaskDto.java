@@ -1,21 +1,17 @@
 package edu.netcracker.jobdealer.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 import java.util.UUID;
 
 @Data
 @NoArgsConstructor
-public class VacancyDto {
-
+@AllArgsConstructor
+public class TaskDto {
     private UUID id;
     private String name;
     private String description;
-    private Integer money;
-    private List<String> requestedSkills;
-    private String ownerName;
-    private boolean withTask;
-
+    private UUID vacancyId;
 }

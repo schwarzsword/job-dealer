@@ -16,6 +16,7 @@ import Vacancies from "../components/Vacancies"
 import Resume from "../components/Resume/index";
 import ResumeForm from "../components/Resume/resumeForm";
 import CompanyProfile from "../components/CompanyProfile"
+import VacancyPage from "../components/VacancyPage"
 
 Vue.use(Router);
 
@@ -69,6 +70,11 @@ export default new Router({
             path: '/companies/:id',
             name: 'CompanyPage',
             component: CompanyPage
+        },
+        {
+            path: '/vacancies/:id',
+            name: 'vacancyPage',
+            component: VacancyPage
         },
         {
             path: '/company',
