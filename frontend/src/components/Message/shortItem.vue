@@ -5,7 +5,7 @@
     </div>
     <div class="m-right">
       <div class="author">{{ author }}</div>
-      <div class="subtitle">{{ subtitle }}</div>
+      <div class="status">{{ status }}</div>
     </div>
   </router-link>
 </template>
@@ -14,8 +14,8 @@
   import Router from "../../router"
 
   export default {
-    name: 'MessageItem',
-    props: ['id', 'title', 'author', 'authorId', 'subtitle', 'avatar'],
+    name: 'MessageShortItem',
+    props: ['id', 'title', 'author', 'authorId', 'status', 'avatar'],
 
     data() {
       return {
@@ -61,10 +61,10 @@
     font-size: 16px;
     color: #000;
   }
-  .msg .subtitle {
+  .msg .status {
     display: table;
     padding: 2px 10px;
-    font-size: 12px;
+    font-size: 10px;
     color: #4e555b;
   }
 </style>
