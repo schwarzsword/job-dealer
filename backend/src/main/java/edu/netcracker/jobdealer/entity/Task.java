@@ -19,10 +19,10 @@ public class Task {
     @Column(name = "id", nullable = false)
     @GeneratedValue
     private UUID id;
-    @Basic
+
     @Column(name = "name")
     private String name;
-    @Basic
+
     @Column(name = "description")
     private String description;
 
@@ -42,6 +42,10 @@ public class Task {
     @Mapping("vacancyId")
     public UUID getTaskVacancyId() {
         return vacancy.getId();
+    }
+
+    public void addSubmission(Submission submission){
+        submissions.add(submission);
     }
 
 }

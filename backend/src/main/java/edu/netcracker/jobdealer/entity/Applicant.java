@@ -33,6 +33,7 @@ public class Applicant {
     private List<Response> responses;
 
     @OneToMany(mappedBy = "submiter")
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<Submission> ownedSubmissions;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -50,5 +51,9 @@ public class Applicant {
 
     public void addResponse(Response response) {
         responses.add(response);
+    }
+
+    public void addSubmission(Submission submission) {
+        ownedSubmissions.add(submission);
     }
 }

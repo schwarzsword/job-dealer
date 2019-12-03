@@ -197,6 +197,7 @@
 
     import {base64ArrayBuffer, urlPort} from "../../tool";
     import {AUTH_REQUEST} from "../../store/actions/auth";
+    import download from "downloadjs";
 
     export default {
         data() {
@@ -257,7 +258,7 @@
                 reader.readAsArrayBuffer(this.file);
 
                 reader.onload = () => {
-                    this.fileBytes = base64ArrayBuffer(reader.result)
+                    this.fileBytes = base64ArrayBuffer(reader.result);
                 };
 
 

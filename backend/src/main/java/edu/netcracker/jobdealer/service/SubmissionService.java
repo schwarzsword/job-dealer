@@ -3,13 +3,17 @@ package edu.netcracker.jobdealer.service;
 import edu.netcracker.jobdealer.entity.Applicant;
 import edu.netcracker.jobdealer.entity.Submission;
 import edu.netcracker.jobdealer.entity.Task;
+import org.springframework.security.access.annotation.Secured;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface SubmissionService {
 
-    Submission commitSubmission(Task task, String filename, Applicant user);
+    List<Applicant> showSubmitters(UUID taskId, String email);
 
-    List<Applicant> showSubmitters(Task task);
+    List<Submission> getSubmissions(UUID taskId, String email);
+
+    Submission addSubmission(byte[] fileData, String email, UUID taskId);
 
 }

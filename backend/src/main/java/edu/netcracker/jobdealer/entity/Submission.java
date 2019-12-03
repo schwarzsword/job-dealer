@@ -2,6 +2,7 @@ package edu.netcracker.jobdealer.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.dozer.Mapping;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -15,9 +16,9 @@ public class Submission {
     @Column(name = "id", nullable = false)
     @GeneratedValue
     private UUID id;
-    @Basic
+
     @Column
-    private String filename;
+    private byte[] fileData;
 
     @ManyToOne
     @JoinColumn(name = "ownedSubmissions", referencedColumnName = "id")
@@ -28,10 +29,20 @@ public class Submission {
     private Task task;
 
 
-    public Submission(String filename, Task task, Applicant submiter) {
-        this.filename = filename;
+    public Submission(byte[] fileData, Task task, Applicant submiter) {
+        this.fileData = fileData;
         this.submiter = submiter;
         this.task = task;
     }
 
+
+    @Mapping(value = "taskId")
+    public UUID getTaskID() {
+        return task.getId();
+    }
+
+    @Mapping(value = "applicantId")
+    public UUID getApplicantID() {
+        return submiter.getId();
+    }
 }

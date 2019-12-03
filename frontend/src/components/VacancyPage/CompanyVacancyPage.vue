@@ -29,16 +29,18 @@
             </template>
             <template v-slot:item.action="{ item }">
 
+                <v-icon
+                        @click="downloadSubmission(item)"
+                >
+                    mdi-cloud-download-outline
+                </v-icon>
+
                 <v-icon v-if="item.status === 'APPLIED'"
                         @click="accept(item)"
                 >
                     mdi-check-outline
                 </v-icon>
-                <!--                <v-icon v-if=""-->
-                <!--                        @click="accept(item)"-->
-                <!--                >-->
-                <!--                    mdi-arrow-compress-down-->
-                <!--                </v-icon>-->
+
                 <v-icon
                         v-if="item.status === 'APPLIED'"
                         @click="reject(item)"
@@ -61,12 +63,14 @@
 <script>
 
     import Router from "../../router"
-    import {urlPort} from "../../tool";
+    import {base64ArrayBuffer, base64ToArrayBuffer, urlPort} from "../../tool";
+    import download from "downloadjs"
 
     export default {
         name: "companyVacancyPage",
         data: function () {
             return {
+                fileBytes: null,
                 vacancy: {
                     id: Router.currentRoute.params.id,
                     name: "",
@@ -74,12 +78,15 @@
                     money: null,
                     ownerName: "",
                     requestedSkills: [],
+                    withTask: null,
                 },
                 task: {
+                    id: null,
                     name: "",
                     description: "",
                 },
                 responses: [],
+                submissions: [],
                 headers: [
                     {text: 'Applicant name', value: 'applicantName',},
                     {text: 'Status', value: 'status',},
@@ -96,9 +103,13 @@
                             this.responses = resp.data
                         });
                     if (this.vacancy.withTask) {
-                        urlPort.get("/vacancies/" + this.vacancy.id + "/task")
+                        urlPort.get("/vacancies/" + this.vacancy.id + "/tasks")
                             .then(resp => {
-                                this.task = resp.data
+                                this.task = resp.data;
+                                urlPort.get("/vacancies/" + this.vacancy.id + "/tasks/" + this.task.id)
+                                    .then(resp => {
+                                        this.submissions = resp.data;
+                                    })
                             });
 
                     }
@@ -119,8 +130,11 @@
             setStatus(item) {
                 let params = new URLSearchParams();
                 params.append("status", item.status);
-                console.log(params.get("status"));
                 urlPort.post("/responses/" + item.id, params)
+            },
+            downloadSubmission(item) {
+               this.fileBytes = this.submissions.find(function(element, index, array){return element.applicantId === item.applicantId}).fileData;
+               download(atob(this.fileBytes), item.applicantName+"submission.png", "image/png")
             }
         },
     }

@@ -213,7 +213,7 @@
             editItem(item) {
                 this.editedIndex = this.vacancies.indexOf(item);
                 this.editedItem = Object.assign({}, item);
-                urlPort.get('/vacancies/' + item.id + '/task').then(
+                urlPort.get('/vacancies/' + item.id + '/tasks').then(
                     resp => {
                         this.task = resp.data;
                         this.editedItem.withTask = true;
@@ -253,7 +253,7 @@
                         task.vacancyId = resp.data.id;
                         let params = new URLSearchParams();
                         params.append("taskData", JSON.stringify(task));
-                        urlPort.post('/vacancies/' + task.vacancyId + '/task', params)
+                        urlPort.post('/vacancies/' + task.vacancyId + '/tasks', params)
                     }
                 }).catch(err => {
 
