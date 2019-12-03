@@ -14,6 +14,6 @@ public interface SubmissionService {
 
     List<Submission> getSubmissions(UUID taskId, String email);
 
-    Submission addSubmission(byte[] fileData, String email, UUID taskId);
+    Submission addSubmission(String fileData, String email, UUID taskId);
 
 }

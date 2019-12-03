@@ -17,7 +17,7 @@ public interface CompanyService {
 
     Company addCompany(String companyData);
 
-    Company updateCompany(UUID id, String name, Boolean isVerified, String description, byte[] fileData,
+    Company updateCompany(UUID id, String name, Boolean isVerified, String description, String fileData,
                           UUID accountId);
 
     Company getByAccount(Account accountByEmail);

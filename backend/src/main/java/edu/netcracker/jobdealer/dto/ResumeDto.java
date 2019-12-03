@@ -18,7 +18,7 @@ public class ResumeDto {
     private String firstName;
     private String lastName;
     private int salary;
-    private byte[] fileData;
+    private String fileData;
     private String about;
     private List<String> skills;
 

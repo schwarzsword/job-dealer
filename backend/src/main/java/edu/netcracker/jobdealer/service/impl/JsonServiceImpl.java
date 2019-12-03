@@ -6,8 +6,10 @@ import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import edu.netcracker.jobdealer.dto.*;
 import edu.netcracker.jobdealer.service.JsonService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class JsonServiceImpl implements JsonService {
     @Override
     public String toJson(Object o) {

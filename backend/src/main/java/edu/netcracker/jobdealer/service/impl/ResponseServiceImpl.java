@@ -13,12 +13,14 @@ import edu.netcracker.jobdealer.repository.VacancyRepository;
 import edu.netcracker.jobdealer.service.ResponseService;
 import edu.netcracker.jobdealer.util.CollectionUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class ResponseServiceImpl implements ResponseService {
 
     private final VacancyRepository vacancyRepository;

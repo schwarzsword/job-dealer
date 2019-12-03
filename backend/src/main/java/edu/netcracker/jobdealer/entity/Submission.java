@@ -17,8 +17,9 @@ public class Submission {
     @GeneratedValue
     private UUID id;
 
+    @Lob
     @Column
-    private byte[] fileData;
+    private String fileData;
 
     @ManyToOne
     @JoinColumn(name = "ownedSubmissions", referencedColumnName = "id")
@@ -29,7 +30,7 @@ public class Submission {
     private Task task;
 
 
-    public Submission(byte[] fileData, Task task, Applicant submiter) {
+    public Submission(String fileData, Task task, Applicant submiter) {
         this.fileData = fileData;
         this.submiter = submiter;
         this.task = task;

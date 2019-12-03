@@ -43,7 +43,7 @@ public class Response {
 
     @Mapping(value = "applicantName")
     public String getApplicantName() {
-        return applicant.getActiveResume().getName();
+        return applicant.getActiveResume().getFirstName();
     }
 
     @Mapping(value = "vacancyName")

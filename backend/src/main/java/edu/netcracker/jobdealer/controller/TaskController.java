@@ -46,7 +46,7 @@ public class TaskController {
 
     @Secured("ROLE_USER")
     @PostMapping("/vacancies/{id}/tasks/{taskId}")
-    public ResponseEntity<?> submit(@PathVariable UUID taskId, @RequestParam byte[] fileData,
+    public ResponseEntity<?> submit(@PathVariable UUID taskId, @RequestParam String fileData,
                                     @AuthenticationPrincipal User user) {
         Submission submission = submissionService.addSubmission(fileData, user.getUsername(), taskId);
         return ResponseEntity.ok(mapper.map(submission, SubmissionDto.class));

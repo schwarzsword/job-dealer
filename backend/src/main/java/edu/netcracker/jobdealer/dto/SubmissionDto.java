@@ -11,5 +11,5 @@ public class SubmissionDto {
     private UUID id;
     private UUID taskId;
     private UUID applicantId;
-    private byte[] fileData;
+    private String fileData;
 }
