@@ -7,32 +7,50 @@
         </div>
       </div>
       <div class="find">
-        <label for="find"></label><input id="find" name="query" placeholder="Enter job title" type="text" autocomplete="off"/>
+        <form id="search-form" @submit.prevent="handleSubmit">
+          <label>
+            <input id="find" value="" v-model="query" name="query" placeholder="Enter job title" type="text"
+                   @change="handleQuery" autocomplete="off"/>
+          </label>
+          <label>
+            <input id="search" type="submit" value="" class="search"/>
+          </label>
+        </form>
         <div class="select" id="select">
-          <span class="item" id="vacancies">vacancies</span>
-          <span class="item" id="resumes">resumes</span>
+          <span class="item hideAction" id="i1">vacancies</span>
+          <a class="item" id="i2">resumes</a>
         </div>
         <div class="selected" id="selected">vacancies</div>
-        <div id="search" class="search"></div>
         <div class="histories" id="histories">
           <div class="sub">
-            <a href="#">Advanced Search</a>
+            <a href="#">Advanced search</a>
           </div>
-
         </div>
       </div>
       <div class="user">
         <div @click="logout" v-if="isAuthenticated">
-          <router-link class="sign_in" to="/logout">Logout</router-link>
+<!--          <v-avatar :size="avatarSize" color="grey lighten-4">-->
+<!--            <img src="/img/no-avatar.png" alt="avatar">-->
+<!--          </v-avatar>-->
+          <v-avatar :size="avatarSize" color="teal">
+            <span class="white--text headline">K</span>
+          </v-avatar>
+          <!--router-link class="sign_in" to="/logout">Logout</router-link-->
         </div>
         <div v-if="!isAuthenticated && !authLoading">
           <router-link class="sign_in" to="/login">Sign in</router-link>
         </div>
       </div>
-      <div class="menu">
-        <router-link id="messages" class="messages" to="/my/messages">
-          <div class="count">2</div>
+      <div class="menu" v-if="isAuthenticated">
+        <router-link style="float: right" to="/my/messages">
+          <v-icon large color="black" style="font-size: 32px">mail</v-icon>
+          <v-badge class="m-count" color="green">
+            <span slot="badge">2</span>
+          </v-badge>
         </router-link>
+<!--        <router-link id="messages" class="messages" to="/my/messages">-->
+<!--          <div class="count">2</div>-->
+<!--        </router-link>-->
       </div>
     </div>
   </div>
@@ -44,11 +62,39 @@
 
   export default {
     name: 'navigation',
+
+    data: function () {
+      return {
+        query: '',
+        avatarSize: 32,
+      }
+    },
+
     methods: {
       logout: function () {
         this.$store.dispatch(AUTH_LOGOUT).then(() => this.$router.push('/'))
       },
+      handleQuery() {
+        let urlParams = new URLSearchParams(window.location.search);
+        urlParams.set("q", this.query);
+        if (document.getElementById('search-form').getAttribute('action') === '/resumes') {
+          this.$router.push('/resumes/?' + urlParams.toString());
+        } else {
+          this.$router.push('/vacancies/?' + urlParams.toString());
+        }
+      },
+      handleSubmit() {
+        if (document.getElementById('search-form').getAttribute('action') === '/resumes') {
+          this.$router.push('/resumes/?q=' + this.query);
+        } else {
+          this.$router.push('/vacancies/?q=' + this.query);
+        }
+      },
+      // handleChangeQuery(e) {
+      //   this.search.text = e.target.value;
+      // }
     },
+
     computed: {
 
       ...mapGetters(['getProfile', 'isAuthenticated', 'isUser', 'isCompany', 'profile']),
@@ -56,75 +102,84 @@
         authLoading: state => state.auth.status === 'loading',
       })
     },
-  }
 
-  let selectFlag = false;
+    created() {
+      let urlParams = new URLSearchParams(window.location.search);
+      this.query = urlParams.get('q');
+      let selectFlag = false;
 
-  function closeSelect() {
-    document.getElementById('select').style.display = 'none';
-    document.getElementById('selected').style.display = 'block';
-  }
+      function closeSelect() {
+        document.getElementById('select').style.display = 'none';
+        document.getElementById('selected').style.display = 'block';
+      }
 
-  window.onload = function () {
-    let selected = document.querySelector('#selected');
-    let select = document.querySelector('#select');
-    let vacancies = document.querySelector('#vacancies');
-    let resumes = document.querySelector('#resumes');
-    let find = document.querySelector('#find');
-    let histories = document.querySelector('#histories');
+      window.onload = function () {
+        let selected = document.querySelector('#selected');
+        let select = document.querySelector('#select');
+        let i1 = document.querySelector('#i1');
+        let i2 = document.querySelector('#i2');
+        let find = document.querySelector('#find');
+        let histories = document.querySelector('#histories');
+        let search_form = document.querySelector('#search-form');
 
-    find.onmouseover = function () {
-      addEventListener('click', function () {
-        histories.style.display = 'block';
-        find.style.backgroundColor = '#fff';
-        closeSelect();
-      });
-    };
-
-    find.onmouseleave = function () {
-      addEventListener('click', function () {
-        histories.style.display = 'none';
-        find.style.backgroundColor = '#f3f3f3';
-      })
-    };
-
-    selected.onmouseover = function () {
-      select.style.display = 'block';
-      selected.style.display = 'none';
-
-      select.onmouseout = function () {
-        window.setTimeout(function () {
-          if (selectFlag === false) {
+        find.onmouseover = function () {
+          addEventListener('click', function () {
+            histories.style.display = 'block';
+            find.style.backgroundColor = '#fff';
             closeSelect();
+          });
+        };
+
+        find.onmouseleave = function () {
+          addEventListener('click', function () {
+            histories.style.display = 'none';
+            find.style.backgroundColor = '#f3f3f3';
+          })
+        };
+
+        selected.onmouseover = function () {
+          select.style.display = 'block';
+          selected.style.display = 'none';
+
+          select.onmouseout = function () {
+            window.setTimeout(function () {
+              if (selectFlag === false) {
+                closeSelect();
+              }
+            }, 2000);
+            selectFlag = false;
+          };
+
+          select.onmouseover = function () {
+            selectFlag = true;
+          };
+
+          function chooseAction() {
+            if (selected.textContent === 'vacancies') {
+              selected.innerText = 'resumes';
+              i1.innerText = 'resumes';
+              i2.innerText = 'vacancies';
+              search_form.setAttribute('action', '/resumes');
+            } else if (selected.textContent === 'resumes') {
+              selected.innerText = 'vacancies';
+              i1.innerText = 'vacancies';
+              i2.innerText = 'resumes';
+              search_form.setAttribute('action', '/vacancies');
+            }
           }
-        }, 2000);
-        selectFlag = false;
-      };
 
-      select.onmouseover = function () {
-        selectFlag = true;
-      };
+          // i1.onclick = function () {
+          //   chooseAction();
+          // };
 
-      vacancies.onclick = function () {
-        selected.innerText = 'vacancies';
-        // search_button.setAttribute('href', '/vacancies');
-      };
+          i2.onclick = function () {
+            chooseAction();
+            closeSelect();
+          };
 
-      resumes.onclick = function () {
-        selected.innerText = 'resumes';
-        // search_button.setAttribute('href', '/resumes');
-        closeSelect();
-      };
-
-    };
-
-    (function() {
-      document.querySelector("input[name=query]").addEventListener('keydown', function(e) {
-        if (e.keyCode === 13) {
-          alert(this.value);
-        }
-      });
-    })();
+        };
+      }
+    }
   }
 </script>
 
@@ -135,7 +190,7 @@
     height: 60px;
     line-height: 60px;
     background-color: #fff;
-    /*box-shadow: 0 0 5px 2px rgba(200, 200, 200, .6);*/
+    box-shadow: 0 0 5px 2px rgba(200, 200, 200, .6);
   }
 
   .header .container {
@@ -222,6 +277,11 @@
     color: #000;
   }
 
+  .header .container .menu .m-count {
+    left: -15px;
+    top: -15px;
+  }
+
   .header .container .menu .messages {
     display: block;
     float: right;
@@ -229,8 +289,8 @@
     padding: 0 10px;
     width: 40px;
     height: 40px;
-    background: url("/img/message.png") no-repeat center;
-    background-size: 24px;
+    background: url("/img/chat.png") no-repeat center;
+    background-size: 32px;
   }
 
   .header .container .menu .messages:hover .count {
@@ -267,7 +327,7 @@
 
   .header .container .find input {
     position: relative;
-    width: 440px;
+    width: 480px;
     height: 40px;
     border: 0;
     border-radius: 20px;
@@ -314,11 +374,26 @@
     z-index: 12;
   }
 
+  .header .container .find .select .hideAction {
+    display: block;
+    padding: 0 10px;
+    margin: 0;
+    width: 100px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    opacity: 0.3;
+  }
+  .header .container .find .select .hideAction:hover {
+    cursor: text;
+    opacity: 0.3;
+  }
+
   /* search button */
   .header .container .find .search {
     display: block;
     padding: 0;
-    margin: -47px 0 0 455px;
+    margin: -45px 0 0 455px;
     width: 30px;
     height: 30px;
     position: absolute;
@@ -334,7 +409,7 @@
     background-color: #e3e3e3;
   }
 
-  .header .container .find .select span.item {
+  .header .container .find .select a.item {
     display: block;
     padding: 0 10px;
     margin: 0;
@@ -343,9 +418,10 @@
     line-height: 40px;
     cursor: pointer;
     font-size: 14px;
+    color: #777;
   }
 
-  .header .container .find .select span.item:hover {
+  .header .container .find .select a.item:hover {
     color: #000;
   }
 
@@ -381,7 +457,7 @@
     height: 30px;
     font-size: 10px;
     line-height: 30px;
-    padding: 30px 0 0 10px;
+    padding: 30px 0 0 20px;
   }
 
   /* user */
@@ -392,10 +468,11 @@
     line-height: inherit;
     float: right;
     margin: 0;
+    padding: 0 20px;
     text-align: center;
   }
 
-  /*
+
   .header .container .user a.sign_in {
     line-height: inherit;
     color: rgba(0, 0, 0, 0.6);
@@ -410,5 +487,5 @@
     background-color: rgba(0, 0, 0, 0.03);
     border: 2px rgba(0, 0, 0, 0.2) solid;
   }
-  */
+
 </style>
