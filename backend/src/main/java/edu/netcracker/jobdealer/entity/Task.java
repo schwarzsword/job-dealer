@@ -27,7 +27,7 @@ public class Task {
     private String description;
 
     @OneToOne
-    @JoinColumn(name = "task", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "vacancy", referencedColumnName = "id", nullable = false)
     private Vacancy vacancy;
 
     @OneToMany(mappedBy = "task")

@@ -1,8 +1,11 @@
 package edu.netcracker.jobdealer.controller;
 
+import edu.netcracker.jobdealer.dto.ResponseDto;
 import edu.netcracker.jobdealer.dto.VacancyDto;
+import edu.netcracker.jobdealer.entity.Response;
 import edu.netcracker.jobdealer.entity.Vacancy;
 import edu.netcracker.jobdealer.exceptions.*;
+import edu.netcracker.jobdealer.service.ResponseService;
 import edu.netcracker.jobdealer.service.VacancyService;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +33,7 @@ public class VacancyController {
     }
 
     @Secured("ROLE_COMPANY")
-    @PostMapping(value = "vacancies")
+    @PostMapping(value = "/vacancies")
     public ResponseEntity<?> createOrUpdateVacancy(@RequestParam String vacancyData,
                                                    @AuthenticationPrincipal User user) {
         try {
@@ -67,15 +70,15 @@ public class VacancyController {
         return ResponseEntity.ok().body(vacancies);
     }
 
+
+
     @GetMapping(value = "/vacancies")
     public ResponseEntity<?> getVacancies(@RequestParam String filters) {
         try {
             List<Vacancy> vacancies = vacancyService.sortAndReturn(filters);
-            if (vacancies != null) {
-                return ResponseEntity.ok(vacancies.stream()
-                        .map(e -> mapper.map(e, VacancyDto.class))
-                        .collect(Collectors.toList()));
-            } else return ResponseEntity.noContent().build();
+            return ResponseEntity.ok(vacancies.stream()
+                    .map(e -> mapper.map(e, VacancyDto.class))
+                    .collect(Collectors.toList()));
         } catch (SkillNotFoundException e) {
             return ResponseEntity.status(404).body(e.getMessage());
         } catch (BadParameterException e) {
@@ -96,4 +99,5 @@ public class VacancyController {
     public ResponseEntity<?> getVacancy(@PathVariable UUID id) {
         return ResponseEntity.ok(mapper.map(vacancyService.getVacancy(id), VacancyDto.class));
     }
+
 }

@@ -31,15 +31,12 @@ public class TaskServiceImpl implements TaskService {
 
 
     @Override
-    public Task createOrUpdateTask(String taskData, String email) {
+    public Task createOrUpdateTask(String taskData, String email, UUID vacancyId) {
         TaskDto taskDto = jsonService.parseTaskDto(taskData);
-        Vacancy vacancy = vacancyRepository.findById(taskDto.getVacancyId()).orElseThrow(VacancyNotFoundException::new);
+        Vacancy vacancy = vacancyRepository.findById(vacancyId).orElseThrow(VacancyNotFoundException::new);
         if (taskDto.getId() == null) {
             Task task = new Task(taskDto.getName(), taskDto.getDescription(), vacancy);
-            Task save = testTaskRepository.save(task);
-            vacancy.setTask(save);
-            vacancyRepository.save(vacancy);
-            return save;
+            return testTaskRepository.save(task);
         } else {
             Task task = testTaskRepository.findById(taskDto.getId()).orElseThrow(TaskNotFoundException::new);
             task.setName(taskDto.getName());

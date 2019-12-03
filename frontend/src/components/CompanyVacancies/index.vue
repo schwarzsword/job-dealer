@@ -1,6 +1,5 @@
 <template>
     <v-app>
-        <div>какая то инфа про компанию, может кто сделает</div>
         <v-data-table
                 :headers="headers"
                 :items="vacancies"
@@ -99,6 +98,12 @@
                 >
                     delete
                 </v-icon>
+                <v-icon
+                        class="mr-2"
+                        @click="route(item)"
+                >
+                    mdi-file-document-box
+                </v-icon>
             </template>
             <template v-slot:no-data>
                 You have no active vacancies
@@ -112,7 +117,7 @@
     import {urlPort} from "../../tool";
 
     export default {
-        name: "CompanyProfile",
+        name: "companyVacancies",
         data: function () {
             return {
                 dialog: false,
@@ -185,6 +190,7 @@
             this.initialize()
         },
 
+
         methods: {
             initialize() {
                 urlPort.get("/my/vacancies").then(resp => {
@@ -197,6 +203,10 @@
                     .then(resp => {
                         this.skills = resp.data;
                     })
+            },
+
+            route(item) {
+                this.$router.push('/my/vacancies/' + item.id)
             },
 
 
@@ -238,13 +248,12 @@
                 params.append("vacancyData", JSON.stringify(this.editedItem));
                 let w = this.editedItem.withTask;
                 let task = this.task;
-                let vacId = this.editedItem.id;
                 urlPort.post('/vacancies', params).then(resp => {
                     if (w) {
-                        task.vacancyId=resp.data.id;
+                        task.vacancyId = resp.data.id;
                         let params = new URLSearchParams();
                         params.append("taskData", JSON.stringify(task));
-                        urlPort.post('/vacancies/' + vacId + '/task', params)
+                        urlPort.post('/vacancies/' + task.vacancyId + '/task', params)
                     }
                 }).catch(err => {
 

@@ -309,17 +309,15 @@
                                 this.resume.applicantId = resp.data.id;
                                 const {email, password} = this.account;
                                 this.$store.dispatch(AUTH_REQUEST, {email, password}).then(() => {
+                                    console.log("1");
+                                    this.resume.fileData = this.fileBytes;
+                                    let params = new FormData();
+                                    params.append('resumeData', JSON.stringify(this.resume));
+                                    urlPort.post('/my/resumes', params, {headers: {ContentType: 'multipart/form-data'}})
+                                        .then(resp => {
+                                            this.$router.push('/');
+                                        })
                                 });
-                                this.resume.fileData = this.fileBytes;
-                                let params = new FormData();
-                                params.append('resumeData', JSON.stringify(this.resume));
-                                urlPort.post('/my/resumes', params, {headers: {ContentType: 'multipart/form-data'}})
-                                    .then(resp => {
-                                        this.$router.push('/');
-                                    })
-                                    .catch(err => {
-                                        //TODO добавить обработку ошибок
-                                    })
                             })
                             .catch(err => {
                                 this.errors.step1Error = "This email already in use";

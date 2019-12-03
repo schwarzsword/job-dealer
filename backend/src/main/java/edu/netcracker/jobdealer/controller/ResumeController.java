@@ -89,7 +89,7 @@ public class ResumeController {
     }
 
     @Secured("ROLE_USER")
-    @PostMapping(value = "my/resumes")
+    @PostMapping(value = "/my/resumes")
     public ResponseEntity<?> createResume(@RequestParam String resumeData) {
         try {
             Resume add = resumeService.add(resumeData);

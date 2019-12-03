@@ -15,8 +15,9 @@ import store from '../store'
 import Vacancies from "../components/Vacancies"
 import Resume from "../components/Resume/index";
 import ResumeForm from "../components/Resume/resumeForm";
-import CompanyProfile from "../components/CompanyProfile"
+import CompanyVacancies from "../components/CompanyVacancies"
 import VacancyPage from "../components/VacancyPage"
+import CompanyVacancyPage from "../components/VacancyPage/CompanyVacancyPage";
 
 Vue.use(Router);
 
@@ -76,14 +77,20 @@ export default new Router({
             name: 'vacancyPage',
             component: VacancyPage
         },
+
         {
-            path: '/company',
-            name: 'companyProfile',
-            component: CompanyProfile
+            path: '/my/vacancies/:id',
+            name: 'companyVacancyPage',
+            component: CompanyVacancyPage
         },
         {
-            path: '/applicants',
-            name: 'applicants',
+            path: '/my/vacancies',
+            name: 'companyVacancies',
+            component: CompanyVacancies
+        },
+        {
+            path: '/profile',
+            name: 'applicant',
             component: Applicant
         },
         {

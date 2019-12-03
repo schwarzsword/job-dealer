@@ -2,7 +2,9 @@ package edu.netcracker.jobdealer.service;
 
 
 import edu.netcracker.jobdealer.dto.Filters;
+import edu.netcracker.jobdealer.entity.Applicant;
 import edu.netcracker.jobdealer.entity.Company;
+import edu.netcracker.jobdealer.entity.Response;
 import edu.netcracker.jobdealer.entity.Vacancy;
 import edu.netcracker.jobdealer.exceptions.BadParameterException;
 import edu.netcracker.jobdealer.exceptions.SkillNotFoundException;

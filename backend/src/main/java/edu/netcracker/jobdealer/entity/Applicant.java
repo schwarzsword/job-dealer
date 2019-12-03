@@ -3,6 +3,8 @@ package edu.netcracker.jobdealer.entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.dozer.Mapping;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.List;
@@ -26,14 +28,15 @@ public class Applicant {
     @OneToMany(mappedBy = "applicant")
     private List<Resume> ownedResumes;
 
-    @ManyToMany(mappedBy = "respondents")
-    private List<Vacancy> responsedVacancies;
+    @OneToMany(mappedBy = "applicant", fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
+    private List<Response> responses;
 
     @OneToMany(mappedBy = "submiter")
     private List<Submission> ownedSubmissions;
 
-    @OneToOne
-    @JoinColumn(name = "account", referencedColumnName = "id", nullable = false)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "account", referencedColumnName = "id")
     private Account account;
 
     public Applicant(Account account) {
@@ -43,5 +46,9 @@ public class Applicant {
     @Mapping("accountId")
     public UUID getAccountId() {
         return account.getId();
+    }
+
+    public void addResponse(Response response) {
+        responses.add(response);
     }
 }

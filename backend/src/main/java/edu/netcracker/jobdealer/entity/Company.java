@@ -31,7 +31,7 @@ public class Company {
     @Column(name = "fileData")
     private byte[] fileData;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "account", referencedColumnName = "id", nullable = false)
     private Account account;
 

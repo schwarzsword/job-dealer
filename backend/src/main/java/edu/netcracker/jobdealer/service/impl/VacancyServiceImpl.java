@@ -3,13 +3,9 @@ package edu.netcracker.jobdealer.service.impl;
 
 import edu.netcracker.jobdealer.dto.Filters;
 import edu.netcracker.jobdealer.dto.VacancyDto;
-import edu.netcracker.jobdealer.entity.Company;
-import edu.netcracker.jobdealer.entity.Skills;
-import edu.netcracker.jobdealer.entity.Vacancy;
+import edu.netcracker.jobdealer.entity.*;
 import edu.netcracker.jobdealer.exceptions.*;
-import edu.netcracker.jobdealer.repository.CompanyRepository;
-import edu.netcracker.jobdealer.repository.SkillsRepository;
-import edu.netcracker.jobdealer.repository.VacancyRepository;
+import edu.netcracker.jobdealer.repository.*;
 import edu.netcracker.jobdealer.service.JsonService;
 import edu.netcracker.jobdealer.service.VacancyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,17 +23,21 @@ public class VacancyServiceImpl implements VacancyService {
     private final VacancyRepository vacancyRepository;
     private final SkillsRepository skillsRepository;
     private final CompanyRepository companyRepository;
+    private final ApplicantRepository applicantRepository;
     private final JsonService jsonService;
+    private final ResponseRepository responseRepository;
 
     @Autowired
     public VacancyServiceImpl(VacancyRepository vacancyRepository,
                               SkillsRepository skillsRepository,
                               CompanyRepository companyRepository,
-                              JsonService jsonService) {
+                              ApplicantRepository applicantRepository, JsonService jsonService, ResponseRepository responseRepository) {
         this.vacancyRepository = vacancyRepository;
         this.skillsRepository = skillsRepository;
         this.companyRepository = companyRepository;
+        this.applicantRepository = applicantRepository;
         this.jsonService = jsonService;
+        this.responseRepository = responseRepository;
     }
 
     @Override
@@ -68,7 +68,7 @@ public class VacancyServiceImpl implements VacancyService {
         if (filters.getRequestedSkills().size() == 0
                 && filters.getVacancyName().equals("")
                 && filters.getCompanyName().equals("")
-                && filters.getMoney() == 0
+                && filters.getMoney() < 0
         )
             throw new BadParameterException("Can't search with empty parameters");
         Set<Vacancy> vacancies = new HashSet<Vacancy>(vacancyRepository.findAll());
@@ -124,6 +124,7 @@ public class VacancyServiceImpl implements VacancyService {
         return vacancyRepository.findById(vacancyId).orElseThrow(VacancyNotFoundException::new);
     }
 
+
     @Override
     public int getSize(String filtersStr) {
         Filters filters = jsonService.parseFilters(filtersStr);
@@ -141,13 +142,14 @@ public class VacancyServiceImpl implements VacancyService {
                                 .save(new Skills(e))))
                 .collect(Collectors.toList());
         if (vacancyDto.getId() == null) {
-            return vacancyRepository.save(new Vacancy(vacancyDto.getName(), vacancyDto.getDescription(), vacancyDto.getMoney(), requestedSkills, company));
+            return vacancyRepository.save(new Vacancy(requestedSkills, vacancyDto.getName(), vacancyDto.getDescription(), vacancyDto.getMoney(), vacancyDto.isWithTask(), company));
         } else {
             Vacancy vacancy = vacancyRepository.findById(vacancyDto.getId()).orElseThrow(VacancyNotFoundException::new);
             vacancy.setName(vacancyDto.getName());
             vacancy.setOwner(company);
             vacancy.setDescription(vacancyDto.getDescription());
             vacancy.setMoney(vacancyDto.getMoney());
+            vacancy.setWithTask(vacancyDto.isWithTask());
             vacancy.setRequestedSkills(requestedSkills);
             return vacancyRepository.save(vacancy);
         }

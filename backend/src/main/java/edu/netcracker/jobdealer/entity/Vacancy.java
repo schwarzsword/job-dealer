@@ -1,8 +1,11 @@
 package edu.netcracker.jobdealer.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.dozer.Mapping;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.List;
@@ -14,44 +17,38 @@ import java.util.stream.Collectors;
 @Table
 @NoArgsConstructor
 public class Vacancy {
-
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "vacancySkills",
             joinColumns = @JoinColumn(name = "vacancyId"),
             inverseJoinColumns = @JoinColumn(name = "skillId"))
-    List<Skills> requestedSkills;
-    @ManyToMany
-    @JoinTable(
-            name = "vacancyUser",
-            joinColumns = @JoinColumn(name = "vacancyId"),
-            inverseJoinColumns = @JoinColumn(name = "applicantId"))
-    List<Applicant> respondents;
+    private List<Skills> requestedSkills;
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue
     private UUID id;
-    @Basic
     @Column(name = "name")
     private String name;
-    @Basic
     @Column(name = "description")
     private String description;
-    @Basic
     @Column(name = "money")
     private int money;
+    @Column(name = "withTask")
+    private boolean withTask;
     @ManyToOne
     @JoinColumn(name = "vacancies", referencedColumnName = "id")
     private Company owner;
-    @OneToOne(mappedBy = "vacancy")
-    private Task task;
 
-    public Vacancy(String name, String description, int money, List<Skills> requestedSkills, Company owner) {
+    @OneToMany(mappedBy = "vacancy", fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
+    private List<Response> responses;
+
+    public Vacancy(List<Skills> requestedSkills, String name, String description, int money, boolean withTask, Company owner) {
+        this.requestedSkills = requestedSkills;
         this.name = name;
         this.description = description;
         this.money = money;
-        this.requestedSkills = requestedSkills;
+        this.withTask = withTask;
         this.owner = owner;
     }
 
@@ -64,4 +61,9 @@ public class Vacancy {
     public List<String> getRequestedSkillsNames() {
         return requestedSkills.stream().map(Skills::getName).collect(Collectors.toList());
     }
+
+    public void addResponse(Response response) {
+        responses.add(response);
+    }
+
 }
