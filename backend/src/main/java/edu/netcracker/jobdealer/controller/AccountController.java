@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/accounts")
 public class AccountController {
 
     private final AccountService accountService;
@@ -32,7 +31,7 @@ public class AccountController {
     }
 
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/accounts/{id}")
     public ResponseEntity<?> getAccountById(@PathVariable("id") String id) {
         try {
             return ResponseEntity.ok(mapper.map(accountService.getAccount(id), AccountDto.class));
@@ -77,7 +76,7 @@ public class AccountController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/my")
+    @GetMapping("/my/accounts")
     public ResponseEntity<?> getProfile(@AuthenticationPrincipal User user) {
         Account byEmail = accountService.getByEmail(user.getUsername());
         return ResponseEntity.ok(mapper.map(byEmail, AccountDto.class));
