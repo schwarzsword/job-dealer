@@ -8,12 +8,13 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @Repository
 public interface ResumeRepository extends JpaRepository<Resume, UUID> {
 
-    List<Resume> findAllBySalaryIsGreaterThanEqual(int money);
+    Set<Resume> findAllBySalaryIsGreaterThanEqual(int money);
 
     List<Resume> findAllBySalary(int money);
 
@@ -28,6 +29,14 @@ public interface ResumeRepository extends JpaRepository<Resume, UUID> {
     List<Resume> findAllByApplicantAccount(Account account);
 
     List<Resume> findAllByApplicantAccountEmail(String email);
+
+    Set<Resume> findByCountry(String country);
+
+    Set<Resume> findByCity(String city);
+
+    Set<Resume> findByExperience(Boolean experience);
+
+    Set<Resume> findByDriverLicence(Boolean driverLicence);
 
     void deleteAllByApplicant(Applicant applicant);
 

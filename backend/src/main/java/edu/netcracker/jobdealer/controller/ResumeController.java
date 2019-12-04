@@ -3,9 +3,7 @@ package edu.netcracker.jobdealer.controller;
 import edu.netcracker.jobdealer.dto.ResumeDto;
 import edu.netcracker.jobdealer.entity.Resume;
 import edu.netcracker.jobdealer.entity.Skills;
-import edu.netcracker.jobdealer.exceptions.ApplicantNotFoundException;
-import edu.netcracker.jobdealer.exceptions.ResumeAlreadyExistsException;
-import edu.netcracker.jobdealer.exceptions.ResumeNotFoundException;
+import edu.netcracker.jobdealer.exceptions.*;
 import edu.netcracker.jobdealer.service.AccountService;
 import edu.netcracker.jobdealer.service.ApplicantService;
 import edu.netcracker.jobdealer.service.ResumeService;
@@ -79,13 +77,8 @@ public class ResumeController {
                                           @RequestParam int salary,
                                           @RequestParam List<Skills> skills,
                                           @RequestBody Resume resume) {
-        try {
             Resume updatedResume = resumeService.update(resumeId, resumeName, firstName, lastName, about, avatarUrl, salary, skills);
             return ResponseEntity.ok(updatedResume);
-        } catch (ResumeNotFoundException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
-        }
-
     }
 
     @Secured("ROLE_USER")
@@ -98,6 +91,30 @@ public class ResumeController {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (ApplicantNotFoundException e) {
             return ResponseEntity.status(404).body(e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/resumes")
+    public ResponseEntity<?> getResumes(@RequestParam int offset,
+                                        @RequestParam int limit,
+                                        @RequestParam(required = false) String sortBy,
+                                        @RequestParam(required = false) String country,
+                                        @RequestParam(required = false) String city,
+                                        @RequestParam(required = false) int salaryMin,
+                                        @RequestParam(required = false) int salaryMax,
+                                        @RequestParam(required = false) boolean experience,
+                                        @RequestParam(required = false) boolean driverLicence) {
+        try {
+            List<Resume> resumes = resumeService.sortAndReturn(country, city, salaryMin, salaryMax, experience, driverLicence, offset, limit, sortBy);
+            if (resumes != null) {
+                return ResponseEntity.ok(resumes.stream()
+                        .map(e -> mapper.map(e, ResumeDto.class))
+                        .collect(Collectors.toList()));
+            } else return ResponseEntity.noContent().build();
+        } catch (ResumeNotFoundException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        } catch (BadParameterException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 }
