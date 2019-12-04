@@ -27,18 +27,18 @@ public class Company {
 
     @Column(name = "description")
     private String description;
-
+@Lob
     @Column(name = "fileData")
-    private byte[] fileData;
+    private String fileData;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "account", referencedColumnName = "id", nullable = false)
     private Account account;
 
     @OneToMany
     private List<Vacancy> vacancies;
 
-    public Company(UUID id, String name, Boolean verified, String description,  byte[] fileData, Account account) {
+    public Company(UUID id, String name, Boolean verified, String description, String fileData, Account account) {
         this.id = id;
         this.name = name;
         this.verified = verified;
@@ -47,7 +47,7 @@ public class Company {
         this.account = account;
     }
 
-    public Company(String name, Boolean verified, String description, byte[] fileData, Account account) {
+    public Company(String name, Boolean verified, String description, String fileData, Account account) {
         this.name = name;
         this.verified = verified;
         this.description = description;

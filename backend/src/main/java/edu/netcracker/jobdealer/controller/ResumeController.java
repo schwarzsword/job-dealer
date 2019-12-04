@@ -1,26 +1,22 @@
-
 package edu.netcracker.jobdealer.controller;
 
-import edu.netcracker.jobdealer.dto.MessageDto;
 import edu.netcracker.jobdealer.dto.ResumeDto;
-import edu.netcracker.jobdealer.dto.VacancyDto;
-import edu.netcracker.jobdealer.entity.*;
-import edu.netcracker.jobdealer.exceptions.*;
+import edu.netcracker.jobdealer.entity.Resume;
+import edu.netcracker.jobdealer.entity.Skills;
+import edu.netcracker.jobdealer.exceptions.ApplicantNotFoundException;
+import edu.netcracker.jobdealer.exceptions.ResumeAlreadyExistsException;
+import edu.netcracker.jobdealer.exceptions.ResumeNotFoundException;
 import edu.netcracker.jobdealer.service.AccountService;
 import edu.netcracker.jobdealer.service.ApplicantService;
 import edu.netcracker.jobdealer.service.ResumeService;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -47,11 +43,11 @@ public class ResumeController {
         this.applicantService = applicantService;
         this.mapper = mapper;
     }
-  
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping(value = "/my/resumes/")
     public ResponseEntity<?> getAllResumes(@AuthenticationPrincipal User user) {
-    //todo сделать хорошо, пофиксить урлы, подумать о безопасности, использовать билдер
+        //todo сделать хорошо, пофиксить урлы, подумать о безопасности, использовать билдер
         List<Resume> userResumes = resumeService.getAllResumeOfUser(user.getUsername());
         List<ResumeDto> dtos = userResumes
                 .stream()
@@ -71,7 +67,7 @@ public class ResumeController {
 //        }
 //    }
 
-    @PreAuthorize("isAuthenticated()")
+    @Secured("ROLE_USER")
     @PatchMapping(value = "/my/resumes/{resumeId}")
     public ResponseEntity<?> updateResume(@RequestParam UUID userId,
                                           @PathVariable @Valid UUID resumeId,
@@ -92,15 +88,11 @@ public class ResumeController {
 
     }
 
-    @PreAuthorize("isAuthenticated()")
-    @PostMapping(value = "my/resumes")
-    public ResponseEntity<?> createResume(@RequestParam String resumeName, @RequestParam String firstName,
-                                          @RequestParam String lastName, @RequestParam String about,
-                                          @RequestParam byte[] fileData, @RequestParam UUID applicantId,
-                                          @RequestParam List<String> skills, @RequestParam int salary) {
-
+    @Secured("ROLE_USER")
+    @PostMapping(value = "/my/resumes")
+    public ResponseEntity<?> createResume(@RequestParam String resumeData) {
         try {
-            Resume add = resumeService.add(resumeName, firstName, lastName, about, fileData, salary, applicantId, skills);
+            Resume add = resumeService.add(resumeData);
             return ResponseEntity.ok(mapper.map(add, ResumeDto.class));
         } catch (ResumeAlreadyExistsException | IOException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

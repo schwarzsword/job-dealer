@@ -58,18 +58,15 @@ public class CompanyController {
     }
 
     @PostMapping(value = "/companies")
-    public ResponseEntity<?> addCompany(@RequestParam String name, @RequestParam String description,
-                                        @RequestParam byte[] fileData, @RequestParam UUID accountId) {
-
-
+    public ResponseEntity<?> addCompany(@RequestParam String companyData) {
         try {
             CompanyDto company = mapper
                     .map(companyService
-                            .addCompany(name, false, description, fileData, accountId), CompanyDto.class);
+                            .addCompany(companyData), CompanyDto.class);
             return ResponseEntity.ok(company);
         } catch (AccountNotFoundException e) {
             return ResponseEntity.status(404).body(e.getMessage());
-        } catch (AccountIdExistsException | IOException e) {
+        } catch (AccountIdExistsException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

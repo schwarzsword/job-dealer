@@ -16,7 +16,7 @@ const getters = {
 const actions = {
     [USER_REQUEST]: ({commit, dispatch}) => {
         commit(USER_REQUEST);
-        urlPort.get("/accounts/my", {withCredentials: true})
+        urlPort.get("/my/accounts", {withCredentials: true})
             .then(resp => {
                 commit(USER_SUCCESS, resp)
             })

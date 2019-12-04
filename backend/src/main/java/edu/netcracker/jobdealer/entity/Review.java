@@ -17,10 +17,10 @@ public class Review {
     @Column(name = "id", nullable = false)
     @GeneratedValue
     private UUID id;
-    @Basic
+
     @Column(name = "description")
     private String text;
-    @Basic
+
     @Column(name = "rating")
     private int rating;
 

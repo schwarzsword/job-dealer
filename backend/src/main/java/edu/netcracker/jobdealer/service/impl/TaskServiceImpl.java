@@ -1,15 +1,17 @@
 package edu.netcracker.jobdealer.service.impl;
 
+import edu.netcracker.jobdealer.dto.TaskDto;
 import edu.netcracker.jobdealer.entity.Task;
 import edu.netcracker.jobdealer.entity.Vacancy;
 import edu.netcracker.jobdealer.exceptions.TaskNotFoundException;
+import edu.netcracker.jobdealer.exceptions.VacancyNotFoundException;
 import edu.netcracker.jobdealer.repository.TestTaskRepository;
 import edu.netcracker.jobdealer.repository.VacancyRepository;
+import edu.netcracker.jobdealer.service.JsonService;
 import edu.netcracker.jobdealer.service.TaskService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Transactional
@@ -19,47 +21,42 @@ public class TaskServiceImpl implements TaskService {
     private final TestTaskRepository testTaskRepository;
 
     private final VacancyRepository vacancyRepository;
+    private final JsonService jsonService;
 
-    public TaskServiceImpl(TestTaskRepository testTaskRepository, VacancyRepository vacancyRepository) {
+    public TaskServiceImpl(TestTaskRepository testTaskRepository, VacancyRepository vacancyRepository, JsonService jsonService) {
         this.testTaskRepository = testTaskRepository;
         this.vacancyRepository = vacancyRepository;
-    }
-
-    @Override
-    public Task createTask(Vacancy vacancy, String name, String description) {
-        Task task = new Task(name, description, vacancy);
-        vacancy.setTask(task);
-        testTaskRepository.save(task);
-        vacancyRepository.save(vacancy);
-        return task;
-    }
-
-    @Override
-    public Task updateTaskName(Task task, String newName) {
-        task.setName(newName);
-        return testTaskRepository.save(task);
+        this.jsonService = jsonService;
     }
 
 
     @Override
-    public Task updateTaskDescription(Task task, String newDescription) {
-        task.setDescription(newDescription);
-        return testTaskRepository.save(task);
+    public Task createOrUpdateTask(String taskData, String email, UUID vacancyId) {
+        TaskDto taskDto = jsonService.parseTaskDto(taskData);
+        Vacancy vacancy = vacancyRepository.findById(vacancyId).orElseThrow(VacancyNotFoundException::new);
+        if (taskDto.getId() == null) {
+            Task task = new Task(taskDto.getName(), taskDto.getDescription(), vacancy);
+            return testTaskRepository.save(task);
+        } else {
+            Task task = testTaskRepository.findById(taskDto.getId()).orElseThrow(TaskNotFoundException::new);
+            task.setName(taskDto.getName());
+            task.setDescription(taskDto.getDescription());
+            return testTaskRepository.save(task);
+        }
     }
 
     @Override
-    public Task getTaskByVacancy(Vacancy vacancy) throws TaskNotFoundException {
-        Optional<Task> byVacancy = testTaskRepository.findByVacancy(vacancy);
-        if (byVacancy.isPresent()) {
-            return byVacancy.get();
-        } else throw new TaskNotFoundException();
+    public Task getTaskByVacancy(Vacancy vacancy) {
+        return testTaskRepository.findByVacancy(vacancy).orElseThrow(TaskNotFoundException::new);
     }
 
     @Override
-    public Task getTaskById(UUID taskId) throws TaskNotFoundException {
-        Optional<Task> byVacancy = testTaskRepository.findById(taskId);
-        if (byVacancy.isPresent()) {
-            return byVacancy.get();
-        } else throw new TaskNotFoundException();
+    public Task getTaskByVacancyId(UUID id) {
+        return testTaskRepository.findByVacancyId(id).orElseThrow(TaskNotFoundException::new);
+    }
+
+    @Override
+    public Task getTaskById(UUID taskId) {
+        return testTaskRepository.findById(taskId).orElseThrow(TaskNotFoundException::new);
     }
 }

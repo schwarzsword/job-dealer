@@ -1,9 +1,13 @@
 package edu.netcracker.jobdealer.service;
 
 
+import edu.netcracker.jobdealer.dto.Filters;
+import edu.netcracker.jobdealer.entity.Applicant;
 import edu.netcracker.jobdealer.entity.Company;
+import edu.netcracker.jobdealer.entity.Response;
 import edu.netcracker.jobdealer.entity.Vacancy;
-import edu.netcracker.jobdealer.exceptions.*;
+import edu.netcracker.jobdealer.exceptions.BadParameterException;
+import edu.netcracker.jobdealer.exceptions.SkillNotFoundException;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,24 +19,21 @@ public interface VacancyService {
 
     List<Vacancy> getVacanciesByCompany(Company company);
 
-    Vacancy addOrUpdateVacancy(String name, String description,
-                               Integer money, List<String> skills, String email,
-                               String id) throws CompanyNotFoundException;
+    Vacancy addOrUpdateVacancy(String vacancyData, String email);
 
-    void remove(UUID vacancyId, String email) throws VacancyNotFoundException, NoPermissionException;
+    void remove(UUID vacancyId, String email);
 
     List<Vacancy> getVacanciesByCompanyEmail(String email);
 
     List<Vacancy> getPage(List<Vacancy> inp, int offset, int limit);
 
-    public List<Vacancy> applyConditions(List<String> skills, Integer salary, String vacancyName, String companyName) throws SkillNotFoundException;
+    List<Vacancy> applyConditions(Filters filters);
 
-    public int getSize(List<String> skills, Integer salary, String vacancyName, String companyName);
+    int getSize(String filters);
 
-    public List<Vacancy> sortAndReturn(List<String> skills, Integer salary,
-                                       String vacancyName, String companyName,
-                                       int offset, int limit,
-                                       String sortBy)
-            throws SkillNotFoundException, BadParameterException;
+    List<Vacancy> sortAndReturn(String filters);
+
+    Vacancy getVacancy(UUID vacancyId);
+
 
 }

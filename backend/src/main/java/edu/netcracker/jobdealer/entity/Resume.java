@@ -32,8 +32,9 @@ public class Resume {
     private String lastName;
     @Column(name = "salary")
     private int salary;
+    @Lob
     @Column(name = "fileData")
-    private byte[] fileData;
+    private String fileData;
     @Column(name = "about")
     private String about;
     @ManyToOne
@@ -45,7 +46,7 @@ public class Resume {
         this.applicant = applicant;
     }
 
-    public Resume(String name, String firstName, String lastName, int salary, byte[] fileData,
+    public Resume(String name, String firstName, String lastName, int salary, String fileData,
                   String about, Applicant applicant, List<Skills> skills) {
         this.name = name;
         this.firstName = firstName;

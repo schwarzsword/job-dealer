@@ -16,5 +16,6 @@ public class VacancyDto {
     private Integer money;
     private List<String> requestedSkills;
     private String ownerName;
+    private boolean withTask;
 
 }
