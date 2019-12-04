@@ -15,5 +15,7 @@ public interface TestTaskRepository extends JpaRepository<Task, UUID> {
 
     Optional<Task> findByVacancy(Vacancy vacancy);
 
+    Optional<Task> findByVacancyId(UUID uuid);
+
     void deleteByVacancy(Vacancy vacancy);
 }

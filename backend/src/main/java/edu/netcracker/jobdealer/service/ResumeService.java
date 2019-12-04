@@ -11,13 +11,10 @@ import java.util.UUID;
 
 public interface ResumeService {
 
-    public Resume add(String resumeName, String firstName,
-                      String lastName, String about,
-                      byte[] fileData, int salary,
-                      UUID applicantId, List<String> skillsString)
+    public Resume add(String resumeData)
             throws ApplicantNotFoundException, ResumeAlreadyExistsException, IOException;
 
-//todo переделать avatarUrl -> fileData[]
+    //todo переделать avatarUrl -> fileData[]
     Resume update(UUID resumeId,
                   String resumeName,
                   String firstName,
@@ -26,7 +23,7 @@ public interface ResumeService {
                   String avatarUrl,
                   int salary,
                   List<Skills> skillsString);
-  
+
 //    void remove(UUID resumeId);
 
     List<Resume> getAllResumeOfUser(String login);

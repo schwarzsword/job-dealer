@@ -1,7 +1,6 @@
-
 spring:
   profiles:
-    active: dev
+    active: docker
   datasource:
     url: jdbc:postgresql://postgres:5432/jobdealer
     username: root

@@ -17,7 +17,7 @@ public class Skills {
     @Column(name = "id", nullable = false)
     @GeneratedValue
     private UUID id;
-    @Basic
+
     @Column(name = "skill", unique = true)
     private String name;
 

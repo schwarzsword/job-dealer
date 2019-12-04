@@ -3,14 +3,19 @@ package edu.netcracker.jobdealer.service.impl;
 import edu.netcracker.jobdealer.entity.Applicant;
 import edu.netcracker.jobdealer.entity.Submission;
 import edu.netcracker.jobdealer.entity.Task;
+import edu.netcracker.jobdealer.exceptions.ApplicantNotFoundException;
+import edu.netcracker.jobdealer.exceptions.NoPermissionException;
+import edu.netcracker.jobdealer.exceptions.TaskNotFoundException;
 import edu.netcracker.jobdealer.repository.ApplicantRepository;
 import edu.netcracker.jobdealer.repository.SubmissionRepository;
 import edu.netcracker.jobdealer.repository.TestTaskRepository;
+import edu.netcracker.jobdealer.service.ResponseService;
 import edu.netcracker.jobdealer.service.SubmissionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Transactional
@@ -23,26 +28,45 @@ public class SubmissionServiceImpl implements SubmissionService {
 
     private final ApplicantRepository applicantRepository;
 
-    public SubmissionServiceImpl(TestTaskRepository testTaskRepository, SubmissionRepository submissionRepository, ApplicantRepository applicantRepository) {
+    private final ResponseService responseService;
+
+    public SubmissionServiceImpl(TestTaskRepository testTaskRepository, SubmissionRepository submissionRepository, ApplicantRepository applicantRepository, ResponseService responseService) {
         this.testTaskRepository = testTaskRepository;
         this.submissionRepository = submissionRepository;
         this.applicantRepository = applicantRepository;
+        this.responseService = responseService;
     }
 
+    @Override
+    public List<Applicant> showSubmitters(UUID taskId, String email) {
+        Task task = testTaskRepository.findById(taskId).orElseThrow(TaskNotFoundException::new);
+        if (task.getVacancy().getOwner().getAccount().getEmail().equals(email)) {
+            return submissionRepository.findAllByTask(task)
+                    .stream()
+                    .map(Submission::getSubmiter)
+                    .collect(Collectors.toList());
+        } else throw new NoPermissionException();
+    }
 
     @Override
-    public Submission commitSubmission(Task task, String filename, Applicant user) {
-        Submission submission = new Submission(filename, task, user);
-        task.getSubmissions().add(submission);
-        user.getOwnedSubmissions().add(submission);
-        submissionRepository.save(submission);
+    public List<Submission> getSubmissions(UUID taskId, String email) {
+        Task task = testTaskRepository.findById(taskId).orElseThrow(TaskNotFoundException::new);
+        if (task.getVacancy().getOwner().getAccount().getEmail().equals(email)) {
+            return submissionRepository.findAllByTask(task);
+        } else throw new NoPermissionException();
+    }
+
+    @Override
+    public Submission addSubmission(String  fileData, String email, UUID taskId) {
+
+        Applicant applicant = applicantRepository.findByAccountEmail(email).orElseThrow(ApplicantNotFoundException::new);
+        Task task = testTaskRepository.findById(taskId).orElseThrow(TaskNotFoundException::new);
+        responseService.apply(task.getTaskVacancyId(), email);
+        Submission save = submissionRepository.save(new Submission(fileData, task, applicant));
+        applicant.addSubmission(save);
+        task.addSubmission(save);
+        applicantRepository.save(applicant);
         testTaskRepository.save(task);
-        applicantRepository.save(user);
-        return submission;
-    }
-
-    @Override
-    public List<Applicant> showSubmitters(Task task) {
-        return task.getSubmissions().stream().map(Submission::getSubmiter).collect(Collectors.toList());
+        return save;
     }
 }

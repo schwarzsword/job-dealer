@@ -20,4 +20,6 @@ public interface CompanyRepository extends JpaRepository<Company, UUID> {
     boolean existsByAccount_Id(UUID id);
 
     Optional<Company> findFirstByName(String name);
+
+    boolean existsByName(String string);
 }

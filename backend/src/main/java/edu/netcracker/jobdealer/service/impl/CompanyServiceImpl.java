@@ -1,15 +1,14 @@
 package edu.netcracker.jobdealer.service.impl;
 
+import edu.netcracker.jobdealer.dto.CompanyDto;
 import edu.netcracker.jobdealer.entity.Account;
 import edu.netcracker.jobdealer.entity.Company;
-import edu.netcracker.jobdealer.exceptions.AccountByIdNotFoundException;
-import edu.netcracker.jobdealer.exceptions.AccountIdExistsException;
-import edu.netcracker.jobdealer.exceptions.CompanyNotFoundException;
-import edu.netcracker.jobdealer.exceptions.NotImplementedMethodException;
+import edu.netcracker.jobdealer.exceptions.*;
 import edu.netcracker.jobdealer.repository.AccountRepository;
 import edu.netcracker.jobdealer.repository.CompanyRepository;
 import edu.netcracker.jobdealer.service.AccountService;
 import edu.netcracker.jobdealer.service.CompanyService;
+import edu.netcracker.jobdealer.service.JsonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -19,35 +18,33 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.awt.image.WritableRaster;
-import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static edu.netcracker.jobdealer.util.FileWorker.extractBytes;
 
 @Service
 @Transactional
 public class CompanyServiceImpl implements CompanyService {
 
-    // TODO: убрать null  и посмотреть исключения (+)
-    // TODO: потестить методы, хотя бы визуально
-
     private final CompanyRepository companyRepository;
     private final AccountRepository accountRepository;
     private final AccountService accountService;
+    private final JsonService jsonService;
 
     @Value("${upload.path}")
     private String path;
 
     @Autowired
     public CompanyServiceImpl(CompanyRepository companyRepository, AccountRepository accountRepository,
-                              AccountService accountService) {
+                              AccountService accountService, JsonService jsonService) {
         this.companyRepository = companyRepository;
         this.accountRepository = accountRepository;
         this.accountService = accountService;
+        this.jsonService = jsonService;
     }
 
     @Override
@@ -78,20 +75,27 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public Company addCompany(String name, Boolean isVerified, String description, byte[] fileData, UUID accountId)
-            throws AccountByIdNotFoundException, AccountIdExistsException, IOException {
-        if (!companyRepository.existsByAccount_Id(accountId)) {
-            Account byId = accountService.getById(accountId);
-            byte[] n = "null".getBytes();
-            if (Arrays.equals(n, fileData)) {
-                fileData = extractBytes(path);
+    public Company addCompany(String companyDataString) {
+        CompanyDto companyData = jsonService.parseCompanyDto(companyDataString);
+        if (!companyRepository.existsByAccount_Id(companyData.getAccountId())) {
+            if (companyRepository.existsByName(companyData.getName())) {
+                accountService.deleteAccount(companyData.getAccountId());
+                throw new CompanyNameAlreadyInUseException();
             }
-            return companyRepository.save(new Company(name, false, description, fileData, byId));
+            Account byId = accountService.getById(companyData.getAccountId());
+            try {
+                if (companyData.getFileData() == null) {
+                    companyData.setFileData(extractBytes(path));
+                }
+            } catch (IOException e) {
+                throw new BadException();
+            }
+            return companyRepository.save(new Company(companyData.getName(), false, companyData.getDescription(), companyData.getFileData(), byId));
         } else throw new AccountIdExistsException();
     }
 
     @Override
-    public Company updateCompany(UUID id, String name, Boolean isVerified, String description, byte[] fileData, UUID accountId) {
+    public Company updateCompany(UUID id, String name, Boolean isVerified, String description, String fileData, UUID accountId) {
         throw new NotImplementedMethodException("");
     }
 
@@ -130,12 +134,5 @@ public class CompanyServiceImpl implements CompanyService {
         return companyRepository.findAll().stream().map(Company::getName).distinct().collect(Collectors.toList());
     }
 
-    private byte[] extractBytes(String imageName) throws IOException {
-        File imgPath = new File(imageName);
-        BufferedImage bufferedImage = ImageIO.read(imgPath);
-        WritableRaster raster = bufferedImage.getRaster();
-        DataBufferByte data = (DataBufferByte) raster.getDataBuffer();
 
-        return (data.getData());
-    }
 }

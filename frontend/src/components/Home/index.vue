@@ -3,6 +3,7 @@
         <h1>{{title}}</h1>
         <p>{{msg}}</p>
     </div>
+
 </template>
 
 <script>
@@ -13,7 +14,7 @@
                 title: 'Home',
                 msg: 'Welcome to Job Dealer!'
             }
-        }
+        },
     }
 </script>
 

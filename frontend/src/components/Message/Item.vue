@@ -1,9 +1,11 @@
 <template>
-  <router-link class="message" to="/">
-    <div class="title">Message</div>
-    <div class="author">Company</div>
-    <div class="desc">
-      Desc
+  <router-link class="msg" :to="'/my/messages/' + `${authorId}`">
+    <div class="m-left">
+      <img :src="`${avatar}`" alt="avatar">
+    </div>
+    <div class="m-right">
+      <div class="author">{{ author }}</div>
+      <div class="subtitle">{{ subtitle }}</div>
     </div>
   </router-link>
 </template>
@@ -12,45 +14,57 @@
   import Router from "../../router"
 
   export default {
-  name: 'MessageItem',
+    name: 'MessageItem',
+    props: ['id', 'title', 'author', 'authorId', 'subtitle', 'avatar'],
 
-  data() {
-    return {
-      company: {},
-      id: Router.currentRoute.params.id,
+    data() {
+      return {
+        company: {},
+        id: Router.currentRoute.params.id,
+      }
+    },
+    created() {
     }
-  },
-  created() {
   }
-}
 </script>
 
 <style>
-  .message {
+  .msg {
     display: table;
     padding: 4px 0;
     height: 50px;
     width: 100%;
     border-bottom: 1px solid #f0f0f0;
   }
-  .message:hover {
+  .msg:hover {
     background-color: #f3f3f3;
   }
-  .message .title {
+  .msg .m-left {
+    display: block;
+    float: left;
+    width: 48px;
+  }
+  .msg .m-left img {
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    margin: 4px 8px;
+  }
+  .msg .m-right {
+    display: block;
+    float: left;
+    width: calc(100% - 48px);
+  }
+  .msg .author {
     display: table;
     padding: 2px 10px;
     font-size: 16px;
+    color: #000;
   }
-  .message .author {
+  .msg .subtitle {
     display: table;
     padding: 2px 10px;
     font-size: 12px;
     color: #4e555b;
-  }
-  .message .desc {
-    display: table;
-    padding: 2px 10px;
-    font-size: 14px;
-    color: #1b1e21;
   }
 </style>

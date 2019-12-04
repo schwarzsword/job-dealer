@@ -1,16 +1,310 @@
 <template>
-    <div>
-        <button>
-            <router-link to="/resumeForm">Create resume</router-link>
-        </button>
-
-        <ResumeShortDescription></ResumeShortDescription>
+  <div>
+    <div class="left-sidebar" style="text-align: center; margin: 10px 0 0 0;">
+      <div>
+        <router-link class="my-2" to="/resumes/add">
+          <v-btn large color="primary" outlined>Add resume</v-btn>
+        </router-link>
+      </div>
+      <div class="link-my-resumes">
+        <router-link class="link" to="/my/resumes">
+          My resumes
+        </router-link>
+      </div>
     </div>
+    <div class="content">
 
+      <template v-for="(item, index) in items">
+
+        <ResumeItem
+            :id="`${item.id}`"
+            :title="`${item.title}`"
+            :author="`${item.author}`"
+            :subtitle="`${item.subtitle}`"/>
+      </template>
+
+      <div class="item">
+        <v-card-text>
+          <router-link class="title" to="/resumes/{id}">Java Developer</router-link>
+          <div class="author">Ivan Ivanov</div>
+          <div class="desc text--primary">
+            Direct injecting of css code, it can be solved. Inspect the code on your browser and find out...
+          </div>
+          <div class="item-bottom">
+            <router-link class="invite" to="">Send invite</router-link>
+            <div class="date">25 december</div>
+          </div>
+        </v-card-text>
+      </div>
+
+      <div class="item">
+        <v-card-text>
+          <router-link class="title" to="/resumes/{id}">Java Developer</router-link>
+          <div class="author">Ivan Ivanov</div>
+          <div class="desc text--primary">
+            Direct injecting of css code, it can be solved. Inspect the code on your browser and find out...
+          </div>
+          <div class="item-bottom">
+            <router-link class="invite" to="">Send invite</router-link>
+            <div class="date">25 december</div>
+          </div>
+        </v-card-text>
+      </div>
+
+      <div class="item">
+        <v-card-text>
+          <router-link class="title" to="/resumes/{id}">Java Developer</router-link>
+          <div class="author">Ivan Ivanov</div>
+          <div class="desc text--primary">
+            Direct injecting of css code, it can be solved. Inspect the code on your browser and find out...
+          </div>
+          <div class="item-bottom">
+            <router-link class="invite" to="">Send invite</router-link>
+            <div class="date">25 december</div>
+          </div>
+        </v-card-text>
+      </div>
+
+      <div class="item">
+        <v-card-text>
+          <router-link class="title" to="/resumes/{id}">Java Developer</router-link>
+          <div class="author">Ivan Ivanov</div>
+          <div class="desc text--primary">
+            Direct injecting of css code, it can be solved. Inspect the code on your browser and find out...
+          </div>
+          <div class="item-bottom">
+            <router-link class="invite" to="">Send invite</router-link>
+            <div class="date">25 december</div>
+          </div>
+        </v-card-text>
+      </div>
+
+    </div>
+    <div class="right-sidebar">
+      <v-card class="filter-block" outlined>
+        <v-card-text>
+          <v-select :items="countries" v-model="country" @change="handleCountry" label="Choose country"></v-select>
+          <v-select :items="cities" v-model="city" @change="handleCity" label="Choose city"></v-select>
+          Salary:
+          <div style="display: table; margin-bottom: 20px;">
+            <v-text-field class="salary-input" @change="handleSalary" v-model="price[0]" hide-details single-line
+                          type="number"></v-text-field>
+            <v-text-field class="salary-input" @change="handleSalary" v-model="price[1]" hide-details single-line
+                          type="number"></v-text-field>
+          </div>
+          <v-range-slider v-model="price" @change="handleSalary" :min="0" :max="5000" :step="100"></v-range-slider>
+          <v-checkbox class="check-box" v-model="experience" @change="handleExperience" label="Experience"></v-checkbox>
+          <v-checkbox class="check-box" v-model="driverLicense" @change="handleDriverLicense"
+                      label="Driver license"></v-checkbox>
+          <v-switch v-model="saveFilter" @change="handleSaveFilter" label="Save filter"></v-switch>
+        </v-card-text>
+      </v-card>
+    </div>
+  </div>
 </template>
 
 <script>
-    export default {
-        name: 'Resume'
-    }
+  import ResumeItem from "./item";
+  export default {
+    name: 'Resume',
+    components: {ResumeItem},
+    data: function () {
+      return {
+        countries: ['Russia', 'USA', 'Germany', 'India'],
+        cities: ['Moscow', 'St. Petersburg', 'Saratov'],
+        country: 'Russia',
+        city: 'St. Petersburg',
+        checkbox: true,
+        saveFilter: false,
+        salary: 0,
+        price: [0, 5000],
+        experience: false,
+        driverLicense: false,
+
+        items: [
+          {
+            id: 1,
+            avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
+            title: 'Brunch this weekend?',
+            author: 'Yan Nepomyashy',
+            subtitle: "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
+          },
+          {
+            id: 2,
+            avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg',
+            title: 'Summer BBQ',
+            author: 'Magnus Carlsen',
+            subtitle: "Wish I could come, but I'm out of town this weekend."
+          },
+          {
+            id: 3,
+            avatar: '/img/no-avatar.png',
+            title: 'Oui oui',
+            author: 'Garik Gasparov',
+            subtitle: "Do you have Paris recommendations? Have you ever been?"
+          },
+          {
+            id: 4,
+            avatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg',
+            title: 'Birthday gift',
+            author: 'Vashe Lagrav',
+            subtitle: "Have any ideas about what we should get Heidi for her birthday?"
+          },
+          {
+            id: 5,
+            avatar: '/img/no-avatar.png',
+            title: 'Recipe to try',
+            author: 'Anatoly Karpov',
+            subtitle: "We should eat this: Grate, Squash, Corn, and tomatillo Tacos."
+          }
+        ]
+      }
+    },
+    methods: {
+      handleCountry() {
+        let urlParams = new URLSearchParams(window.location.search);
+        urlParams.set("country", this.country);
+        this.$router.push('/resumes/?' + urlParams.toString());
+      },
+      handleCity() {
+        let urlParams = new URLSearchParams(window.location.search);
+        urlParams.set("city", this.city);
+        this.$router.push('/resumes/?' + urlParams.toString());
+      },
+      handleSalary() {
+        let urlParams = new URLSearchParams(window.location.search);
+        urlParams.set("salaryMin", this.price[0]);
+        urlParams.set("salaryMax", this.price[1]);
+        this.$router.push('/resumes/?' + urlParams.toString());
+      },
+      handleExperience() {
+        let urlParams = new URLSearchParams(window.location.search);
+        urlParams.set("experience", this.experience);
+        this.$router.push('/resumes/?' + urlParams.toString());
+      },
+      handleDriverLicense() {
+        let urlParams = new URLSearchParams(window.location.search);
+        urlParams.set("driverLicense", this.driverLicense);
+        this.$router.push('/resumes/?' + urlParams.toString());
+      },
+      handleSaveFilter() {
+        let urlParams = new URLSearchParams(window.location.search);
+        urlParams.set("saveFilter", this.saveFilter);
+        this.$router.push('/resumes/?' + urlParams.toString());
+      },
+    },
+
+    created: function () {
+      const app = document.createElement('div');
+      app.setAttribute('data-app', true);
+      document.body.append(app);
+
+      //console.log(this.$store.state.profile);
+    },
+  }
 </script>
+
+<style>
+  /* right sidebar */
+  .right-sidebar .filter-block {
+    display: block;
+    width: calc(100% - 20px);
+    height: auto;
+    margin: 10px;
+  }
+
+  .right-sidebar .filter-block .salary-input {
+    display: block;
+    margin: 0;
+    padding: 0;
+    float: left;
+    width: 50%;
+  }
+
+  .right-sidebar .filter-block .check-box {
+    display: block;
+    margin: 0;
+    padding: 0;
+    line-height: 20px;
+    height: 30px;
+  }
+
+  /* content */
+  .content {
+    margin-top: 10px;
+  }
+
+  .content .item {
+    display: block;
+    width: calc(100% - 20px);
+    height: auto;
+    padding: 0;
+    margin: 0 10px;
+    background-color: #fafafa;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .content .item:hover {
+    background-color: #f5f5f5;
+  }
+
+  .content .item .title {
+    font-size: 20px;
+    /*color: #1b1e21;*/
+  }
+
+  .content .item .title:hover {
+    color: #5bbaff;
+  }
+
+  .content .item .author {
+    font-size: 14px;
+    font-weight: bold;
+    color: #4e555b;
+  }
+
+  .content .item .desc {
+    font-size: 14px;
+  }
+
+  .content .item .item-bottom {
+    display: table;
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+  }
+
+  .content .item .item-bottom .invite {
+    display: block;
+    float: left;
+    font-size: 14px;
+    color: #1e7e34;
+  }
+
+  .content .item .item-bottom .invite:hover {
+    color: #5bbaff;
+  }
+
+  .content .item .item-bottom .date {
+    display: block;
+    float: right;
+    font-size: 14px;
+  }
+
+  .link-my-resumes {
+    display: table;
+    width: 100%;
+    height: 50px;
+    text-align: center;
+    font-size: 14px;
+    color: #1b1e21;
+  }
+  .link-my-resumes .link {
+    line-height: 50px;
+    font-size: 14px;
+    color: #1b1e21;
+  }
+  .link-my-resumes .link:hover {
+    text-decoration: underline;
+  }
+</style>
