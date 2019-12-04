@@ -2,9 +2,9 @@ spring:
   profiles:
     active: dev
   datasource:
-    url: jdbc:postgresql://localhost:5432/jobdealer
-    username: root
-    password: root
+    url: jdbc:postgresql://localhost:5432/netcracker
+    username: netcracker
+    password: netcracker
     driver-class-name: org.postgresql.Driver
     initialization-mode: always
     hikari:

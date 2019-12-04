@@ -14,7 +14,6 @@
                 <v-stepper-content step="1">
                     <v-card
                             class="mb-12"
-                            color="grey lighten-1"
                             height="350px"
                     >
                         <div>Login</div>
@@ -66,7 +65,6 @@
                 <v-stepper-content step="2">
                     <v-card
                             class="mb-12"
-                            color="grey lighten-1"
                             height="350px"
                             v-if="account.isCompany"
                     >
@@ -108,7 +106,6 @@
                         <router-link class="sign_in" to="/login">Cancel</router-link>
                     </v-card>
                     <v-card class="mb-12"
-                            color="grey lighten-1"
                             height="650px"
                             v-else>
                         <v-text-field

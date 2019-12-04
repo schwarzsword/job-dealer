@@ -1,7 +1,7 @@
 package edu.netcracker.jobdealer.service.impl;
 
 
-import edu.netcracker.jobdealer.dto.Filters;
+import edu.netcracker.jobdealer.dto.VacancyFilters;
 import edu.netcracker.jobdealer.dto.VacancyDto;
 import edu.netcracker.jobdealer.entity.*;
 import edu.netcracker.jobdealer.exceptions.*;
@@ -64,19 +64,19 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
-    public List<Vacancy> applyConditions(Filters filters) {
-        if (filters.getRequestedSkills().size() == 0
-                && filters.getVacancyName().equals("")
-                && filters.getCompanyName().equals("")
-                && filters.getMoney() < 0
+    public List<Vacancy> applyConditions(VacancyFilters vacancyFilters) {
+        if (vacancyFilters.getRequestedSkills().size() == 0
+                && vacancyFilters.getVacancyName().equals("")
+                && vacancyFilters.getCompanyName().equals("")
+                && vacancyFilters.getMoney() < 0
         )
             throw new BadParameterException("Can't search with empty parameters");
         Set<Vacancy> vacancies = new HashSet<Vacancy>(vacancyRepository.findAll());
         Set<Vacancy> allByMoneyIsGreaterThanEqual = vacancyRepository
-                .findDistinctByMoneyIsGreaterThanEqual(filters.getMoney());
+                .findDistinctByMoneyIsGreaterThanEqual(vacancyFilters.getMoney());
         vacancies.retainAll(allByMoneyIsGreaterThanEqual);
-        if (filters.getRequestedSkills().size() != 0) {
-            List<Skills> requestedSkills = filters.getRequestedSkills().stream()
+        if (vacancyFilters.getRequestedSkills().size() != 0) {
+            List<Skills> requestedSkills = vacancyFilters.getRequestedSkills().stream()
                     .map(e -> skillsRepository.findByName(e)
                             .orElseThrow(SkillNotFoundException::new))
                     .collect(Collectors.toList());
@@ -85,12 +85,12 @@ public class VacancyServiceImpl implements VacancyService {
                 vacancies.retainAll(allByRequestedSkillsContains);
             });
         }
-        if (!filters.getVacancyName().equals("")) {
-            Set<Vacancy> allByNameLike = vacancyRepository.findDistinctByNameContains(filters.getVacancyName());
+        if (!vacancyFilters.getVacancyName().equals("")) {
+            Set<Vacancy> allByNameLike = vacancyRepository.findDistinctByNameContains(vacancyFilters.getVacancyName());
             vacancies.retainAll(allByNameLike);
         }
-        if (!filters.getCompanyName().equals("")) {
-            Company company = companyRepository.findFirstByName(filters.getCompanyName())
+        if (!vacancyFilters.getCompanyName().equals("")) {
+            Company company = companyRepository.findFirstByName(vacancyFilters.getCompanyName())
                     .orElseThrow(CompanyNotFoundException::new);
             Set<Vacancy> allByNameLike = vacancyRepository.findDistinctByOwner(company);
             vacancies.retainAll(allByNameLike);
@@ -100,9 +100,9 @@ public class VacancyServiceImpl implements VacancyService {
 
     @Override
     public List<Vacancy> sortAndReturn(String filtersStr) {
-        Filters filters = jsonService.parseFilters(filtersStr);
-        List<Vacancy> vacancies = applyConditions(filters);
-        switch (filters.getSortBy()) {
+        VacancyFilters vacancyFilters = jsonService.parseFilters(filtersStr);
+        List<Vacancy> vacancies = applyConditions(vacancyFilters);
+        switch (vacancyFilters.getSortBy()) {
             case "Salary":
                 vacancies.sort(Comparator.comparing(Vacancy::getMoney));
                 break;
@@ -112,10 +112,10 @@ public class VacancyServiceImpl implements VacancyService {
             default:
                 vacancies.sort(Comparator.comparing(Vacancy::getName));
         }
-        if (filters.isDescending()) {
+        if (vacancyFilters.isDescending()) {
             Collections.reverse(vacancies);
         }
-        return getPage(vacancies, filters.getOffset(), filters.getLimit());
+        return getPage(vacancies, vacancyFilters.getOffset(), vacancyFilters.getLimit());
 
     }
 
@@ -127,8 +127,8 @@ public class VacancyServiceImpl implements VacancyService {
 
     @Override
     public int getSize(String filtersStr) {
-        Filters filters = jsonService.parseFilters(filtersStr);
-        return applyConditions(filters).size();
+        VacancyFilters vacancyFilters = jsonService.parseFilters(filtersStr);
+        return applyConditions(vacancyFilters).size();
     }
 
 

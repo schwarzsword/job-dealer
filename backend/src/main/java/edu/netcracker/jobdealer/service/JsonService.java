@@ -5,7 +5,7 @@ import edu.netcracker.jobdealer.dto.*;
 public interface JsonService {
     String toJson(Object o);
 
-    Filters parseFilters(String s);
+    VacancyFilters parseFilters(String s);
 
     ResumeDto parseResumeDto(String s);
 
