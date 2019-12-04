@@ -4,25 +4,24 @@
 
 
             <v-text-field
-                    v-model="filters.vacancyName"
+                    v-model="tempFilters.vacancyName"
                     label="Vacancy"/>
             <v-text-field
                     type="number"
-                    maxva
-                    v-model="filters.money"
+                    v-model="tempFilters.money"
                     label="Minimum salary"
                     @change="checkNull"/>
             <v-autocomplete
                     label="Company"
                     :items="companyNames"
-                    v-model="filters.companyName"/>
+                    v-model="tempFilters.companyName"/>
             <v-combobox
                     :items="skills"
                     chips
                     clearable
                     label="Skills"
                     multiple
-                    v-model="filters.requestedSkills"
+                    v-model="tempFilters.requestedSkills"
             >
                 <template v-slot:selection="{ attrs, item, select, selected }">
                     <v-chip
@@ -51,49 +50,22 @@
             <template v-slot:top>
                 <v-toolbar flat color="white">
                     <v-toolbar-title>Vacancies</v-toolbar-title>
-                    <v-divider
-                            class="mx-4"
-                            inset
-                            vertical
-                    ></v-divider>
                     <v-spacer></v-spacer>
                     <div>
                         Sort by
                         <v-select
                                 :items="items"
-                                v-model="savedFilters.sortBy"
+                                v-model="filters.sortBy"
                                 @change="upload"
                         ></v-select>
+                        <v-checkbox v-model="filters.descending" label="descending" @change="upload">descending</v-checkbox>
                     </div>
-                    <v-dialog v-model="dialog" max-width="1100px">
-                        <v-card>
-                            <v-card-title>
-                                <span class="headline">Vacancy</span>
-                            </v-card-title>
-
-                            <v-card-text>
-                                <v-container>
-                                    <div>{{editedItem.name}}</div>
-                                    <div>{{editedItem.description}}</div>
-                                    <div>{{editedItem.money}}</div>
-                                    <div>{{editedItem.ownerName}}</div>
-                                    <div>{{editedItem.requestedSkills}}</div>
-                                </v-container>
-                            </v-card-text>
-
-                            <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                                <v-btn color="blue darken-1" text @click="apply">Apply</v-btn>
-                            </v-card-actions>
-                        </v-card>
-                    </v-dialog>
                 </v-toolbar>
             </template>
             <template v-slot:item.action="{ item }">
                 <v-icon
                         class="mr-2"
-                        @click="editItem(item)"
+                        @click="route(item)"
                 >
                     mdi-file-document-box
                 </v-icon>
@@ -102,8 +74,8 @@
                 Please, specify some data
             </template>
             <template v-slot:footer>
-                <span>{{offset}}-{{offset+limit}}</span>
-                <span>of {{totalSize}}</span>
+                <span>{{filters.offset}}-{{filters.offset+filters.limit}}</span>
+                <span> of {{totalSize}}</span>
                 <v-icon
                         large
                         class="mr-2"
@@ -131,12 +103,10 @@
         name: "vacancies",
         data: function () {
             return {
-                items: ['Vacancy name ascending', 'Vacancy name descending', 'Salary ascending', 'Salary descending', 'Company name ascending', 'Company name descending',],
+                items: ['Vacancy name', 'Salary', 'Company name'],
                 skills: [],
                 companyNames: [],
                 dialog: false,
-                limit: 20,
-                offset: 0,
                 totalSize: 0,
                 vacancies: [],
                 message: "",
@@ -146,26 +116,21 @@
                     {text: 'Company name', value: 'ownerName', sortable: false,},
                     {text: 'Actions', value: 'action', sortable: false},
                 ],
-                editedItem: {
-                    id: '',
-                    name: '',
+                tempFilters: {
                     money: 0,
-                    description: '',
                     requestedSkills: [],
-                    ownerName: '',
+                    vacancyName: "",
+                    companyName: "",
                 },
                 filters: {
+                    limit: 20,
+                    offset: 0,
                     money: 0,
                     requestedSkills: [],
                     vacancyName: "",
                     companyName: "",
-                },
-                savedFilters: {
-                    money: 0,
-                    requestedSkills: [],
-                    vacancyName: "",
-                    companyName: "",
-                    sortBy: "Salary descending",
+                    sortBy: "Salary",
+                    descending: true,
                 },
                 rules: {
                     moneyRules: [
@@ -179,71 +144,46 @@
 
         },
         methods: {
-            close() {
-                this.dialog = false;
-                setTimeout(() => {
-                    this.editedIndex = -1;
-                }, 300)
-            },
-
             checkNull() {
-                this.filters.money === "" ? this.filters.money = 0 : false;
+                this.tempFilters.money = this.tempFilters.money || 0;
+                this.tempFilters.money = Number.parseInt(this.tempFilters.money);
             },
 
-            editItem(item) {
-                this.editedIndex = this.vacancies.indexOf(item);
-                this.editedItem = Object.assign({}, item);
-                this.dialog = true
-            },
-
-            apply() {
-
+            route(item) {
+                this.$router.push('/vacancies/'+item.id)
             },
 
             remove(item) {
-                confirm()
-                this.filters.requestedSkills.splice(this.filters.requestedSkills.indexOf(item), 1);
-                this.filters.requestedSkills = [...this.filters.requestedSkills]
+                this.tempFilters.requestedSkills.splice(this.tempFilters.requestedSkills.indexOf(item), 1);
+                this.tempFilters.requestedSkills = [...this.tempFilters.requestedSkills]
             },
 
             right() {
-                if ((this.offset + this.limit) < this.totalSize) {
-                    this.offset += this.limit;
+                if ((this.filters.offset + this.filters.limit) < this.totalSize) {
+                    this.filters.offset += this.filters.limit;
                     this.upload();
                 } else return false;
             },
 
             left() {
-                if ((this.offset - this.limit) >= 0) {
-                    this.offset -= this.limit;
+                if ((this.filters.offset - this.filters.limit) >= 0) {
+                    this.filters.offset -= this.filters.limit;
                     this.upload();
                 } else return false;
             },
 
             applyFilters() {
-                this.savedFilters.vacancyName = this.filters.vacancyName;
-                this.savedFilters.money = this.filters.money;
-                this.savedFilters.requestedSkills = this.filters.requestedSkills;
-                this.savedFilters.companyName = this.filters.companyName;
+                this.filters.vacancyName = this.tempFilters.vacancyName;
+                this.filters.money = this.tempFilters.money;
+                this.filters.requestedSkills = this.tempFilters.requestedSkills;
+                this.filters.companyName = this.tempFilters.companyName;
                 this.upload();
             },
 
             upload() {
                 let params = new URLSearchParams({
-                    'limit': this.limit,
-                    'offset': this.offset,
-                    "money": this.savedFilters.money,
-                    'sortBy': this.savedFilters.sortBy
+                    'filters': JSON.stringify(this.filters)
                 });
-                if (this.savedFilters.requestedSkills.size !== 0) {
-                    params.append('requestedSkills', this.savedFilters.requestedSkills)
-                }
-                if (this.savedFilters.companyName !== ""){
-                    params.append('companyName', this.savedFilters.companyName)
-                }
-                if (this.savedFilters.vacancyName !== ""){
-                    params.append('vacancyName', this.savedFilters.vacancyName)
-                }
                 urlPort.get('/vacancies/size', {params}).then(resp => {
                     this.totalSize = resp.data;
                     urlPort.get('/vacancies', {params}).then(resp => {
@@ -252,9 +192,7 @@
 
                     })
                 }).catch(err => {
-
                 });
-
             },
 
             uploadSkills() {

@@ -2,10 +2,12 @@ package edu.netcracker.jobdealer.service.impl;
 
 
 import edu.netcracker.jobdealer.entity.*;
+import edu.netcracker.jobdealer.dto.ResumeDto;
 import edu.netcracker.jobdealer.exceptions.*;
 import edu.netcracker.jobdealer.repository.ApplicantRepository;
 import edu.netcracker.jobdealer.repository.ResumeRepository;
 import edu.netcracker.jobdealer.repository.SkillsRepository;
+import edu.netcracker.jobdealer.service.JsonService;
 import edu.netcracker.jobdealer.service.ResumeService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -15,14 +17,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.awt.image.WritableRaster;
-import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static edu.netcracker.jobdealer.util.FileWorker.extractBytes;
 
 
 @Service
@@ -32,42 +31,46 @@ public class ResumeServiceImpl implements ResumeService {
     private final ResumeRepository resumeRepository;
     private final SkillsRepository skillsRepository;
     private final ApplicantRepository applicantRepository;
-
-
-    public ResumeServiceImpl(ResumeRepository resumeRepository,
-                             SkillsRepository skillsRepository,
-                             ApplicantRepository applicantRepository) {
-        this.resumeRepository = resumeRepository;
-        this.skillsRepository = skillsRepository;
-        this.applicantRepository = applicantRepository;
-    }
+    private final JsonService jsonService;
 
     @Value("${upload.path}")
     private String path;
 
+    public ResumeServiceImpl(ResumeRepository resumeRepository,
+                             SkillsRepository skillsRepository,
+                             ApplicantRepository applicantRepository, JsonService jsonService) {
+        this.resumeRepository = resumeRepository;
+        this.skillsRepository = skillsRepository;
+        this.applicantRepository = applicantRepository;
+        this.jsonService = jsonService;
+    }
 
     @Override
-    public Resume add(String resumeName, String firstName,
-                      String lastName, String about,
-                      byte[] fileData, int salary,
-                      UUID applicantId, List<String> skillsString)
-            throws ApplicantNotFoundException, ResumeAlreadyExistsException, IOException {
-        Applicant applicant = applicantRepository.findById(applicantId).orElseThrow(ApplicantNotFoundException::new);
-        List<Skills> skills = skillsString.stream()
+    public Resume add(String resumeDataString) {
+        ResumeDto resumeData = jsonService.parseResumeDto(resumeDataString);
+        Applicant applicant = applicantRepository.findById(resumeData.getApplicantId())
+                .orElseThrow(ApplicantNotFoundException::new);
+        List<Skills> skills = resumeData.getSkills().stream()
                 .map(e -> skillsRepository.findByName(e)
                         .orElseThrow(SkillNotFoundException::new))
                 .collect(Collectors.toList());
-        byte[] n = "null".getBytes();
-        if (Arrays.equals(n, fileData)) {
-            fileData = extractBytes(path);
+        try {
+            if (resumeData.getFileData() == null) {
+                resumeData.setFileData(extractBytes(path));
+            }
+        } catch (IOException e){
+            throw new BadException();
         }
-        if (!resumeRepository.existsByNameAndApplicant(resumeName, applicant)) {
+        if (!resumeRepository.existsByNameAndApplicant(resumeData.getName(), applicant)) {
             Resume resume = resumeRepository.save(
-                    new Resume(resumeName, firstName, lastName, salary, fileData, about, applicant, skills));
+                    new Resume(resumeData.getName(), resumeData.getFirstName(),
+                            resumeData.getLastName(), resumeData.getSalary(),
+                            resumeData.getFileData(), resumeData.getAbout(),
+                            applicant, skills));
             List<Resume> ownedResumes = applicant.getOwnedResumes();
             ownedResumes.add(resume);
             applicant.setOwnedResumes(ownedResumes);
-            applicant.setActiveResume(resume);
+//            applicant.setActiveResume(resume);
             applicantRepository.save(applicant);
             return resume;
         } else throw new ResumeAlreadyExistsException();
@@ -134,29 +137,9 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
 
-//    @Override
-//    public void remove(UUID resumeId) {
-//        Resume resumeToDelete = resumeRepository.findById(resumeId).orElseThrow(
-//                () -> {
-//                    throw new ResourceNotFoundException();
-//                }
-//        );
-//        resumeRepository.delete(resumeToDelete);
-//    }
-
     @Override
     public List<Resume> getAllResumeOfUser(String login) {
         throw new NotImplementedMethodException("Method is not implemented");
-    }
-
-    //todo перенести в класс Util
-    private byte[] extractBytes(String imageName) throws IOException {
-        File imgPath = new File(imageName);
-        BufferedImage bufferedImage = ImageIO.read(imgPath);
-        WritableRaster raster = bufferedImage.getRaster();
-        DataBufferByte data = (DataBufferByte) raster.getDataBuffer();
-
-        return (data.getData());
     }
 
     @Override
@@ -167,50 +150,52 @@ public class ResumeServiceImpl implements ResumeService {
         } else return null;
     }
 
-    @Override
-    public List<Resume> sortAndReturn(String country,
-                                      String city,
-                                      int salaryMin,
-                                      int salaryMax,
-                                      boolean experience,
-                                      boolean driverLicence,
-                                      int offset,
-                                      int limit,
-                                      String sortBy) {
-        List<Resume> vacancies = applyConditions(country, city, salaryMax, experience, driverLicence);
-        switch (sortBy) {
-            case "Vacancy name descending":
-                vacancies.sort(Comparator.comparing(Resume::getName).reversed());
-                break;
-            case "Salary ascending":
-                vacancies.sort(Comparator.comparing(Resume::getSalary));
-                break;
-            case "Salary descending":
-                vacancies.sort(Comparator.comparing(Resume::getSalary).reversed());
-                break;
-            case "City name ascending":
-                vacancies.sort(Comparator.comparing(Resume::getCity));
-                break;
-            case "City name descending":
-                vacancies.sort(Comparator.comparing(Resume::getCity).reversed());
-                break;
-            case "Country name ascending":
-                vacancies.sort(Comparator.comparing(Resume::getCountry));
-                break;
-            case "Country name descending":
-                vacancies.sort(Comparator.comparing(Resume::getCountry).reversed());
-                break;
-            case "Experience":
-                vacancies.sort(Comparator.comparing(Resume::getExperience));
-                break;
-            case "DriverLicence":
-                vacancies.sort(Comparator.comparing(Resume::getDriverLicence));
-                break;
-            default:
-                vacancies.sort(Comparator.comparing(Resume::getName));
-        }
-        return getPage(vacancies, offset, limit);
-    }
+  
+  //todo: переделать актуально
+//     @Override
+//     public List<Resume> sortAndReturn(String country,
+//                                       String city,
+//                                       int salaryMin,
+//                                       int salaryMax,
+//                                       boolean experience,
+//                                       boolean driverLicence,
+//                                       int offset,
+//                                       int limit,
+//                                       String sortBy) {
+//         List<Resume> vacancies = applyConditions(country, city, salaryMax, experience, driverLicence);
+//         switch (sortBy) {
+//             case "Vacancy name descending":
+//                 vacancies.sort(Comparator.comparing(Resume::getName).reversed());
+//                 break;
+//             case "Salary ascending":
+//                 vacancies.sort(Comparator.comparing(Resume::getSalary));
+//                 break;
+//             case "Salary descending":
+//                 vacancies.sort(Comparator.comparing(Resume::getSalary).reversed());
+//                 break;
+//             case "City name ascending":
+//                 vacancies.sort(Comparator.comparing(Resume::getCity));
+//                 break;
+//             case "City name descending":
+//                 vacancies.sort(Comparator.comparing(Resume::getCity).reversed());
+//                 break;
+//             case "Country name ascending":
+//                 vacancies.sort(Comparator.comparing(Resume::getCountry));
+//                 break;
+//             case "Country name descending":
+//                 vacancies.sort(Comparator.comparing(Resume::getCountry).reversed());
+//                 break;
+//             case "Experience":
+//                 vacancies.sort(Comparator.comparing(Resume::getExperience));
+//                 break;
+//             case "DriverLicence":
+//                 vacancies.sort(Comparator.comparing(Resume::getDriverLicence));
+//                 break;
+//             default:
+//                 vacancies.sort(Comparator.comparing(Resume::getName));
+//         }
+//         return getPage(vacancies, offset, limit);
+//     }
 
     @Override
     public List<Resume> applyConditions(String country,

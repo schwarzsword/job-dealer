@@ -11,7 +11,7 @@ public interface MessageRepository extends JpaRepository<Message, UUID> {
     /**
      * Gets a list of messages by sender identifier and receiver identifier.
      *
-     * @param senderId sender identifier
+     * @param senderId   sender identifier
      * @param receiverId receiver identifier
      * @return List of message objects
      */

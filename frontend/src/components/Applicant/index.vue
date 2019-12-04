@@ -1,35 +1,65 @@
 <template>
-    <div>
-        <ol>
-            <li class="account" v-bind:key="resume" v-for="resume in resumes">
-                <p>
-                    Resume name: {{resume.name}}
-                </p>
-                <p>
-                    Vacancy: {{resume.vacancy}}
-                </p>
-                <p>
-                    Salary: {{resume.salary}}
-                </p>
-                <p>
-                    Brief descriprion: {{resume.description}}
-                </p>
-            </li>
-        </ol>
-    </div>
+    <v-app>
+        <div> всякое разное, типа мои резюме, активное резюме, крч разберетесь, кто фронт пилит</div>
+        <v-data-table
+                :headers="headers"
+                :items="responses"
+                sort-by="calories"
+                class="elevation-1"
+        >
+            <template v-slot:top>
+                <v-toolbar flat color="white">
+                    <v-toolbar-title>Responces</v-toolbar-title>
+                </v-toolbar>
+            </template>
+
+            <template v-slot:item.action="{ item }">
+
+                <v-icon
+                        @click="route(item)"
+                >
+                    mdi-file-document-box
+                </v-icon>
+            </template>
+            <template v-slot:no-data>
+                You have no active responses
+            </template>
+        </v-data-table>
+    </v-app>
 </template>
 
 <script>
+
+    import {urlPort} from "../../tool";
+
     export default {
-        name: 'Applicant',
-        data() {
+        name: "applicant",
+        data: function () {
             return {
-                resumes: [
-                    {name: "resume1", vacancy: "vacancy 1", salary: "70000", description: "description1"},
-                    {name: "resume2", vacancy: "vacancy 2", salary: "80000", description: "description2"},
-                    {name: "resume3", vacancy: "vacancy 3", salary: "90000", description: "description3"}
-                ]
+                responses: [],
+                headers: [
+                    {text: 'Vacancy name', value: 'vacancyName',},
+                    {text: 'Status', value: 'status',},
+                    {text: 'Company', value: 'vacancyCompanyName',},
+                    {text: 'Actions', value: 'action', sortable: false},
+                ],
             }
-        }
+        },
+        created() {
+            urlPort.get("/my/responses/")
+                .then(resp => {
+                    this.responses = resp.data
+                });
+        },
+        methods: {
+
+            route(item) {
+                this.$router.push('/vacancies/'+item.vacancyId);
+            },
+        },
     }
 </script>
+
+<style scoped>
+
+</style>

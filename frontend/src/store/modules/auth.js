@@ -19,7 +19,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             commit(AUTH_REQUEST);
             let params = new URLSearchParams();
-            params.append('username', user.username);
+            params.append('username', user.email);
             params.append('password', user.password);
             urlPort.post("/login", params, {withCredentials: true})
                 .then(resp => {

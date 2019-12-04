@@ -1,13 +1,15 @@
 <template>
-    <div id="app">
-        <navigation/>
-        <div class="wrapper">
-            <div class="container">
-                <router-view/>
+    <v-app>
+        <div id="app">
+            <navigation/>
+            <div class="wrapper">
+                <div class="container">
+                    <router-view/>
+                </div>
             </div>
+            <Footer/>
         </div>
-        <Footer/>
-    </div>
+    </v-app>
 </template>
 
 <script>
@@ -33,6 +35,8 @@
 </script>
 
 <style>
+    html {
+    }
     body {
         font-family: "Roboto", sans-serif;
     }
@@ -40,9 +44,8 @@
         color: #3E5F8A;
         text-decoration: none;
     }
-
     a:hover {
-        color: #007bff;
+        color: #5bbaff;
     }
 
     /* wrapper */
@@ -55,7 +58,7 @@
 
     .wrapper .container {
         display: table;
-        margin: 60px auto 0 auto;
+        margin: 20px auto 0 auto;
         width: 1000px;
         height: auto;
         padding: 0;

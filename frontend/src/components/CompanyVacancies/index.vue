@@ -1,6 +1,5 @@
 <template>
     <v-app>
-        <div>какая то инфа про компанию, может кто сделает</div>
         <v-data-table
                 :headers="headers"
                 :items="vacancies"
@@ -28,15 +27,21 @@
                             <v-card-text>
                                 <v-container>
 
-                                    <v-text-field v-model="editedItem.name" label="Vacancy name"
-                                                  :rules="rules.requiredRules"></v-text-field>
+                                    <v-text-field
+                                            v-model="editedItem.name" label="Vacancy name"
+                                            outlined
+                                            :rules="rules.requiredRules"/>
                                     <v-text-field v-model="editedItem.money" label="Salary"
-                                                  :rules="rules.salaryRules"></v-text-field>
-                                    <v-textarea v-model="editedItem.description" :rules="rules.requiredRules"
-                                                label="Vacancy description"></v-textarea>
+                                                  outlined
+                                                  type="number"
+                                                  :rules="rules.salaryRules"/>
+                                    <v-textarea outlined
+                                                v-model="editedItem.description" :rules="rules.requiredRules"
+                                                label="Vacancy description"/>
                                     <v-combobox
                                             :items="skills"
                                             chips
+                                            outlined
                                             clearable
                                             label="Skills"
                                             multiple
@@ -54,8 +59,19 @@
                                             </v-chip>
                                         </template>
                                     </v-combobox>
+                                    <v-checkbox v-model="editedItem.withTask" label="Add test task?"></v-checkbox>
 
-
+                                </v-container>
+                                <v-container v-if="editedItem.withTask">
+                                    <v-text-field
+                                            outlined
+                                            v-model="task.name"
+                                            label="Task name"
+                                            :rules="rules.requiredRules"/>
+                                    <v-textarea outlined
+                                                v-model="task.description"
+                                                :rules="rules.requiredRules"
+                                                label="Task description"/>
                                 </v-container>
                             </v-card-text>
 
@@ -82,6 +98,12 @@
                 >
                     delete
                 </v-icon>
+                <v-icon
+                        class="mr-2"
+                        @click="route(item)"
+                >
+                    mdi-file-document-box
+                </v-icon>
             </template>
             <template v-slot:no-data>
                 You have no active vacancies
@@ -95,7 +117,7 @@
     import {urlPort} from "../../tool";
 
     export default {
-        name: "CompanyProfile",
+        name: "companyVacancies",
         data: function () {
             return {
                 dialog: false,
@@ -104,6 +126,19 @@
                     {text: 'Salary', value: 'money'},
                     {text: 'Actions', value: 'action', sortable: false},
                 ],
+                task: {
+                    id: null,
+                    name: "",
+                    description: "",
+                    vacancyId: null,
+                },
+                defaultTask: {
+                    id: null,
+                    name: "",
+                    description: "",
+                    vacancyId: null
+                },
+
                 vacancies: [],
                 editedIndex: -1,
                 editedItem: {
@@ -112,6 +147,8 @@
                     money: 0,
                     requestedSkills: [],
                     description: '',
+                    ownerName: '',
+                    withTask: false,
                 },
                 defaultItem: {
                     id: null,
@@ -119,6 +156,8 @@
                     money: 0,
                     requestedSkills: [],
                     description: '',
+                    ownerName: '',
+                    withTask: false,
                 },
                 skills: [],
                 rules: {
@@ -151,6 +190,7 @@
             this.initialize()
         },
 
+
         methods: {
             initialize() {
                 urlPort.get("/my/vacancies").then(resp => {
@@ -165,10 +205,20 @@
                     })
             },
 
+            route(item) {
+                this.$router.push('/my/vacancies/' + item.id)
+            },
+
 
             editItem(item) {
                 this.editedIndex = this.vacancies.indexOf(item);
                 this.editedItem = Object.assign({}, item);
+                urlPort.get('/vacancies/' + item.id + '/tasks').then(
+                    resp => {
+                        this.task = resp.data;
+                        this.editedItem.withTask = true;
+                    }
+                );
                 this.dialog = true
             },
 
@@ -183,6 +233,7 @@
                 this.dialog = false;
                 setTimeout(() => {
                     this.editedItem = Object.assign({}, this.defaultItem);
+                    this.task = Object.assign({}, this.defaultTask);
                     this.editedIndex = -1
                 }, 300)
             },
@@ -192,25 +243,29 @@
                     Object.assign(this.vacancies[this.editedIndex], this.editedItem);
                 } else {
                     this.vacancies.push(this.editedItem);
-                    let params = new URLSearchParams();
-                    params.append("id", this.editedItem.id);
-                    params.append("requestedSkills", this.editedItem.requestedSkills);
-                    params.append("money", this.editedItem.money);
-                    params.append("description", this.editedItem.description);
-                    params.append("name", this.editedItem.name);
-                    urlPort.post('/vacancies', params).then(resp => {
-
-                    }).catch(err => {
-
-                    })
                 }
+                let params = new URLSearchParams();
+                params.append("vacancyData", JSON.stringify(this.editedItem));
+                let w = this.editedItem.withTask;
+                let task = this.task;
+                urlPort.post('/vacancies', params).then(resp => {
+                    if (w) {
+                        task.vacancyId = resp.data.id;
+                        let params = new URLSearchParams();
+                        params.append("taskData", JSON.stringify(task));
+                        urlPort.post('/vacancies/' + task.vacancyId + '/tasks', params)
+                    }
+                }).catch(err => {
+
+                });
                 this.close()
             },
             remove(item) {
                 this.editedItem.requestedSkills.splice(this.editedItem.requestedSkills.indexOf(item), 1);
                 this.editedItem.requestedSkills = [...this.editedItem.requestedSkills]
             },
-        },
+        }
+        ,
     }
 
 </script>

@@ -4,10 +4,12 @@ import edu.netcracker.jobdealer.entity.Skills;
 import edu.netcracker.jobdealer.repository.SkillsRepository;
 import edu.netcracker.jobdealer.service.SkillsService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class SkillsServiceImpl implements SkillsService {
 
     private final SkillsRepository skillsRepository;

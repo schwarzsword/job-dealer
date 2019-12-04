@@ -9,7 +9,7 @@
                 :rules="emailRules"
                 label="E-mail"
                 required
-                v-model="username"
+                v-model="email"
         ></v-text-field>
 
         <v-text-field
@@ -44,7 +44,7 @@
             return {
                 show1: false,
                 valid: true,
-                username: '',
+                email: '',
                 password: '',
                 emailRules: [
                     v => !!v || 'E-mail is required',
@@ -54,8 +54,8 @@
         },
         methods: {
             login: function () {
-                const {username, password} = this;
-                this.$store.dispatch(AUTH_REQUEST, {username, password}).then(() => {
+                const {email, password} = this;
+                this.$store.dispatch(AUTH_REQUEST, {email, password}).then(() => {
                     this.$router.push('/')
                 })
             }

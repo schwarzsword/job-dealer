@@ -14,8 +14,13 @@ import Message from "../components/Message"
 import store from '../store'
 import Vacancies from "../components/Vacancies"
 import Resume from "../components/Resume/index";
+import ResumeAdd from "../components/Resume/add";
+import ResumePage from "../components/Resume/page";
 import ResumeForm from "../components/Resume/resumeForm";
-import CompanyProfile from "../components/CompanyProfile"
+import CompanyVacancies from "../components/CompanyVacancies"
+import VacancyPage from "../components/VacancyPage"
+import CompanyVacancyPage from "../components/VacancyPage/CompanyVacancyPage";
+import MessageDialog from "../components/Message/dialog"
 
 Vue.use(Router);
 
@@ -71,13 +76,24 @@ export default new Router({
             component: CompanyPage
         },
         {
-            path: '/company',
-            name: 'companyProfile',
-            component: CompanyProfile
+            path: '/vacancies/:id',
+            name: 'vacancyPage',
+            component: VacancyPage
+        },
+
+        {
+            path: '/my/vacancies/:id',
+            name: 'companyVacancyPage',
+            component: CompanyVacancyPage
         },
         {
-            path: '/applicants',
-            name: 'applicants',
+            path: '/my/vacancies',
+            name: 'companyVacancies',
+            component: CompanyVacancies
+        },
+        {
+            path: '/profile',
+            name: 'applicant',
             component: Applicant
         },
         {
@@ -96,8 +112,20 @@ export default new Router({
             path: '/resumes',
             name: 'resume',
             component: Resume,
-            //beforeEnter: ifAuthenticated
+            //beforeEnter: ifAuthenticated,
             props: (route) => ({ query: route.query.q })
+        },
+        {
+            path: '/resumes/add',
+            name: 'addResume',
+            component: ResumeAdd,
+            beforeEnter: ifAuthenticated,
+            props: (route) => ({ query: route.query.q })
+        },
+        {
+            path: '/resumes/:id',
+            name: 'resumePage',
+            component: ResumePage,
         },
         {
             path: '/resumeForm',
@@ -114,6 +142,11 @@ export default new Router({
             path: '/my/messages',
             name: 'messages',
             component: Message,
+        },
+        {
+            path: '/my/messages/:opponentId',
+            name: 'messageDialog',
+            component: MessageDialog,
         }
     ]
 })
