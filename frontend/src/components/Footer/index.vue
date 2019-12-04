@@ -1,5 +1,5 @@
 <template>
-    <div class="footer">
+    <!--div class="footer">
         <div class="container">
             <router-link class="nav-link" to="/about">About</router-link>
             <router-link class="nav-link" to="/rules">Rules</router-link>
@@ -8,7 +8,7 @@
             <br>
             (c) JobDealer 2020
         </div>
-    </div>
+    </div-->
 </template>
 
 <script>

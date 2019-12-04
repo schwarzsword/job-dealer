@@ -19,9 +19,9 @@ public class Applicant {
     @Column(name = "id")
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "resumeId", referencedColumnName = "id")
-    private Resume activeResume;
+//    @ManyToOne
+//    @JoinColumn(name = "resumeId", referencedColumnName = "id")
+//    private Resume activeResume;
 
     @OneToMany(mappedBy = "applicant")
     private List<Resume> ownedResumes;

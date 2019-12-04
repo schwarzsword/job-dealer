@@ -3,8 +3,8 @@ spring:
     active: dev
   datasource:
     url: jdbc:postgresql://localhost:5432/jobdealer
-    username: postgres
-    password:
+    username: root
+    password: root
     driver-class-name: org.postgresql.Driver
     initialization-mode: always
     hikari:
