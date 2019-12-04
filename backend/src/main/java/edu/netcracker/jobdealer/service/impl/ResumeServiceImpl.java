@@ -68,7 +68,7 @@ public class ResumeServiceImpl implements ResumeService {
             List<Resume> ownedResumes = applicant.getOwnedResumes();
             ownedResumes.add(resume);
             applicant.setOwnedResumes(ownedResumes);
-            applicant.setActiveResume(resume);
+//            applicant.setActiveResume(resume);
             applicantRepository.save(applicant);
             return resume;
         } else throw new ResumeAlreadyExistsException();

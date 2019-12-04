@@ -14,7 +14,14 @@ public interface MessageService {
      * Gets a list of messages by the identifier of the interlocutor
      * and can receive by limit and offset
      *
+<<<<<<< HEAD
      * @param senderId   sender identifier
+=======
+     * @see UUID
+     * @see Message
+     *
+     * @param username sender identifier name
+>>>>>>> 18f0df042c68b6a0762049c8350ff8a0be485482
      * @param receiverId receiver identifier
      * @param offset     offset for message list
      * @param limit      limit for message list
@@ -22,7 +29,7 @@ public interface MessageService {
      * @see UUID
      * @see Message
      */
-    List<Message> getMessages(UUID senderId, UUID receiverId, Integer offset, Integer limit);
+    List<Message> getMessages(String username, UUID receiverId, Integer offset, Integer limit);
 
     /**
      * Gets a message by identifier
