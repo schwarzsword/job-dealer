@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Filters {
+public class VacancyFilters {
     int limit;
     int offset;
     Integer money;

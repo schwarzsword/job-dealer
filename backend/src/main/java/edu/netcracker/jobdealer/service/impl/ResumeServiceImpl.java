@@ -150,52 +150,51 @@ public class ResumeServiceImpl implements ResumeService {
         } else return null;
     }
 
-  
-  //todo: переделать актуально
-//     @Override
-//     public List<Resume> sortAndReturn(String country,
-//                                       String city,
-//                                       int salaryMin,
-//                                       int salaryMax,
-//                                       boolean experience,
-//                                       boolean driverLicence,
-//                                       int offset,
-//                                       int limit,
-//                                       String sortBy) {
-//         List<Resume> vacancies = applyConditions(country, city, salaryMax, experience, driverLicence);
-//         switch (sortBy) {
-//             case "Vacancy name descending":
-//                 vacancies.sort(Comparator.comparing(Resume::getName).reversed());
-//                 break;
-//             case "Salary ascending":
-//                 vacancies.sort(Comparator.comparing(Resume::getSalary));
-//                 break;
-//             case "Salary descending":
-//                 vacancies.sort(Comparator.comparing(Resume::getSalary).reversed());
-//                 break;
-//             case "City name ascending":
-//                 vacancies.sort(Comparator.comparing(Resume::getCity));
-//                 break;
-//             case "City name descending":
-//                 vacancies.sort(Comparator.comparing(Resume::getCity).reversed());
-//                 break;
-//             case "Country name ascending":
-//                 vacancies.sort(Comparator.comparing(Resume::getCountry));
-//                 break;
-//             case "Country name descending":
-//                 vacancies.sort(Comparator.comparing(Resume::getCountry).reversed());
-//                 break;
-//             case "Experience":
-//                 vacancies.sort(Comparator.comparing(Resume::getExperience));
-//                 break;
-//             case "DriverLicence":
-//                 vacancies.sort(Comparator.comparing(Resume::getDriverLicence));
-//                 break;
-//             default:
-//                 vacancies.sort(Comparator.comparing(Resume::getName));
-//         }
-//         return getPage(vacancies, offset, limit);
-//     }
+    //todo : переделать актуально
+     @Override
+     public List<Resume> sortAndReturn(String country,
+                                       String city,
+                                       int salaryMin,
+                                       int salaryMax,
+                                       boolean experience,
+                                       boolean driverLicence,
+                                       int offset,
+                                       int limit,
+                                       String sortBy) {
+         List<Resume> vacancies = applyConditions(country, city, salaryMax, experience, driverLicence);
+         switch (sortBy) {
+             case "Vacancy name descending":
+                 vacancies.sort(Comparator.comparing(Resume::getName).reversed());
+                 break;
+             case "Salary ascending":
+                 vacancies.sort(Comparator.comparing(Resume::getSalary));
+                 break;
+             case "Salary descending":
+                 vacancies.sort(Comparator.comparing(Resume::getSalary).reversed());
+                 break;
+             case "City name ascending":
+                 vacancies.sort(Comparator.comparing(Resume::getCity));
+                 break;
+             case "City name descending":
+                 vacancies.sort(Comparator.comparing(Resume::getCity).reversed());
+                 break;
+             case "Country name ascending":
+                 vacancies.sort(Comparator.comparing(Resume::getCountry));
+                 break;
+             case "Country name descending":
+                 vacancies.sort(Comparator.comparing(Resume::getCountry).reversed());
+                 break;
+             case "Experience":
+                 vacancies.sort(Comparator.comparing(Resume::getExperience));
+                 break;
+             case "DriverLicence":
+                 vacancies.sort(Comparator.comparing(Resume::getDriverLicence));
+                 break;
+             default:
+                 vacancies.sort(Comparator.comparing(Resume::getName));
+         }
+         return getPage(vacancies, offset, limit);
+     }
 
     @Override
     public List<Resume> applyConditions(String country,

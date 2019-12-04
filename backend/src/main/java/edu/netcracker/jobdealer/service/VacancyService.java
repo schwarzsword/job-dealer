@@ -1,13 +1,9 @@
 package edu.netcracker.jobdealer.service;
 
 
-import edu.netcracker.jobdealer.dto.Filters;
-import edu.netcracker.jobdealer.entity.Applicant;
+import edu.netcracker.jobdealer.dto.VacancyFilters;
 import edu.netcracker.jobdealer.entity.Company;
-import edu.netcracker.jobdealer.entity.Response;
 import edu.netcracker.jobdealer.entity.Vacancy;
-import edu.netcracker.jobdealer.exceptions.BadParameterException;
-import edu.netcracker.jobdealer.exceptions.SkillNotFoundException;
 
 import java.util.List;
 import java.util.UUID;
@@ -27,7 +23,7 @@ public interface VacancyService {
 
     List<Vacancy> getPage(List<Vacancy> inp, int offset, int limit);
 
-    List<Vacancy> applyConditions(Filters filters);
+    List<Vacancy> applyConditions(VacancyFilters vacancyFilters);
 
     int getSize(String filters);
 

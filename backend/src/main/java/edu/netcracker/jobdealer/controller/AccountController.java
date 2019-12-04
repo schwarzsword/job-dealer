@@ -40,7 +40,7 @@ public class AccountController {
         }
     }
 
-    @PostMapping
+    @PostMapping(value = "/accounts")
     public ResponseEntity signUpAccount(@RequestParam("email") String email,
                                         @RequestParam("password") String password,
                                         @RequestParam("isCompany") boolean isCompany) {

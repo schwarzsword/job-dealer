@@ -15,8 +15,6 @@ import edu.netcracker.jobdealer.exceptions.AccountNotFoundException;
 import java.io.IOException;
 
 
-//todo сделать
-
 @RestControllerAdvice
 public class ControllerAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = {UsernameNotFoundException.class})

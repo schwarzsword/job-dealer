@@ -43,7 +43,7 @@
       </div>
       <div class="menu" v-if="isAuthenticated">
         <router-link style="float: right" to="/my/messages">
-          <v-icon large color="black" style="font-size: 32px">mail</v-icon>
+          <v-icon large color="black" style="font-size: 32px">mdi-email</v-icon>
           <v-badge class="m-count" color="green">
             <span slot="badge">2</span>
           </v-badge>
