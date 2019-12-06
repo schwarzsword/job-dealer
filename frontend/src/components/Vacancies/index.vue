@@ -50,14 +50,14 @@
             <template v-slot:top>
                 <v-toolbar flat color="white">
                     <v-toolbar-title>Vacancies</v-toolbar-title>
-                    <v-spacer></v-spacer>
+                    <v-spacer/>
                     <div>
                         Sort by
                         <v-select
                                 :items="items"
                                 v-model="filters.sortBy"
                                 @change="upload"
-                        ></v-select>
+                        />
                         <v-checkbox v-model="filters.descending" label="descending" @change="upload">descending</v-checkbox>
                     </div>
                 </v-toolbar>

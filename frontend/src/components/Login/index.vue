@@ -10,7 +10,7 @@
                 label="E-mail"
                 required
                 v-model="email"
-        ></v-text-field>
+        />
 
         <v-text-field
                 :type="show1 ? 'text' : 'password'"
@@ -18,7 +18,7 @@
                 label="Password"
                 required
                 v-model="password"
-        ></v-text-field>
+        />
 
         <v-btn
                 :disabled="!valid"

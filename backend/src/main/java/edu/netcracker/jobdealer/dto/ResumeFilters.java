@@ -9,13 +9,12 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class VacancyFilters {
+public class ResumeFilters {
     private int limit;
     private int offset;
-    private Integer money;
-    private List<String> requestedSkills;
-    private String vacancyName;
-    private String companyName;
+    private Integer minSalary;
+    private Integer maxSalary;
+    private List<String> skills;
     private String sortBy;
     private boolean descending;
 }

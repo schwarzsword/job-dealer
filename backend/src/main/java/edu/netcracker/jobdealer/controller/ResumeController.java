@@ -1,9 +1,8 @@
 package edu.netcracker.jobdealer.controller;
 
+import edu.netcracker.jobdealer.dto.ResponseDto;
 import edu.netcracker.jobdealer.dto.ResumeDto;
 import edu.netcracker.jobdealer.entity.Resume;
-import edu.netcracker.jobdealer.entity.Skills;
-import edu.netcracker.jobdealer.exceptions.*;
 import edu.netcracker.jobdealer.service.AccountService;
 import edu.netcracker.jobdealer.service.ApplicantService;
 import edu.netcracker.jobdealer.service.ResumeService;
@@ -11,13 +10,10 @@ import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -42,79 +38,47 @@ public class ResumeController {
         this.mapper = mapper;
     }
 
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping(value = "/my/resumes/")
-    public ResponseEntity<?> getAllResumes(@AuthenticationPrincipal User user) {
-        //todo сделать хорошо, пофиксить урлы, подумать о безопасности, использовать билдер
-        List<Resume> userResumes = resumeService.getAllResumeOfUser(user.getUsername());
-        List<ResumeDto> dtos = userResumes
-                .stream()
-                .map(e -> mapper.map(e, ResumeDto.class))
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(dtos);
-    }
-//todo: implement
-//    @PreAuthorize("isAuthenticated()")
-//    @DeleteMapping(value = "/my/resumes/{resumeId}")
-//    public ResponseEntity<?> removeResume(@PathVariable("resumeId") @Valid UUID resumeId) {
-//        try {
-//            resumeService.remove(resumeId);
-//            return ResponseEntity.noContent().build();
-//        } catch (ApplicantNotFoundException | NoPermissionException ex) {
-//            return ResponseEntity.status(401).body("You have no permission to delete resumes");
-//        }
-//    }
-
-    @Secured("ROLE_USER")
-    @PatchMapping(value = "/my/resumes/{resumeId}")
-    public ResponseEntity<?> updateResume(@RequestParam UUID userId,
-                                          @PathVariable @Valid UUID resumeId,
-                                          @RequestParam String resumeName,
-                                          @RequestParam String firstName,
-                                          @RequestParam String lastName,
-                                          @RequestParam String about,
-                                          @RequestParam String avatarUrl,
-                                          @RequestParam int salary,
-                                          @RequestParam List<Skills> skills,
-                                          @RequestBody Resume resume) {
-            Resume updatedResume = resumeService.update(resumeId, resumeName, firstName, lastName, about, avatarUrl, salary, skills);
-            return ResponseEntity.ok(updatedResume);
-    }
-
     @Secured("ROLE_USER")
     @PostMapping(value = "/my/resumes")
     public ResponseEntity<?> createResume(@RequestParam String resumeData) {
-        try {
-            Resume add = resumeService.add(resumeData);
-            return ResponseEntity.ok(mapper.map(add, ResumeDto.class));
-        } catch (ResumeAlreadyExistsException | IOException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (ApplicantNotFoundException e) {
-            return ResponseEntity.status(404).body(e.getMessage());
-        }
+        Resume add = resumeService.addOrUpdate(resumeData);
+        return ResponseEntity.ok(mapper.map(add, ResumeDto.class));
     }
 
-    @GetMapping(value = "/resumes")
-    public ResponseEntity<?> getResumes(@RequestParam int offset,
-                                        @RequestParam int limit,
-                                        @RequestParam(required = false) String sortBy,
-                                        @RequestParam(required = false) String country,
-                                        @RequestParam(required = false) String city,
-                                        @RequestParam(required = false) int salaryMin,
-                                        @RequestParam(required = false) int salaryMax,
-                                        @RequestParam(required = false) boolean experience,
-                                        @RequestParam(required = false) boolean driverLicence) {
-        try {
-            List<Resume> resumes = resumeService.sortAndReturn(country, city, salaryMin, salaryMax, experience, driverLicence, offset, limit, sortBy);
-            if (resumes != null) {
-                return ResponseEntity.ok(resumes.stream()
-                        .map(e -> mapper.map(e, ResumeDto.class))
-                        .collect(Collectors.toList()));
-            } else return ResponseEntity.noContent().build();
-        } catch (ResumeNotFoundException e) {
-            return ResponseEntity.status(404).body(e.getMessage());
-        } catch (BadParameterException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
-        }
+    @Secured("ROLE_USER")
+    @GetMapping(value = "/my/resumes")
+    public ResponseEntity<?> getOwnedResumes(@AuthenticationPrincipal User user) {
+        List<Resume> ownedResumes = resumeService.getOwnedResumes(user.getUsername());
+        return ResponseEntity.ok(ownedResumes.stream()
+                .map(e -> mapper.map(e, ResponseDto.class)));
     }
+
+    @Secured("ROLE_USER")
+    @DeleteMapping(value = "/my/resumes/{id}")
+    public ResponseEntity<?> deleteResume(@PathVariable UUID id, @AuthenticationPrincipal User user) {
+        resumeService.deleteResume(id, user.getUsername());
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping(value = "/resumes/{id}")
+    public ResponseEntity<?> getResume(@PathVariable UUID id) {
+        Resume resume = resumeService.getResume(id);
+        return ResponseEntity.ok(mapper.map(resume, ResumeDto.class));
+    }
+
+    @Secured("ROLE_COMPANY")
+    @GetMapping(value = "/resumes")
+    public ResponseEntity<?> getVacancies(@RequestParam String filters) {
+        List<Resume> vacancies = resumeService.sortAndReturn(filters);
+        return ResponseEntity.ok(vacancies.stream()
+                .map(e -> mapper.map(e, ResumeDto.class))
+                .collect(Collectors.toList()));
+    }
+
+    @Secured("ROLE_COMPANY")
+    @GetMapping(value = "/resumes/size")
+    public ResponseEntity<?> getSize(@RequestParam String filters) {
+        return ResponseEntity.ok(resumeService.getSize(filters));
+    }
+
 }

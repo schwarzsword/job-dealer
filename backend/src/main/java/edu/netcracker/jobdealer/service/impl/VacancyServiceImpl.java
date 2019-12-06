@@ -1,9 +1,11 @@
 package edu.netcracker.jobdealer.service.impl;
 
 
-import edu.netcracker.jobdealer.dto.VacancyFilters;
 import edu.netcracker.jobdealer.dto.VacancyDto;
-import edu.netcracker.jobdealer.entity.*;
+import edu.netcracker.jobdealer.dto.VacancyFilters;
+import edu.netcracker.jobdealer.entity.Company;
+import edu.netcracker.jobdealer.entity.Skills;
+import edu.netcracker.jobdealer.entity.Vacancy;
 import edu.netcracker.jobdealer.exceptions.*;
 import edu.netcracker.jobdealer.repository.*;
 import edu.netcracker.jobdealer.service.JsonService;
@@ -60,7 +62,7 @@ public class VacancyServiceImpl implements VacancyService {
         int size = vacancies.size();
         if (size > offset) {
             return vacancies.subList(offset, limit > (size - offset) ? size : (limit + offset));
-        } else return null;
+        } else return Collections.emptyList();
     }
 
     @Override
@@ -95,12 +97,12 @@ public class VacancyServiceImpl implements VacancyService {
             Set<Vacancy> allByNameLike = vacancyRepository.findDistinctByOwner(company);
             vacancies.retainAll(allByNameLike);
         }
-        return new ArrayList<Vacancy>(vacancies);
+        return new ArrayList<>(vacancies);
     }
 
     @Override
     public List<Vacancy> sortAndReturn(String filtersStr) {
-        VacancyFilters vacancyFilters = jsonService.parseFilters(filtersStr);
+        VacancyFilters vacancyFilters = jsonService.parseVacancyFilters(filtersStr);
         List<Vacancy> vacancies = applyConditions(vacancyFilters);
         switch (vacancyFilters.getSortBy()) {
             case "Salary":
@@ -127,7 +129,7 @@ public class VacancyServiceImpl implements VacancyService {
 
     @Override
     public int getSize(String filtersStr) {
-        VacancyFilters vacancyFilters = jsonService.parseFilters(filtersStr);
+        VacancyFilters vacancyFilters = jsonService.parseVacancyFilters(filtersStr);
         return applyConditions(vacancyFilters).size();
     }
 
@@ -141,18 +143,12 @@ public class VacancyServiceImpl implements VacancyService {
                         .orElseGet(() -> skillsRepository
                                 .save(new Skills(e))))
                 .collect(Collectors.toList());
-        if (vacancyDto.getId() == null) {
-            return vacancyRepository.save(new Vacancy(requestedSkills, vacancyDto.getName(), vacancyDto.getDescription(), vacancyDto.getMoney(), vacancyDto.isWithTask(), company));
-        } else {
-            Vacancy vacancy = vacancyRepository.findById(vacancyDto.getId()).orElseThrow(VacancyNotFoundException::new);
-            vacancy.setName(vacancyDto.getName());
-            vacancy.setOwner(company);
-            vacancy.setDescription(vacancyDto.getDescription());
-            vacancy.setMoney(vacancyDto.getMoney());
-            vacancy.setWithTask(vacancyDto.isWithTask());
-            vacancy.setRequestedSkills(requestedSkills);
-            return vacancyRepository.save(vacancy);
+        Vacancy vacancy = new Vacancy(requestedSkills, vacancyDto.getName(), vacancyDto.getDescription(), vacancyDto.getMoney(), vacancyDto.isWithTask(), company);
+        if (vacancyDto.getId() != null) {
+            vacancy.setId(vacancyDto.getId());
         }
+        return vacancyRepository.save(vacancy);
+
     }
 
     @Override

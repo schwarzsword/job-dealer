@@ -1,6 +1,5 @@
 package edu.netcracker.jobdealer.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.dozer.Mapping;

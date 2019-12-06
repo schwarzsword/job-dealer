@@ -88,15 +88,15 @@
           Salary:
           <div style="display: table; margin-bottom: 20px;">
             <v-text-field class="salary-input" @change="handleSalary" v-model="price[0]" hide-details single-line
-                          type="number"></v-text-field>
+                          type="number"/>
             <v-text-field class="salary-input" @change="handleSalary" v-model="price[1]" hide-details single-line
-                          type="number"></v-text-field>
+                          type="number"/>
           </div>
-          <v-range-slider v-model="price" @change="handleSalary" :min="0" :max="5000" :step="100"></v-range-slider>
-          <v-checkbox class="check-box" v-model="experience" @change="handleExperience" label="Experience"></v-checkbox>
+          <v-range-slider v-model="price" @change="handleSalary" :min="0" :max="5000" :step="100"/>
+          <v-checkbox class="check-box" v-model="experience" @change="handleExperience" label="Experience"/>
           <v-checkbox class="check-box" v-model="driverLicense" @change="handleDriverLicense"
-                      label="Driver license"></v-checkbox>
-          <v-switch v-model="saveFilter" @change="handleSaveFilter" label="Save filter"></v-switch>
+                      label="Driver license"/>
+          <v-switch v-model="saveFilter" @change="handleSaveFilter" label="Save filter"/>
         </v-card-text>
       </v-card>
     </div>

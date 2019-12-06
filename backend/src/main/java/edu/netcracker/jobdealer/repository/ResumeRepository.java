@@ -3,6 +3,7 @@ package edu.netcracker.jobdealer.repository;
 import edu.netcracker.jobdealer.entity.Account;
 import edu.netcracker.jobdealer.entity.Applicant;
 import edu.netcracker.jobdealer.entity.Resume;
+import edu.netcracker.jobdealer.entity.Skills;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -18,7 +19,7 @@ public interface ResumeRepository extends JpaRepository<Resume, UUID> {
 
     List<Resume> findAllBySalary(int money);
 
-    List<Resume> findAllBySalaryIsLessThanEqual(int money);
+    Set<Resume> findAllBySalaryIsLessThanEqual(int money);
 
     Optional<Resume> findByNameAndApplicantAccountEmail(String resumeName, String email);
 
@@ -30,14 +31,6 @@ public interface ResumeRepository extends JpaRepository<Resume, UUID> {
 
     List<Resume> findAllByApplicantAccountEmail(String email);
 
-    Set<Resume> findByCountry(String country);
-
-    Set<Resume> findByCity(String city);
-
-    Set<Resume> findByExperience(Boolean experience);
-
-    Set<Resume> findByDriverLicence(Boolean driverLicence);
-
     void deleteAllByApplicant(Applicant applicant);
 
     void deleteAllByApplicantAccount(Account account);
@@ -47,4 +40,7 @@ public interface ResumeRepository extends JpaRepository<Resume, UUID> {
     boolean existsByNameAndApplicantId(String name, UUID applicantId);
 
     boolean existsByNameAndApplicant(String name, Applicant applicant);
+
+    Set<Resume> findDistinctBySkillsContains(Skills skills);
+
 }

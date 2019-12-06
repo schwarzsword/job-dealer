@@ -4,7 +4,7 @@
             <v-stepper-header>
                 <v-stepper-step :complete="e1 > 1" step="1">Step 1</v-stepper-step>
 
-                <v-divider></v-divider>
+                <v-divider/>
 
                 <v-stepper-step :complete="e1 > 2" step="2">Step 2</v-stepper-step>
 
@@ -23,7 +23,7 @@
                                 label="E-mail"
                                 required
                                 v-model="account.email"
-                        ></v-text-field>
+                        />
 
                         <div class="error--text" v-if="errors.step1Error">{{errors.step1Error}}</div>
 
@@ -33,7 +33,7 @@
                                 label="Password"
                                 required
                                 v-model="account.password"
-                        ></v-text-field>
+                        />
 
                         <v-text-field
                                 :type="show1 ? 'text' : 'password'"
@@ -42,12 +42,12 @@
                                 required
                                 v-model="account.password_confirmation"
                                 :rules="rules.confirmPassRules"
-                        ></v-text-field>
+                        />
 
                         <v-checkbox
                                 :label="'Do you want a company account?'"
                                 v-model="account.isCompany"
-                        ></v-checkbox>
+                        />
 
                     </v-card>
 
