@@ -3,7 +3,7 @@
     <div class="container">
       <div class="logo">
         <div class="link">
-          <router-link to="/"></router-link>
+          <router-link to="/"/>
         </div>
       </div>
       <div class="find">

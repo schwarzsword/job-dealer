@@ -27,7 +27,7 @@ public class Company {
 
     @Column(name = "description")
     private String description;
-@Lob
+    @Lob
     @Column(name = "fileData")
     private String fileData;
 

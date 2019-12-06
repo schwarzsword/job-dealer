@@ -23,11 +23,22 @@ public class JsonServiceImpl implements JsonService {
     }
 
     @Override
-    public VacancyFilters parseFilters(String s) {
+    public VacancyFilters parseVacancyFilters(String s) {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new Hibernate5Module());
         try {
             return objectMapper.readValue(s, VacancyFilters.class);
+        } catch (JsonProcessingException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public ResumeFilters parseResumeFilters(String s) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new Hibernate5Module());
+        try {
+            return objectMapper.readValue(s, ResumeFilters.class);
         } catch (JsonProcessingException e) {
             return null;
         }

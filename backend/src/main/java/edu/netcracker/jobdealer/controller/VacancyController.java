@@ -1,11 +1,7 @@
 package edu.netcracker.jobdealer.controller;
 
-import edu.netcracker.jobdealer.dto.ResponseDto;
 import edu.netcracker.jobdealer.dto.VacancyDto;
-import edu.netcracker.jobdealer.entity.Response;
 import edu.netcracker.jobdealer.entity.Vacancy;
-import edu.netcracker.jobdealer.exceptions.*;
-import edu.netcracker.jobdealer.service.ResponseService;
 import edu.netcracker.jobdealer.service.VacancyService;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,27 +32,17 @@ public class VacancyController {
     @PostMapping(value = "/vacancies")
     public ResponseEntity<?> createOrUpdateVacancy(@RequestParam String vacancyData,
                                                    @AuthenticationPrincipal User user) {
-        try {
-            Vacancy vacancy = vacancyService.addOrUpdateVacancy(vacancyData, user.getUsername());
-            return ResponseEntity.ok(
-                    mapper.map(vacancy, VacancyDto.class));
-        } catch (CompanyNotFoundException ex) {
-            return ResponseEntity.status(401).body("You have no permission to create vacancies");
-        }
+        Vacancy vacancy = vacancyService.addOrUpdateVacancy(vacancyData, user.getUsername());
+        return ResponseEntity.ok(
+                mapper.map(vacancy, VacancyDto.class));
     }
 
     @Secured("ROLE_COMPANY")
     @DeleteMapping(value = "/vacancies/{vacancyId}")
     public ResponseEntity<?> deleteVacancy(@PathVariable("vacancyId") UUID vacancyId,
                                            @AuthenticationPrincipal User user) {
-        try {
-            vacancyService.remove(vacancyId, user.getUsername());
-            return ResponseEntity.noContent().build();
-        } catch (VacancyNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        } catch (NoPermissionException e) {
-            return ResponseEntity.status(401).body(e.getMessage());
-        }
+        vacancyService.remove(vacancyId, user.getUsername());
+        return ResponseEntity.noContent().build();
     }
 
 
@@ -71,28 +57,17 @@ public class VacancyController {
     }
 
 
-
     @GetMapping(value = "/vacancies")
     public ResponseEntity<?> getVacancies(@RequestParam String filters) {
-        try {
-            List<Vacancy> vacancies = vacancyService.sortAndReturn(filters);
-            return ResponseEntity.ok(vacancies.stream()
-                    .map(e -> mapper.map(e, VacancyDto.class))
-                    .collect(Collectors.toList()));
-        } catch (SkillNotFoundException e) {
-            return ResponseEntity.status(404).body(e.getMessage());
-        } catch (BadParameterException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
-        }
+        List<Vacancy> vacancies = vacancyService.sortAndReturn(filters);
+        return ResponseEntity.ok(vacancies.stream()
+                .map(e -> mapper.map(e, VacancyDto.class))
+                .collect(Collectors.toList()));
     }
 
     @GetMapping(value = "/vacancies/size")
     public ResponseEntity<?> getSize(@RequestParam String filters) {
-        try {
-            return ResponseEntity.ok(vacancyService.getSize(filters));
-        } catch (BadParameterException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        return ResponseEntity.ok(vacancyService.getSize(filters));
     }
 
     @GetMapping(value = "/vacancies/{id}")

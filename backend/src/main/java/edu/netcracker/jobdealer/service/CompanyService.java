@@ -2,10 +2,7 @@ package edu.netcracker.jobdealer.service;
 
 import edu.netcracker.jobdealer.entity.Account;
 import edu.netcracker.jobdealer.entity.Company;
-import edu.netcracker.jobdealer.exceptions.AccountByIdNotFoundException;
-import edu.netcracker.jobdealer.exceptions.AccountIdExistsException;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
