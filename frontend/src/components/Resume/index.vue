@@ -12,74 +12,17 @@
         </router-link>
       </div>
     </div>
+
     <div class="content">
-
-      <template v-for="(item, index) in items">
-
+      <div v-for="item in this.vacancies">
         <ResumeItem
             :id="`${item.id}`"
-            :title="`${item.title}`"
-            :author="`${item.author}`"
-            :subtitle="`${item.subtitle}`"/>
-      </template>
-
-      <div class="item">
-        <v-card-text>
-          <router-link class="title" to="/resumes/{id}">Java Developer</router-link>
-          <div class="author">Ivan Ivanov</div>
-          <div class="desc text--primary">
-            Direct injecting of css code, it can be solved. Inspect the code on your browser and find out...
-          </div>
-          <div class="item-bottom">
-            <router-link class="invite" to="">Send invite</router-link>
-            <div class="date">25 december</div>
-          </div>
-        </v-card-text>
+            :title="`${item.name}`"
+            :author="`${item.firstName} ${item.lastName}`"
+            :subtitle="`${item.salary}`"/>
       </div>
-
-      <div class="item">
-        <v-card-text>
-          <router-link class="title" to="/resumes/{id}">Java Developer</router-link>
-          <div class="author">Ivan Ivanov</div>
-          <div class="desc text--primary">
-            Direct injecting of css code, it can be solved. Inspect the code on your browser and find out...
-          </div>
-          <div class="item-bottom">
-            <router-link class="invite" to="">Send invite</router-link>
-            <div class="date">25 december</div>
-          </div>
-        </v-card-text>
-      </div>
-
-      <div class="item">
-        <v-card-text>
-          <router-link class="title" to="/resumes/{id}">Java Developer</router-link>
-          <div class="author">Ivan Ivanov</div>
-          <div class="desc text--primary">
-            Direct injecting of css code, it can be solved. Inspect the code on your browser and find out...
-          </div>
-          <div class="item-bottom">
-            <router-link class="invite" to="">Send invite</router-link>
-            <div class="date">25 december</div>
-          </div>
-        </v-card-text>
-      </div>
-
-      <div class="item">
-        <v-card-text>
-          <router-link class="title" to="/resumes/{id}">Java Developer</router-link>
-          <div class="author">Ivan Ivanov</div>
-          <div class="desc text--primary">
-            Direct injecting of css code, it can be solved. Inspect the code on your browser and find out...
-          </div>
-          <div class="item-bottom">
-            <router-link class="invite" to="">Send invite</router-link>
-            <div class="date">25 december</div>
-          </div>
-        </v-card-text>
-      </div>
-
     </div>
+
     <div class="right-sidebar">
       <v-card class="filter-block" outlined>
         <v-card-text>
@@ -105,6 +48,8 @@
 
 <script>
   import ResumeItem from "./item";
+  import {urlPort} from "../../tool";
+
   export default {
     name: 'Resume',
     components: {ResumeItem},
@@ -121,6 +66,18 @@
         experience: false,
         driverLicense: false,
 
+        totalSize: 0,
+        vacancies: [],
+
+        filters: {
+          limit: 20,
+          offset: 0,
+          minSalary: 0,
+          maxSalary: 500,
+          skills: [],
+          sortBy: "name",
+          descending: true,
+        },
         items: [
           {
             id: 1,
@@ -198,6 +155,22 @@
       const app = document.createElement('div');
       app.setAttribute('data-app', true);
       document.body.append(app);
+
+      let params = new URLSearchParams({
+        'filters': JSON.stringify(this.filters)
+      });
+      urlPort.get('/resumes/size', {params}).then(resp => {
+        this.totalSize = resp.data;
+        urlPort.get('/resumes', {params}).then(resp => {
+          this.vacancies = resp.data;
+          console.log(this.vacancies)
+        }).catch(err => {
+          console.log(err)
+        })
+      }).catch(err => {
+        console.log(err)  // тут status: 304
+      });
+
 
       //console.log(this.$store.state.profile);
     },
@@ -299,11 +272,13 @@
     font-size: 14px;
     color: #1b1e21;
   }
+
   .link-my-resumes .link {
     line-height: 50px;
     font-size: 14px;
     color: #1b1e21;
   }
+
   .link-my-resumes .link:hover {
     text-decoration: underline;
   }
