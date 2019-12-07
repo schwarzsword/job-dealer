@@ -3,7 +3,7 @@
     <div class="container">
       <div class="logo">
         <div class="link">
-          <router-link to="/"/>
+          <router-link to="/"></router-link>
         </div>
       </div>
       <div class="find">
@@ -27,31 +27,40 @@
           </div>
         </div>
       </div>
+
+      <div class="menu">
+        <router-link to="/vacancies" title="Vacancies">
+          <v-icon class="m-icon i-vacancy"></v-icon>
+        </router-link>
+        <router-link to="/resumes" title="Resumes">
+          <v-icon class="m-icon i-resume"></v-icon>
+        </router-link>
+      </div>
+
+      <!--@click="logout"-->
       <div class="user">
-        <div @click="logout" v-if="isAuthenticated">
-<!--          <v-avatar :size="avatarSize" color="grey lighten-4">-->
-<!--            <img src="/img/no-avatar.png" alt="avatar">-->
-<!--          </v-avatar>-->
+        <div @click="logout" id="profile" class="profile" v-if="isAuthenticated">
           <v-avatar :size="avatarSize" color="teal">
             <span class="white--text headline">K</span>
           </v-avatar>
-          <!--router-link class="sign_in" to="/logout">Logout</router-link-->
+          <div id="pm" class="profile-menu">
+          </div>
         </div>
         <div v-if="!isAuthenticated && !authLoading">
           <router-link class="sign_in" to="/login">Sign in</router-link>
         </div>
       </div>
-      <div class="menu" v-if="isAuthenticated">
+
+      <div class="notifications" v-if="isAuthenticated">
         <router-link style="float: right" to="/my/messages">
           <v-icon large color="black" style="font-size: 32px">mdi-email</v-icon>
           <v-badge class="m-count" color="green">
             <span slot="badge">2</span>
           </v-badge>
         </router-link>
-<!--        <router-link id="messages" class="messages" to="/my/messages">-->
-<!--          <div class="count">2</div>-->
-<!--        </router-link>-->
       </div>
+
+      <!--router-link class="sign_in" to="/logout">Logout</router-link-->
     </div>
   </div>
 </template>
@@ -121,6 +130,15 @@
         let find = document.querySelector('#find');
         let histories = document.querySelector('#histories');
         let search_form = document.querySelector('#search-form');
+        let profile = document.querySelector('#profile');
+        let pm = document.querySelector('#pm');
+
+        profile.onmouseover = function () {
+          if (pm.style.display === 'none') {
+            pm.style.display = 'block';
+          }
+          console.log(1);
+        };
 
         find.onmouseover = function () {
           addEventListener('click', function () {
@@ -234,12 +252,43 @@
     text-decoration: none;
   }
 
+  /* notifications */
+  .header .container .notifications {
+    display: block;
+    min-width: 100px;
+    height: inherit;
+    float: left;
+  }
+
   /* menu */
   .header .container .menu {
     display: block;
     min-width: 100px;
     height: inherit;
-    float: right;
+    float: left;
+  }
+
+  .header .container .menu .m-icon {
+    display: block;
+    width: 60px;
+    height: 60px;
+    float: left;
+    line-height: 60px;
+    text-align: center;
+    font-size: 28px;
+  }
+  .header .container .menu .m-icon:hover {
+    background-color: #f5f5f5;
+  }
+
+  .header .container .menu .i-vacancy {
+    background: url("/img/briefcase-search.svg") no-repeat center;
+    background-size: 28px;
+  }
+
+  .header .container .menu .i-resume {
+    background: url("/img/file-account.svg") no-repeat center;
+    background-size: 28px;
   }
 
   .header .container .menu ul {
@@ -277,7 +326,7 @@
     color: #000;
   }
 
-  .header .container .menu .m-count {
+  .header .container .notifications .m-count {
     left: -15px;
     top: -15px;
   }
@@ -486,6 +535,21 @@
     color: rgba(0, 0, 0, 0.9);
     background-color: rgba(0, 0, 0, 0.03);
     border: 2px rgba(0, 0, 0, 0.2) solid;
+  }
+
+  .header .container .user .profile {
+    display: table;
+  }
+
+  .header .container .user .profile .profile-menu {
+    display: none;
+    position: absolute;
+    width: 100px;
+    min-height: 30px;
+    background-color: #fff;
+    box-shadow: 0 0 5px 1px rgba(0, 0, 0, .1);
+    margin: -25px 0 0 -50px;
+    border-radius: 3px;
   }
 
 </style>
