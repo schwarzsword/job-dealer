@@ -2,10 +2,6 @@ package edu.netcracker.jobdealer.controller;
 
 import edu.netcracker.jobdealer.dto.ReviewDto;
 import edu.netcracker.jobdealer.entity.Review;
-import edu.netcracker.jobdealer.exceptions.DoubleVotingException;
-import edu.netcracker.jobdealer.exceptions.NoPermissionException;
-import edu.netcracker.jobdealer.exceptions.NotFoundException;
-import edu.netcracker.jobdealer.exceptions.ReviewNotFountException;
 import edu.netcracker.jobdealer.service.ReviewService;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,11 +42,7 @@ public class ReviewController {
     public ResponseEntity<?> sendReview(@PathVariable("id") UUID receiver,
                                         @RequestParam String text,
                                         @AuthenticationPrincipal User user) {
-        try {
-            reviewService.sendReview(text, user.getUsername(), receiver);
-        } catch (NotFoundException ex) {
-            return ResponseEntity.status(404).body(ex.getMessage());
-        }
+        reviewService.sendReview(text, user.getUsername(), receiver);
         return ResponseEntity.noContent().build();
     }
 
@@ -58,51 +50,31 @@ public class ReviewController {
     @DeleteMapping(value = "/reviews/{reviewId}/rating/increase")
     public ResponseEntity<?> deleteReview(@PathVariable("reviewId") UUID reviewId,
                                           @AuthenticationPrincipal User user) {
-        try {
-            reviewService.deleteReview(reviewId, user.getUsername());
-        } catch (NoPermissionException ex) {
-            return ResponseEntity.status(401).body(ex.getMessage());
-        } catch (ReviewNotFountException e) {
-            return ResponseEntity.status(404).body(e.getMessage());
-        }
-        return ResponseEntity.ok().build();
+        reviewService.deleteReview(reviewId, user.getUsername());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PatchMapping(value = "/reviews/{reviewId}/rating/increase")
+    public ResponseEntity<?> increaseRating(@PathVariable("reviewId") UUID reviewId,
+                                            @AuthenticationPrincipal User user) {
+        Review review = reviewService.increaseRating(reviewId, user.getUsername());
+        return ResponseEntity.ok(mapper.map(review, ReviewDto.class));
     }
 
     @PreAuthorize("isAuthenticated()")
     @PatchMapping(value = "/reviews/{reviewId}/rating/decrease")
-    public ResponseEntity<?> increaseRating(@PathVariable("reviewId") UUID reviewId,
+    public ResponseEntity<?> decreaseRating(@PathVariable("reviewId") UUID reviewId,
                                             @AuthenticationPrincipal User user) {
-        try {
-            reviewService.increaseRating(reviewId, user.getUsername());
-        } catch (DoubleVotingException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        } catch (ReviewNotFountException e) {
-            return ResponseEntity.status(404).body(e.getMessage());
-        }
-        return ResponseEntity.noContent().build();
+        Review review = reviewService.decreaseRating(reviewId, user.getUsername());
+        return ResponseEntity.ok(mapper.map(review, ReviewDto.class));
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PatchMapping(value = "/reviews/{reviewId}")
-    public ResponseEntity<?> decreaseRating(@PathVariable("reviewId") UUID reviewId,
-                                            @AuthenticationPrincipal User user) {
-        try {
-            reviewService.decreaseRating(reviewId, user.getUsername());
-        } catch (DoubleVotingException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        } catch (ReviewNotFountException e) {
-            return ResponseEntity.status(404).body(e.getMessage());
-        }
-        return ResponseEntity.noContent().build();
+    @GetMapping(value = "/reviews/{reviewId}/")
+    public ResponseEntity<?> canVote(@AuthenticationPrincipal User user, @PathVariable UUID reviewId) {
+        return ResponseEntity.ok(reviewService.canVote(reviewId, user.getUsername()));
     }
 
-
-//    @PreAuthorize("isAuthenticated()")
-//    @GetMapping(value = "{email}/reviews/{reviewId}")
-//    public ResponseEntity<?> getReview(@PathVariable("reviewId") UUID reviewId) {
-//        Review review = reviewService.getReviewById(reviewId);
-//        ReviewDto dto = mapper.map(review, ReviewDto.class);
-//        return ResponseEntity.ok(dto);
-//    }
 
 }
