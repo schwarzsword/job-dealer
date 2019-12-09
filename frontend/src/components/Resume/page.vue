@@ -1,14 +1,25 @@
 <template>
   <div>
-
     <div class="left-sidebar" style="text-align: center; margin: 10px 0 0 0;">
     </div>
-
     <div class="content">
       <v-card class="mx-auto">
+        <v-card-title>
+          <router-link to="/resumes">
+            <v-btn icon class="mr-6">
+              <v-icon>mdi-chevron-left</v-icon>
+            </v-btn>
+          </router-link>
+
+          <span class="subheading">{{ resume.name }}</span>
+        </v-card-title>
+
+
         <v-card-text>
-          <h1>{{ resume.name }}</h1>
-          <div>
+
+          <router-link class="invite" to="">Send invite</router-link>
+
+          <div class="salary">
             {{ resume.salary }}
           </div>
           <div>
@@ -17,16 +28,20 @@
           <div>
             {{ resume.firstName }} {{ resume.lastName }}
           </div>
-          <div class="skills" v-for="skill in resume.skills">
-            <v-chip outlined>{{ skill }}</v-chip>
+
+          <div class="skills">
+            <div class="skill" v-for="skill in resume.skills">
+              <v-chip outlined>
+                {{ skill }}
+              </v-chip>
+            </div>
           </div>
+
         </v-card-text>
       </v-card>
     </div>
-
     <div class="right-sidebar">
     </div>
-
   </div>
 </template>
 
@@ -36,15 +51,11 @@
 
   export default {
     name: 'ResumePage',
-
     data() {
       return {
         id: Router.currentRoute.params.id,
         status: "",
-        resume: {
-          name: "Java Developer",
-          description: "Desciption of Java Developer"
-        }
+        resume: []
       }
     },
     created() {
@@ -65,6 +76,15 @@
 
 <style>
   .skills {
+    display: table;
+    margin: 20px 0;
+  }
+  .skill {
+    display: block;
+    float: left;
+    margin: 0 5px 0 0;
+  }
+  .salary {
     display: table;
     margin: 10px 0;
   }

@@ -3,34 +3,43 @@
     <div class="left-sidebar"></div>
     <div class="content">
       <v-card outlined>
+
+        <v-card-title>
+          <router-link to="/resumes">
+            <v-btn
+                icon
+                class="mr-6"
+            >
+              <v-icon>mdi-chevron-left</v-icon>
+            </v-btn>
+          </router-link>
+
+          <span class="subheading">Resumes</span>
+        </v-card-title>
+
         <v-card-text>
           <form>
+
             <v-text-field
                 v-model="name"
                 :error-messages="nameErrors"
-                :counter="10"
-                label="Name"
+                :counter="50"
+                label="Resume name"
                 required
                 @input="$v.name.$touch()"
                 @blur="$v.name.$touch()"
             ></v-text-field>
+
             <v-text-field
-                v-model="email"
-                :error-messages="emailErrors"
-                label="E-mail"
-                required
-                @input="$v.email.$touch()"
-                @blur="$v.email.$touch()"
+                v-model="salary"
+                label="Salary"
             ></v-text-field>
-            <v-select
-                v-model="select"
-                :items="items"
-                :error-messages="selectErrors"
-                label="Item"
-                required
-                @change="$v.select.$touch()"
-                @blur="$v.select.$touch()"
-            ></v-select>
+
+            <v-text-field
+                v-model="about"
+                label="About me"
+            ></v-text-field>
+
             <v-checkbox
                 v-model="checkbox"
                 :error-messages="checkboxErrors"
@@ -40,8 +49,7 @@
                 @blur="$v.checkbox.$touch()"
             ></v-checkbox>
 
-            <v-btn class="mr-4" @click="submit">submit</v-btn>
-            <v-btn @click="clear">clear</v-btn>
+            <v-btn class="mr-4 primary" @click="submit">Add resume</v-btn>
           </form>
         </v-card-text>
       </v-card>
@@ -53,6 +61,7 @@
 <script>
   import { validationMixin } from 'vuelidate'
   import { required, maxLength, email } from 'vuelidate/lib/validators'
+  import {urlPort} from "../../tool";
 
   export default {
     name: 'ResumeAdd',
@@ -60,7 +69,7 @@
     mixins: [validationMixin],
 
     validations: {
-      name: { required, maxLength: maxLength(10) },
+      name: { required, maxLength: maxLength(50) },
       email: { required, email },
       select: { required },
       checkbox: {
@@ -72,15 +81,27 @@
 
     data: () => ({
       name: '',
-      email: '',
-      select: null,
-      items: [
+      salary: null,
+      about: '',
+      skills: [
         'Item 1',
         'Item 2',
         'Item 3',
         'Item 4',
       ],
       checkbox: false,
+
+      resumeData: {
+        name: '',
+        firstName: '',
+        lastName: '',
+        salary: '',
+        fileData: null,
+        about: '',
+        skills: [],
+        applicantId: '',
+        descending: true,
+      },
     }),
 
     computed: {
@@ -99,34 +120,28 @@
       nameErrors () {
         const errors = []
         if (!this.$v.name.$dirty) return errors
-        !this.$v.name.maxLength && errors.push('Name must be at most 10 characters long')
+        !this.$v.name.maxLength && errors.push('Name must be at most 50 characters long')
         !this.$v.name.required && errors.push('Name is required.')
-        return errors
-      },
-      emailErrors () {
-        const errors = []
-        if (!this.$v.email.$dirty) return errors
-        !this.$v.email.email && errors.push('Must be valid e-mail')
-        !this.$v.email.required && errors.push('E-mail is required')
         return errors
       },
     },
 
     methods: {
       submit () {
-        this.$v.$touch()
-      },
-      clear () {
-        this.$v.$reset()
-        this.name = ''
-        this.email = ''
-        this.select = null
-        this.checkbox = false
+        this.$v.$touch();
+        let params = new URLSearchParams({
+          'filters': JSON.stringify(this.resumeData)
+        });
+
+        params.append('resumeData', JSON.stringify(this.resume));
+
+        urlPort.post('/my/resumes', params, {
+          headers: {ContentType: 'multipart/form-data'}
+        })
       },
     },
 
-    mounted: function () {
-      ResumeShortDescription.create();
+    created() {
     }
   }
 </script>

@@ -30,10 +30,10 @@
 
       <div class="menu">
         <router-link to="/vacancies" title="Vacancies">
-          <v-icon class="m-icon i-vacancy"></v-icon>
+          <v-icon v-ripple class="elevation-2 m-icon i-vacancy"></v-icon>
         </router-link>
         <router-link to="/resumes" title="Resumes">
-          <v-icon class="m-icon i-resume"></v-icon>
+          <v-icon v-ripple class="elevation-2 m-icon i-resume"></v-icon>
         </router-link>
       </div>
 
@@ -276,9 +276,11 @@
     line-height: 60px;
     text-align: center;
     font-size: 28px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 0px 0px,
+    rgba(0, 0, 0, 0.14) 0px 0px 0px 0px, rgba(0, 0, 0, 0.12) 0px 0px 0px 0px !important;
   }
   .header .container .menu .m-icon:hover {
-    background-color: #f5f5f5;
+    /*background-color: #f5f5f5;*/
   }
 
   .header .container .menu .i-vacancy {
