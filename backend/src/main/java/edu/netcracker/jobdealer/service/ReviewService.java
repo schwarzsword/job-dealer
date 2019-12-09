@@ -8,6 +8,8 @@ import java.util.UUID;
 public interface ReviewService {
     Review sendReview(String text, String srcEmail, UUID receiver);
 
+    Review getOwnedReview(String srcEmail, UUID receiver);
+
     List<Review> getUserReviews(UUID userId);
 
     List<Review> getUserReviews(String email);
@@ -21,4 +23,6 @@ public interface ReviewService {
     void deleteReview(UUID id, String ownerEmail);
 
     boolean canVote(UUID id, String ownerEmail);
+
+
 }

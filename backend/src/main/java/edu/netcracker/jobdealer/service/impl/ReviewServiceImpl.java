@@ -40,6 +40,11 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    public Review getOwnedReview(String srcEmail, UUID receiver) {
+        return reviewRepository.findByReviewDestIdAndReviewSourceEmail(receiver, srcEmail).orElseGet(null);
+    }
+
+    @Override
     public List<Review> getUserReviews(UUID userId) {
         return reviewRepository.findAllByReviewDestId(userId);
     }
