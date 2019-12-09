@@ -14,20 +14,31 @@
     </div>
 
     <div class="content">
-      <div v-for="item in this.vacancies">
+      <div v-for="item in this.resumes">
         <ResumeItem
             :id="`${item.id}`"
             :title="`${item.name}`"
             :author="`${item.firstName} ${item.lastName}`"
-            :subtitle="`${item.salary}`"/>
+            :skills="`${item.skills}`"/>
       </div>
     </div>
 
     <div class="right-sidebar">
       <v-card class="filter-block" outlined>
         <v-card-text>
-          <v-select :items="countries" v-model="country" @change="handleCountry" label="Choose country"></v-select>
-          <v-select :items="cities" v-model="city" @change="handleCity" label="Choose city"></v-select>
+
+          <div>
+            Sort by
+            <v-select
+                :items="items"
+                v-model="filters.sortBy"
+                @change="upload"
+            />
+            <v-checkbox v-model="filters.descending" label="descending" @change="upload">descending</v-checkbox>
+          </div>
+
+<!--          <v-select :items="countries" v-model="country" @change="handleCountry" label="Choose country"></v-select>-->
+<!--          <v-select :items="cities" v-model="city" @change="handleCity" label="Choose city"></v-select>-->
           Salary:
           <div style="display: table; margin-bottom: 20px;">
             <v-text-field class="salary-input" @change="handleSalary" v-model="price[0]" hide-details single-line
@@ -36,10 +47,10 @@
                           type="number"/>
           </div>
           <v-range-slider v-model="price" @change="handleSalary" :min="0" :max="5000" :step="100"/>
-          <v-checkbox class="check-box" v-model="experience" @change="handleExperience" label="Experience"/>
-          <v-checkbox class="check-box" v-model="driverLicense" @change="handleDriverLicense"
-                      label="Driver license"/>
-          <v-switch v-model="saveFilter" @change="handleSaveFilter" label="Save filter"/>
+<!--          <v-checkbox class="check-box" v-model="experience" @change="handleExperience" label="Experience"/>-->
+<!--          <v-checkbox class="check-box" v-model="driverLicense" @change="handleDriverLicense"-->
+<!--                      label="Driver license"/>-->
+<!--          <v-switch v-model="saveFilter" @change="handleSaveFilter" label="Save filter"/>-->
         </v-card-text>
       </v-card>
     </div>
@@ -67,7 +78,9 @@
         driverLicense: false,
 
         totalSize: 0,
-        vacancies: [],
+        resumes: [],
+
+        items: ['Name', 'Salary'],
 
         filters: {
           limit: 20,
@@ -75,46 +88,9 @@
           minSalary: 0,
           maxSalary: 500,
           skills: [],
-          sortBy: "name",
+          sortBy: "Name",
           descending: true,
         },
-        items: [
-          {
-            id: 1,
-            avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
-            title: 'Brunch this weekend?',
-            author: 'Yan Nepomyashy',
-            subtitle: "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
-          },
-          {
-            id: 2,
-            avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg',
-            title: 'Summer BBQ',
-            author: 'Magnus Carlsen',
-            subtitle: "Wish I could come, but I'm out of town this weekend."
-          },
-          {
-            id: 3,
-            avatar: '/img/no-avatar.png',
-            title: 'Oui oui',
-            author: 'Garik Gasparov',
-            subtitle: "Do you have Paris recommendations? Have you ever been?"
-          },
-          {
-            id: 4,
-            avatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg',
-            title: 'Birthday gift',
-            author: 'Vashe Lagrav',
-            subtitle: "Have any ideas about what we should get Heidi for her birthday?"
-          },
-          {
-            id: 5,
-            avatar: '/img/no-avatar.png',
-            title: 'Recipe to try',
-            author: 'Anatoly Karpov',
-            subtitle: "We should eat this: Grate, Squash, Corn, and tomatillo Tacos."
-          }
-        ]
       }
     },
     methods: {
@@ -162,16 +138,14 @@
       urlPort.get('/resumes/size', {params}).then(resp => {
         this.totalSize = resp.data;
         urlPort.get('/resumes', {params}).then(resp => {
-          this.vacancies = resp.data;
-          console.log(this.vacancies)
+          this.resumes = resp.data;
+          console.log(this.resumes)
         }).catch(err => {
           console.log(err)
         })
       }).catch(err => {
         console.log(err)  // тут status: 304
       });
-
-
       //console.log(this.$store.state.profile);
     },
   }
