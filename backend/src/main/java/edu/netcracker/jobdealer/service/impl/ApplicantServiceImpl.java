@@ -59,4 +59,9 @@ public class ApplicantServiceImpl implements ApplicantService {
     public Applicant getByAccount(Account accountByEmail) throws ApplicantNotFoundException {
         return applicantRepository.findByAccount(accountByEmail).orElseThrow(CompanyNotFoundException::new);
     }
+
+    @Override
+    public Applicant who(String email) {
+        return applicantRepository.findByAccountEmail(email).orElseThrow(ApplicantNotFoundException::new);
+    }
 }

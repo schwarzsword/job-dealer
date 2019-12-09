@@ -1,6 +1,7 @@
 package edu.netcracker.jobdealer.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.dozer.Mapping;
 import org.hibernate.annotations.Fetch;
@@ -42,6 +43,7 @@ public class Resume {
     private String about;
     @ManyToOne
     @JoinColumn(name = "applicantId", referencedColumnName = "id")
+    @EqualsAndHashCode.Exclude
     private Applicant applicant;
 
 
