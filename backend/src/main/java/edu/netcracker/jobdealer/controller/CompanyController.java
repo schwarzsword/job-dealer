@@ -1,8 +1,7 @@
 package edu.netcracker.jobdealer.controller;
 
 import edu.netcracker.jobdealer.dto.CompanyDto;
-import edu.netcracker.jobdealer.exceptions.AccountIdExistsException;
-import edu.netcracker.jobdealer.exceptions.AccountNotFoundException;
+import edu.netcracker.jobdealer.entity.Company;
 import edu.netcracker.jobdealer.exceptions.CompanyNotFoundException;
 import edu.netcracker.jobdealer.service.CompanyService;
 import org.dozer.Mapper;
@@ -41,33 +40,23 @@ public class CompanyController {
         }
     }
 
-    @GetMapping(value = "/companies/names")
+    @GetMapping(value = "/names/companies")
     public ResponseEntity<?> getCompanies() {
         return ResponseEntity.ok(companyService.getCompanyNames());
     }
 
     @GetMapping(value = "/companies/{id}")
     public ResponseEntity<?> getCompanyById(@PathVariable("id") UUID id) {
-        try {
-            CompanyDto company = mapper.map(companyService.getCompanyById(id), CompanyDto.class);
-            return ResponseEntity.ok(company);
-        } catch (CompanyNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+        Company company = companyService.getCompanyById(id);
+        return ResponseEntity.ok(mapper.map(company, CompanyDto.class));
     }
 
     @PostMapping(value = "/companies")
     public ResponseEntity<?> addCompany(@RequestParam String companyData) {
-        try {
-            CompanyDto company = mapper
-                    .map(companyService
-                            .addCompany(companyData), CompanyDto.class);
-            return ResponseEntity.ok(company);
-        } catch (AccountNotFoundException e) {
-            return ResponseEntity.status(404).body(e.getMessage());
-        } catch (AccountIdExistsException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        CompanyDto company = mapper
+                .map(companyService
+                        .addCompany(companyData), CompanyDto.class);
+        return ResponseEntity.ok(company);
     }
 
     //TODO испрвить

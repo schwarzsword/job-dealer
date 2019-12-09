@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @Transactional
@@ -57,12 +58,12 @@ public class ReviewServiceImpl implements ReviewService {
     public Review increaseRating(UUID reviewId, String email) throws ReviewNotFountException, DoubleVotingException {
         Account account = accountService.getByEmail(email);
         Review review = getReviewById(reviewId);
-        List<Account> increased = review.getIncreased();
+        List<Account> increased = review.getVoted();
         if (!increased.contains(account)) {
             int rating = review.getRating();
             review.setRating(++rating);
             increased.add(account);
-            review.setIncreased(increased);
+            review.setVoted(increased);
             reviewRepository.save(review);
             return review;
         } else throw new DoubleVotingException();
@@ -72,12 +73,12 @@ public class ReviewServiceImpl implements ReviewService {
     public Review decreaseRating(UUID reviewId, String email) throws ReviewNotFountException, DoubleVotingException {
         Account account = accountService.getByEmail(email);
         Review review = getReviewById(reviewId);
-        List<Account> increased = review.getIncreased();
+        List<Account> increased = review.getVoted();
         if (!increased.contains(account)) {
             int rating = review.getRating();
             review.setRating(--rating);
             increased.add(account);
-            review.setIncreased(increased);
+            review.setVoted(increased);
             reviewRepository.save(review);
             return review;
         } else throw new DoubleVotingException();
@@ -89,6 +90,15 @@ public class ReviewServiceImpl implements ReviewService {
         if (review.getReviewSource().getEmail().equals(ownerEmail)) {
             reviewRepository.delete(review);
         } else throw new NoPermissionException("You can delete only owned reviews");
+    }
+
+    @Override
+    public boolean canVote(UUID id, String ownerEmail) {
+        Review review = reviewRepository.findById(id).orElseThrow(ReviewNotFountException::new);
+        return review.getVoted().stream()
+                .map(Account::getEmail)
+                .collect(Collectors.toList())
+                .contains(ownerEmail);
     }
 
 }

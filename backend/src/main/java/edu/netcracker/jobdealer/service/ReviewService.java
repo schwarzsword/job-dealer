@@ -10,17 +10,19 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ReviewService {
-    Review sendReview(String text, String srcEmail, UUID receiver) throws AccountByIdNotFoundException;
+    Review sendReview(String text, String srcEmail, UUID receiver);
 
     List<Review> getUserReviews(UUID userId);
 
     List<Review> getUserReviews(String email);
 
-    Review getReviewById(UUID reviewId) throws ReviewNotFountException;
+    Review getReviewById(UUID reviewId);
 
-    Review increaseRating(UUID reviewId, String email) throws ReviewNotFountException, DoubleVotingException;
+    Review increaseRating(UUID reviewId, String email) ;
 
-    Review decreaseRating(UUID reviewId, String email) throws ReviewNotFountException, DoubleVotingException;
+    Review decreaseRating(UUID reviewId, String email);
 
-    void deleteReview(UUID mesId, String ownerEmail) throws ReviewNotFountException, NoPermissionException;
+    void deleteReview(UUID id, String ownerEmail);
+
+    boolean canVote(UUID id, String ownerEmail);
 }

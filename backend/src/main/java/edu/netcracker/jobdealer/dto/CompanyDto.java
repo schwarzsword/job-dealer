@@ -16,6 +16,5 @@ public class CompanyDto {
     private boolean isVerified;
     private String description;
     private String fileData;
-    private boolean withTask;
     private UUID accountId;
 }
