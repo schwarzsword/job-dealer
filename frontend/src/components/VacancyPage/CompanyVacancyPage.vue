@@ -19,11 +19,11 @@
         <v-data-table
                 :headers="headers"
                 :items="responses"
-                sort-by="calories"
                 class="elevation-1"
+                sort-by="calories"
         >
             <template v-slot:top>
-                <v-toolbar flat color="white">
+                <v-toolbar color="white" flat>
                     <v-toolbar-title>Responces</v-toolbar-title>
                 </v-toolbar>
             </template>
@@ -35,15 +35,15 @@
                     mdi-cloud-download-outline
                 </v-icon>
 
-                <v-icon v-if="item.status === 'APPLIED'"
-                        @click="accept(item)"
+                <v-icon @click="accept(item)"
+                        v-if="item.status === 'APPLIED'"
                 >
                     mdi-check-outline
                 </v-icon>
 
                 <v-icon
-                        v-if="item.status === 'APPLIED'"
                         @click="reject(item)"
+                        v-if="item.status === 'APPLIED'"
                 >
                     mdi-close-outline
                 </v-icon>
@@ -63,7 +63,7 @@
 <script>
 
     import Router from "../../router"
-    import {base64ArrayBuffer, base64ToArrayBuffer, urlPort} from "../../tool";
+    import {urlPort} from "../../tool";
     import download from "downloadjs"
 
     export default {
@@ -125,7 +125,7 @@
                 this.setStatus(item);
             },
             route(item) {
-                //todo сделать линкк на резюме пользователя
+                //todo: сделать линкк на резюме пользователя
             },
             setStatus(item) {
                 let params = new URLSearchParams();
@@ -133,8 +133,10 @@
                 urlPort.post("/responses/" + item.id, params)
             },
             downloadSubmission(item) {
-               this.fileBytes = this.submissions.find(function(element, index, array){return element.applicantId === item.applicantId}).fileData;
-               download(atob(this.fileBytes), item.applicantName+"submission.png", "image/png")
+                this.fileBytes = this.submissions.find(function (element, index, array) {
+                    return element.applicantId === item.applicantId
+                }).fileData;
+                download(atob(this.fileBytes), item.applicantName + "submission.zip", "application/zip")
             }
         },
     }

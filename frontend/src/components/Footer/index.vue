@@ -28,17 +28,20 @@
         line-height: 22px;
         color: #6c757d;
     }
+
     .footer .container {
         display: table;
         margin: 0 auto;
         width: 1000px;
         text-align: center;
     }
+
     .footer .container a {
         font-size: 14px;
         padding: 5px;
         color: #6c757d;
     }
+
     .footer .container a:hover {
         text-decoration: underline;
     }

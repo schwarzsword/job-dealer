@@ -43,7 +43,7 @@ public class MessageController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/messages/{id}")
     public MessageDto getMessage(@PathVariable UUID id) {
-        MessageDto message =  mapper.map(messageService.getMessage(id), MessageDto.class);
+        MessageDto message = mapper.map(messageService.getMessage(id), MessageDto.class);
         log.debug("{}", message);
         return message;
     }

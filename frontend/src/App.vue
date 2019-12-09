@@ -13,13 +13,13 @@
 </template>
 
 <script>
-  import Navigation from './components/Navigation'
-  import {USER_REQUEST} from './store/actions/user'
-  // import '@/assets/css/bootstrap.min.css';
-  import Footer from "./components/Footer";
-  import RightSidebar from "./components/RightSidebar"
+    import Navigation from './components/Navigation'
+    import {USER_REQUEST} from './store/actions/user'
+    // import '@/assets/css/bootstrap.min.css';
+    import Footer from "./components/Footer";
+    import RightSidebar from "./components/RightSidebar"
 
-  export default {
+    export default {
         components: {
             Footer,
             Navigation,
@@ -37,13 +37,16 @@
 <style>
     html {
     }
+
     body {
         font-family: "Roboto", sans-serif;
     }
+
     a {
         color: #3E5F8A;
         text-decoration: none;
     }
+
     a:hover {
         color: #5bbaff;
     }

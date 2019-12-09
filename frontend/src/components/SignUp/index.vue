@@ -36,12 +36,12 @@
                         />
 
                         <v-text-field
+                                :rules="rules.confirmPassRules"
                                 :type="show1 ? 'text' : 'password'"
                                 @click:append="show2 = !show2"
                                 label="Confirm password"
                                 required
                                 v-model="account.password_confirmation"
-                                :rules="rules.confirmPassRules"
                         />
 
                         <v-checkbox
@@ -52,9 +52,9 @@
                     </v-card>
 
                     <v-btn
+                            :disabled="!(account.email && account.password && account.password_confirmation)"
                             @click="this.next"
                             color="primary"
-                            :disabled="!(account.email && account.password && account.password_confirmation)"
                     >
                         Continue
                     </v-btn>
@@ -69,16 +69,16 @@
                             v-if="account.isCompany"
                     >
                         <v-text-field
+                                :rules="rules.requiredRules"
                                 autofocus
                                 label="Company name"
-                                :rules="rules.requiredRules"
                                 v-model="company.name"
                         />
                         <div class="error--text" v-if="errors.companyNameError">{{errors.companyNameError}}</div>
                         <v-textarea
+                                :rules="rules.requiredRules"
                                 label="Company description"
                                 name="input-7-1"
-                                :rules="rules.requiredRules"
                                 v-model="company.description"
                         />
 
@@ -109,34 +109,34 @@
                             height="650px"
                             v-else>
                         <v-text-field
+                                :rules="rules.requiredRules"
                                 autofocus
                                 label="Vacancy you apply"
-                                :rules="rules.requiredRules"
                                 v-model="resume.name"
                         />
                         <v-text-field
+                                :rules="rules.requiredRules"
                                 autofocus
                                 label="Your name"
-                                :rules="rules.requiredRules"
                                 v-model="resume.firstName"
                         />
                         <v-text-field
+                                :rules="rules.requiredRules"
                                 autofocus
                                 label="Your last name"
-                                :rules="rules.requiredRules"
                                 v-model="resume.lastName"
                         />
                         <v-text-field
-                                type="number"
                                 :rules="rules.salaryRules"
                                 autofocus
                                 label="Salary you wish"
+                                type="number"
                                 v-model="resume.salary"
                         />
                         <v-textarea
+                                :rules="rules.requiredRules"
                                 label="Something about you"
                                 name="input-7-1"
-                                :rules="rules.requiredRules"
                                 v-model="resume.about"
                         />
                         <v-file-input
@@ -194,7 +194,6 @@
 
     import {base64ArrayBuffer, urlPort} from "../../tool";
     import {AUTH_REQUEST} from "../../store/actions/auth";
-    import download from "downloadjs";
 
     export default {
         data() {

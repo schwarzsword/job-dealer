@@ -7,8 +7,8 @@
                 <v-card-title>
                     <router-link to="/resumes">
                         <v-btn
-                                icon
                                 class="mr-6"
+                                icon
                         >
                             <v-icon>mdi-chevron-left</v-icon>
                         </v-btn>
@@ -21,36 +21,36 @@
                     <form>
 
                         <v-text-field
-                                v-model="resume.name"
-                                :error-messages="nameErrors"
                                 :counter="50"
+                                :error-messages="nameErrors"
+                                @blur="$v.name.$touch()"
+                                @input="$v.resume.name.$touch()"
                                 label="Resume name"
                                 required
-                                @input="$v.resume.name.$touch()"
-                                @blur="$v.name.$touch()"
+                                v-model="resume.name"
                         />
 
                         <v-text-field
-                                v-model="resume.salary"
-                                type="number"
                                 label="Salary"
+                                type="number"
+                                v-model="resume.salary"
                         />
 
                         <v-text-field
-                                v-model="resume.about"
                                 label="About me"
+                                v-model="resume.about"
                         />
 
                         <v-checkbox
-                                v-model="checkbox"
                                 :error-messages="checkboxErrors"
+                                @blur="$v.checkbox.$touch()"
+                                @change="$v.checkbox.$touch()"
                                 label="Do you agree?"
                                 required
-                                @change="$v.checkbox.$touch()"
-                                @blur="$v.checkbox.$touch()"
+                                v-model="checkbox"
                         />
 
-                        <v-btn class="mr-4 primary" @click="submit">Add resume</v-btn>
+                        <v-btn @click="submit" class="mr-4 primary">Add resume</v-btn>
                     </form>
                 </v-card-text>
             </v-card>
@@ -60,11 +60,11 @@
 </template>
 
 <script>
-    import {validationMixin} from 'vuelidate'
-    import {email, maxLength, required} from 'vuelidate/lib/validators'
-    import {urlPort} from "../../tool";
+  import {validationMixin} from 'vuelidate'
+  import {email, maxLength, required} from 'vuelidate/lib/validators'
+  import {urlPort} from "../../tool";
 
-    export default {
+  export default {
         name: 'ResumeAdd',
 
         mixins: [validationMixin],

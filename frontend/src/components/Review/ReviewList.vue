@@ -3,19 +3,19 @@
         <v-card class="reviews">
             <div>Reviews</div>
             <v-text-field
-                    type="number"
                     label="Hide reviews with rating lower than:"
+                    type="number"
                     v-model="lowestRating"/>
             <hr>
             <div v-for="item in this.reviews">
                 <ReviewItem
-                        :text="item.text"
-                        :sender="item.sender"
-                        :rating="item.rating"
-                        :id="item.id"
-                        :voted="item.voted"
                         :account-id="profile.id"
+                        :id="item.id"
                         :lowest-rating="lowestRating"
+                        :rating="item.rating"
+                        :sender="item.sender"
+                        :text="item.text"
+                        :voted="item.voted"
                 />
             </div>
         </v-card>
