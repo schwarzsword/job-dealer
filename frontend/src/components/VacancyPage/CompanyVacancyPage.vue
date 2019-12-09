@@ -50,7 +50,7 @@
                 <v-icon
                         @click="route(item)"
                 >
-                    mdi-file-document-box
+                    mdi-account-badge-horizontal-outline
                 </v-icon>
             </template>
             <template v-slot:no-data>
