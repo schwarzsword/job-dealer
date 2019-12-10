@@ -14,20 +14,28 @@
                         </v-btn>
                     </router-link>
 
-                    <span class="subheading">Resumes</span>
+                    <span class="subheading">My resume</span>
                 </v-card-title>
 
                 <v-card-text>
                     <form>
 
                         <v-text-field
-                                v-model="resume.name"
-                                :error-messages="nameErrors"
-                                :counter="50"
-                                label="Resume name"
-                                required
-                                @input="$v.resume.name.$touch()"
-                                @blur="$v.name.$touch()"
+                            v-model="resume.name"
+                            :counter="50"
+                            label="Resume name"
+                        />
+
+                        <v-text-field
+                            v-model="resume.firstName"
+                            :counter="50"
+                            label="First name"
+                        />
+
+                        <v-text-field
+                            v-model="resume.lastName"
+                            :counter="50"
+                            label="Last name"
                         />
 
                         <v-text-field
@@ -36,14 +44,13 @@
                                 label="Salary"
                         />
 
-                        <v-text-field
+                        <v-textarea
                                 v-model="resume.about"
                                 label="About me"
                         />
 
                         <v-checkbox
                                 v-model="checkbox"
-                                :error-messages="checkboxErrors"
                                 label="Do you agree?"
                                 required
                                 @change="$v.checkbox.$touch()"
@@ -61,7 +68,7 @@
 
 <script>
     import {validationMixin} from 'vuelidate'
-    import {email, maxLength, required} from 'vuelidate/lib/validators'
+    // import {email, maxLength, required} from 'vuelidate/lib/validators'
     import {urlPort} from "../../tool";
 
     export default {
@@ -70,9 +77,9 @@
         mixins: [validationMixin],
 
         validations: {
-            name: {required, maxLength: maxLength(50)},
-            email: {required, email},
-            select: {required},
+            // name: {required, maxLength: maxLength(50)},
+            // email: {required, email},
+            // select: {required},
             checkbox: {
                 checked(val) {
                     return val
