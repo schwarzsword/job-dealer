@@ -7,7 +7,7 @@ import About from "../components/About";
 import Login from "../components/Login";
 import SignUp from "../components/SignUp";
 import Account from "../components/Account";
-import Applicant from "../components/Applicant";
+import ApplicantOwnerPage from "../components/Applicant/ApplicantOwnerPage";
 import Company from "../components/Company";
 import CompanyPage from "../components/Company/page";
 import Message from "../components/Message"
@@ -21,6 +21,7 @@ import CompanyVacancies from "../components/CompanyVacancies"
 import VacancyPage from "../components/VacancyPage"
 import CompanyVacancyPage from "../components/VacancyPage/CompanyVacancyPage";
 import MessageDialog from "../components/Message/dialog"
+import NotFound from "../components/NotFound"
 
 Vue.use(Router);
 
@@ -94,7 +95,7 @@ export default new Router({
         {
             path: '/profile',
             name: 'applicant',
-            component: Applicant
+            component: ApplicantOwnerPage
         },
         {
             path: '/login',
@@ -147,6 +148,11 @@ export default new Router({
             path: '/my/messages/:opponentId',
             name: 'messageDialog',
             component: MessageDialog,
+        },
+        {
+            path: '*',
+            name: 'notFound',
+            component: NotFound,
         }
     ]
 })

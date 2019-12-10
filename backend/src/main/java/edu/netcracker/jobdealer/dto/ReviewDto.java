@@ -2,6 +2,7 @@ package edu.netcracker.jobdealer.dto;
 
 import lombok.Data;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -10,4 +11,6 @@ public class ReviewDto {
     private String text;
     private Integer rating;
     private String sender;
+    private List<UUID> voted;
+
 }

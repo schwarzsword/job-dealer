@@ -1,31 +1,30 @@
 <template>
     <div>
+        <img v-if="company.fileData" v-bind:src="'data:image/jpeg;base64,'+company.fileData" />
         <h1>{{ company.name }} <span class="verified" v-if="company.verified === true"></span></h1>
         <div>
             {{company.description}}
         </div>
-        <!--Company id: {{ $route.params.id }}-->
+        <ReviewList v-if="this.company.accountId" :account-id="this.company.accountId"/>
     </div>
 </template>
 
 <script>
-    import axios from 'axios';
     import Router from "../../router"
     import {urlPort} from "../../tool";
+    import ReviewList from "../Review/ReviewList";
 
     export default {
         name: 'CompanyPage',
-
+        components: {ReviewList},
         data() {
-            // const route = Router.currentRoute.params.id;
-
             return {
                 company: {},
                 id: Router.currentRoute.params.id,
             }
         },
-        created() {
-            axios.get(urlPort('/companies/' + this.id))
+        beforeCreate() {
+            urlPort.get('/companies/' + Router.currentRoute.params.id)
                 .then(response => {
                     this.company = response.data;
                 })

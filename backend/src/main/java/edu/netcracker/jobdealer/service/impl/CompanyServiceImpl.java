@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -55,7 +54,6 @@ public class CompanyServiceImpl implements CompanyService {
     public List<Company> getCompanies(int page, int limit, String sortBy) {
         Pageable paging = PageRequest.of(page, limit, Sort.by(sortBy));
         Page<Company> pagedResult = companyRepository.findAll(paging);
-
         if (pagedResult.hasContent()) {
             return pagedResult.getContent();
         } else {
@@ -65,13 +63,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public Company getCompanyById(UUID id) {
-        Optional<Company> company = companyRepository.findById(id);
-
-        if (company.isPresent()) {
-            return company.get();
-        } else {
-            throw new CompanyNotFoundException("Company is not found!");
-        }
+        return companyRepository.findById(id).orElseThrow(CompanyNotFoundException::new);
     }
 
     @Override

@@ -33,7 +33,7 @@
     import {urlPort} from "../../tool";
 
     export default {
-        name: "applicant",
+        name: "applicantOwnerPage",
         data: function () {
             return {
                 responses: [],
