@@ -2,20 +2,19 @@ package edu.netcracker.jobdealer.controller;
 
 import edu.netcracker.jobdealer.dto.ApplicantDto;
 import edu.netcracker.jobdealer.entity.Applicant;
-import edu.netcracker.jobdealer.exceptions.AccountAlreadyInUseException;
 import edu.netcracker.jobdealer.service.ApplicantService;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/applicants")
+@RequestMapping
 public class ApplicantController {
 
     private final ApplicantService applicantService;
@@ -27,13 +26,15 @@ public class ApplicantController {
         this.mapper = mapper;
     }
 
-    @PostMapping
+    @PostMapping(value = "/applicants")
     public ResponseEntity<?> addApplicant(@RequestParam UUID accountId) {
-        try {
-            Applicant applicant = applicantService.addApplicant(accountId);
-            return ResponseEntity.ok(mapper.map(applicant, ApplicantDto.class));
-        } catch (AccountAlreadyInUseException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        Applicant applicant = applicantService.addApplicant(accountId);
+        return ResponseEntity.ok(mapper.map(applicant, ApplicantDto.class));
+    }
+
+    @GetMapping(value = "/who")
+    @Secured("ROLE_USER")
+    public ResponseEntity<?> who(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(applicantService.who(user.getUsername()).getId());
     }
 }
