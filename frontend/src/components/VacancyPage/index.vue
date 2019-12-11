@@ -20,11 +20,11 @@
         <v-file-input
                 @change="onFileChange"
                 accept="image/*"
-                label="Select image file..."
-                v-model="file"
+                label="Please, upload zip files"
                 v-if="vacancy.withTask"
+                v-model="file"
         />
-        <v-btn v-if="!isApplied" :disabled="vacancy.withTask && !fileBytes" @click="apply">
+        <v-btn :disabled="vacancy.withTask && !fileBytes" @click="apply" v-if="!isApplied">
             Apply
         </v-btn>
     </v-app>

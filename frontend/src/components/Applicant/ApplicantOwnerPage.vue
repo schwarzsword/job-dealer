@@ -4,11 +4,11 @@
         <v-data-table
                 :headers="headers"
                 :items="responses"
-                sort-by="calories"
                 class="elevation-1"
+                sort-by="calories"
         >
             <template v-slot:top>
-                <v-toolbar flat color="white">
+                <v-toolbar color="white" flat>
                     <v-toolbar-title>Responces</v-toolbar-title>
                 </v-toolbar>
             </template>
@@ -54,7 +54,7 @@
         methods: {
 
             route(item) {
-                this.$router.push('/vacancies/'+item.vacancyId);
+                this.$router.push('/vacancies/' + item.vacancyId);
             },
         },
     }

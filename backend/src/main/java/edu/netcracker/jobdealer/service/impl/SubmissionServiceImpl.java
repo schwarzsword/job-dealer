@@ -57,7 +57,7 @@ public class SubmissionServiceImpl implements SubmissionService {
     }
 
     @Override
-    public Submission addSubmission(String  fileData, String email, UUID taskId) {
+    public Submission addSubmission(String fileData, String email, UUID taskId) {
 
         Applicant applicant = applicantRepository.findByAccountEmail(email).orElseThrow(ApplicantNotFoundException::new);
         Task task = testTaskRepository.findById(taskId).orElseThrow(TaskNotFoundException::new);
