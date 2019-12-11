@@ -16,48 +16,49 @@
       {{task.description}}
     </v-card>
 
-    <v-data-table
-        :headers="headers"
-        :items="responses"
-        class="elevation-1"
-        sort-by="calories"
-    >
-      <template v-slot:top>
-        <v-toolbar color="white" flat>
-          <v-toolbar-title>Responces</v-toolbar-title>
-        </v-toolbar>
-      </template>
-      <template v-slot:item.action="{ item }">
 
+        <v-data-table
+                :headers="headers"
+                :items="responses"
+                class="elevation-1"
+                sort-by="calories"
+        >
+            <template v-slot:top>
+                <v-toolbar color="white" flat>
+                    <v-toolbar-title>Responces</v-toolbar-title>
+                </v-toolbar>
+            </template>
+            <template v-slot:item.action="{ item }">
         <v-icon
             @click="downloadSubmission(item)"
         >
           mdi-cloud-download-outline
         </v-icon>
 
-        <v-icon @click="accept(item)"
-                v-if="item.status === 'APPLIED'"
-        >
-          mdi-check-outline
-        </v-icon>
 
-        <v-icon
-            @click="reject(item)"
-            v-if="item.status === 'APPLIED'"
-        >
-          mdi-close-outline
-        </v-icon>
-        <v-icon
-            @click="route(item)"
-        >
-          mdi-file-document-box
-        </v-icon>
-      </template>
-      <template v-slot:no-data>
-        You have no active responses
-      </template>
-    </v-data-table>
-  </v-app>
+                <v-icon @click="accept(item)"
+                        v-if="item.status === 'APPLIED'"
+                >
+                    mdi-check-outline
+                </v-icon>
+
+                <v-icon
+                        @click="reject(item)"
+                        v-if="item.status === 'APPLIED'"
+                >
+                    mdi-close-outline
+                </v-icon>
+                <v-icon
+                        @click="route(item)"
+                >
+                    mdi-account-badge-horizontal-outline
+                </v-icon>
+            </template>
+            <template v-slot:no-data>
+                You have no active responses
+            </template>
+        </v-data-table>
+    </v-app>
 </template>
 
 <script>
@@ -65,6 +66,7 @@
   import Router from "../../router"
   import {urlPort} from "../../tool";
   import download from "downloadjs"
+
 
   export default {
     name: "companyVacancyPage",
@@ -84,6 +86,7 @@
           id: null,
           name: "",
           description: "",
+
         },
         responses: [],
         submissions: [],
@@ -115,29 +118,29 @@
           }
         });
     },
-    methods: {
-      accept(item) {
-        item.status = "INVITED";
-        this.setStatus(item);
-      },
-      reject(item) {
-        item.status = "REJECTED";
-        this.setStatus(item);
-      },
-      route(item) {
-        //todo сделать линкк на резюме пользователя
-      },
-      setStatus(item) {
-        let params = new URLSearchParams();
-        params.append("status", item.status);
-        urlPort.post("/responses/" + item.id, params)
-      },
-      downloadSubmission(item) {
-        this.fileBytes = this.submissions.find(function (element, index, array) {
-          return element.applicantId === item.applicantId
-        }).fileData;
-        download(atob(this.fileBytes), item.applicantName + "submission.png", "image/png")
-      }
+        methods: {
+            accept(item) {
+                item.status = "INVITED";
+                this.setStatus(item);
+            },
+            reject(item) {
+                item.status = "REJECTED";
+                this.setStatus(item);
+            },
+            route(item) {
+                //todo: сделать линкк на резюме пользователя
+            },
+            setStatus(item) {
+                let params = new URLSearchParams();
+                params.append("status", item.status);
+                urlPort.post("/responses/" + item.id, params)
+            },
+            downloadSubmission(item) {
+                this.fileBytes = this.submissions.find(function (element, index, array) {
+                    return element.applicantId === item.applicantId
+                }).fileData;
+                download(atob(this.fileBytes), item.applicantName + "submission.zip", "application/zip")
+            }
     },
   }
 </script>

@@ -13,23 +13,24 @@
 </template>
 
 <script>
-  import Navigation from './components/Navigation'
-  import {USER_REQUEST} from './store/actions/user'
-  // import '@/assets/css/bootstrap.min.css';
-  import Footer from "./components/Footer";
-  import RightSidebar from "./components/RightSidebar"
+    import Navigation from './components/Navigation'
+    import {USER_REQUEST} from './store/actions/user'
+    // import '@/assets/css/bootstrap.min.css';
+    import Footer from "./components/Footer";
+    import RightSidebar from "./components/RightSidebar"
 
-  export default {
-    components: {
-      Footer,
-      Navigation,
-      RightSidebar
-    },
-    name: 'app',
-    created: function () {
-      if (this.$store.getters.isAuthenticated) {
-        this.$store.dispatch(USER_REQUEST)
-      }
+    export default {
+        components: {
+            Footer,
+            Navigation,
+            RightSidebar
+        },
+        name: 'app',
+        created: function () {
+            if (this.$store.getters.isAuthenticated) {
+                this.$store.dispatch(USER_REQUEST)
+            }
+        }
     }
   }
 </script>
@@ -102,6 +103,17 @@
 
     .footer .container {
       width: 100%;
+    body {
+        font-family: "Roboto", sans-serif;
+    }
+
+    a {
+        color: #3E5F8A;
+        text-decoration: none;
+    }
+
+    a:hover {
+        color: #5bbaff;
     }
   }
 

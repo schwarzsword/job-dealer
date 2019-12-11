@@ -1,4 +1,5 @@
 <template>
+
   <div class="item">
     <v-card>
       <v-card-text>
@@ -14,17 +15,18 @@
       </v-card-text>
     </v-card>
   </div>
+
 </template>
 
 <script>
-  export default {
-    name: 'ResumeItem',
-    props: ['id', 'title', 'author', 'subtitle'],
+    export default {
+        name: 'ResumeItem',
+        props: ['id', 'title', 'author', 'subtitle'],
 
-    data() {
-      return {}
-    },
-    created() {
+        data() {
+            return {}
+        },
+        created() {
+        }
     }
-  }
 </script>

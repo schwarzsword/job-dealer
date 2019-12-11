@@ -1,28 +1,28 @@
 <template>
-  <v-app>
-    <v-data-table
-        :headers="headers"
-        :items="vacancies"
-        class="elevation-1"
-        sort-by="calories"
-    >
-      <template v-slot:top>
-        <v-toolbar color="white" flat>
-          <v-toolbar-title>My vacancies</v-toolbar-title>
-          <v-divider
-              class="mx-4"
-              inset
-              vertical
-          ></v-divider>
-          <v-spacer></v-spacer>
-          <v-dialog max-width="1100px" v-model="dialog">
-            <template v-slot:activator="{ on }">
-              <v-btn class="mb-2" color="primary" dark v-on="on">New Item</v-btn>
-            </template>
-            <v-card>
-              <v-card-title>
-                <span class="headline">{{ formTitle }}</span>
-              </v-card-title>
+    <v-app>
+        <v-data-table
+                :headers="headers"
+                :items="vacancies"
+                class="elevation-1"
+                sort-by="calories"
+        >
+            <template v-slot:top>
+                <v-toolbar color="white" flat>
+                    <v-toolbar-title>My vacancies</v-toolbar-title>
+                    <v-divider
+                            class="mx-4"
+                            inset
+                            vertical
+                    ></v-divider>
+                    <v-spacer></v-spacer>
+                    <v-dialog max-width="1100px" v-model="dialog">
+                        <template v-slot:activator="{ on }">
+                            <v-btn class="mb-2" color="primary" dark v-on="on">New Item</v-btn>
+                        </template>
+                        <v-card>
+                            <v-card-title>
+                                <span class="headline">{{ formTitle }}</span>
+                            </v-card-title>
 
               <v-card-text>
                 <v-container>
@@ -109,6 +109,7 @@
         You have no active vacancies
       </template>
     </v-data-table>
+
 
   </v-app>
 </template>

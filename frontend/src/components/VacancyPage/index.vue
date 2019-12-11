@@ -17,17 +17,19 @@
       {{task.description}}
     </v-card>
 
-    <v-file-input
-        @change="onFileChange"
-        accept="image/*"
-        label="Select image file..."
-        v-if="vacancy.withTask"
-        v-model="file"
-    />
-    <v-btn :disabled="vacancy.withTask && !fileBytes" @click="apply" v-if="!isApplied">
-      Apply
-    </v-btn>
-  </v-app>
+
+        <v-file-input
+                @change="onFileChange"
+                accept="image/*"
+                label="Please, upload zip files"
+                v-if="vacancy.withTask"
+                v-model="file"
+        />
+        <v-btn :disabled="vacancy.withTask && !fileBytes" @click="apply" v-if="!isApplied">
+            Apply
+        </v-btn>
+    </v-app>
+
 
 </template>
 

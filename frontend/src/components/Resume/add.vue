@@ -98,6 +98,7 @@
           </form>
         </v-card-text>
       </v-card>
+
     </div>
     <div class="right-sidebar"></div>
   </div>

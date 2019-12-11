@@ -3,7 +3,12 @@
     <img v-bind:src="'data:image/jpeg;base64,'+company.fileData" v-if="company.fileData"/>
     <h1>{{ company.name }} <span class="verified" v-if="company.verified === true"></span></h1>
     <div>
-      {{company.description}}
+        <img v-bind:src="'data:image/jpeg;base64,'+company.fileData" v-if="company.fileData"/>
+        <h1>{{ company.name }} <span class="verified" v-if="company.verified === true"></span></h1>
+        <div>
+            {{company.description}}
+        </div>
+        <ReviewList :account-id="this.company.accountId" v-if="this.company.accountId"/>
     </div>
     <ReviewList :account-id="this.company.accountId" v-if="this.company.accountId"/>
   </div>

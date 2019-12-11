@@ -51,7 +51,7 @@ public class ResponseServiceImpl implements ResponseService {
     public void apply(UUID vacancyId, String email) {
         Applicant applicant = applicantRepository.findByAccountEmail(email).orElseThrow(ApplicantNotFoundException::new);
         Vacancy vacancy = vacancyRepository.findById(vacancyId).orElseThrow(VacancyNotFoundException::new);
-        Response response = new Response(null, "APPLIED", applicant, vacancy);
+        Response response = new Response(applicant, vacancy, null, "APPLIED");
         responseRepository.save(response);
         vacancy.addResponse(response);
         vacancyRepository.save(vacancy);

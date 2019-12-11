@@ -199,10 +199,12 @@
 
   </div>
 
+
 </template>
 
 
 <script>
+
 
   import {base64ArrayBuffer, urlPort} from "../../tool";
   import {AUTH_REQUEST} from "../../store/actions/auth";
@@ -218,6 +220,7 @@
         errors: {
           step1Error: "",
           companyNameError: "",
+
         },
         company: {
           name: "",

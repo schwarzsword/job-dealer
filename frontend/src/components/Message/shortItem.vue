@@ -1,4 +1,5 @@
 <template>
+
   <router-link :to="'/my/messages/' + `${authorId}`" class="msg">
     <div class="m-left">
       <img :src="`${avatar}`" alt="avatar">
@@ -8,24 +9,25 @@
       <div class="status">{{ status }}</div>
     </div>
   </router-link>
+
 </template>
 
 <script>
-  import Router from "../../router"
+    import Router from "../../router"
 
-  export default {
-    name: 'MessageShortItem',
-    props: ['id', 'title', 'author', 'authorId', 'status', 'avatar'],
+    export default {
+        name: 'MessageShortItem',
+        props: ['id', 'title', 'author', 'authorId', 'status', 'avatar'],
 
-    data() {
-      return {
-        company: {},
-        id: Router.currentRoute.params.id,
-      }
-    },
-    created() {
+        data() {
+            return {
+                company: {},
+                id: Router.currentRoute.params.id,
+            }
+        },
+        created() {
+        }
     }
-  }
 </script>
 
 <style>
@@ -73,4 +75,5 @@
     font-size: 10px;
     color: #4e555b;
   }
+
 </style>

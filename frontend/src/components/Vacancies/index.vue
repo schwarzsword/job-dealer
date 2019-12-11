@@ -1,4 +1,5 @@
 <template>
+
   <div>
     <div class="left-sidebar"></div>
 
@@ -94,149 +95,150 @@
                     @click:close="remove(item)"
                     close
                     v-bind="attrs"
-                >
-                  <strong>{{ item }}</strong>&nbsp;
-                </v-chip>
-              </template>
-            </v-combobox>
-            <v-btn @click="applyFilters" class="primary"> Apply filters</v-btn>
-          </div>
-        </v-card-text>
-      </v-card>
 
+                                >
+                                    <strong>{{ item }}</strong>&nbsp;
+                                </v-chip>
+                            </template>
+                        </v-combobox>
+                        <v-btn @click="applyFilters" class="primary"> Apply filters</v-btn>
+                    </div>
+                </v-card-text>
+            </v-card>
+
+        </div>
     </div>
-  </div>
 
 </template>
 
 <script>
 
-  import {urlPort} from "../../tool";
+    import {urlPort} from "../../tool";
 
-  export default {
-    name: "vacancies",
-    data: function () {
-      return {
-        items: ['Vacancy name', 'Salary', 'Company name'],
-        skills: [],
-        companyNames: [],
-        dialog: false,
-        totalSize: 0,
-        vacancies: [],
-        message: "",
-        headers: [
-          {text: 'Vacancy name', sortable: false, value: 'name',},
-          {text: 'Salary', value: 'money', sortable: false,},
-          {text: 'Company name', value: 'ownerName', sortable: false,},
-          {text: 'Actions', value: 'action', sortable: false},
-        ],
-        tempFilters: {
-          money: 0,
-          requestedSkills: [],
-          vacancyName: "",
-          companyName: "",
+    export default {
+        name: "vacancies",
+        data: function () {
+            return {
+                items: ['Vacancy name', 'Salary', 'Company name'],
+                skills: [],
+                companyNames: [],
+                dialog: false,
+                totalSize: 0,
+                vacancies: [],
+                message: "",
+                headers: [
+                    {text: 'Vacancy name', sortable: false, value: 'name',},
+                    {text: 'Salary', value: 'money', sortable: false,},
+                    {text: 'Company name', value: 'ownerName', sortable: false,},
+                    {text: 'Actions', value: 'action', sortable: false},
+                ],
+                tempFilters: {
+                    money: 0,
+                    requestedSkills: [],
+                    vacancyName: "",
+                    companyName: "",
+                },
+                filters: {
+                    limit: 20,
+                    offset: 0,
+                    money: 0,
+                    requestedSkills: [],
+                    vacancyName: "",
+                    companyName: "",
+                    sortBy: "Salary",
+                    descending: true,
+                },
+                rules: {
+                    moneyRules: [
+                        v => /[0-9]/.test(v) || 'It should be a number',
+                    ],
+                    requiredRules: [
+                        v => !!v || 'Field is required',
+                    ],
+                },
+            }
+
         },
-        filters: {
-          limit: 20,
-          offset: 0,
-          money: 0,
-          requestedSkills: [],
-          vacancyName: "",
-          companyName: "",
-          sortBy: "Salary",
-          descending: true,
+        methods: {
+            checkNull() {
+                this.tempFilters.money = this.tempFilters.money || 0;
+                this.tempFilters.money = Number.parseInt(this.tempFilters.money);
+            },
+
+            route(item) {
+                this.$router.push('/vacancies/' + item.id)
+            },
+
+            remove(item) {
+                this.tempFilters.requestedSkills.splice(this.tempFilters.requestedSkills.indexOf(item), 1);
+                this.tempFilters.requestedSkills = [...this.tempFilters.requestedSkills]
+            },
+
+            right() {
+                if ((this.filters.offset + this.filters.limit) < this.totalSize) {
+                    this.filters.offset += this.filters.limit;
+                    this.upload();
+                } else return false;
+            },
+
+            left() {
+                if ((this.filters.offset - this.filters.limit) >= 0) {
+                    this.filters.offset -= this.filters.limit;
+                    this.upload();
+                } else return false;
+            },
+
+            applyFilters() {
+                this.filters.vacancyName = this.tempFilters.vacancyName;
+                this.filters.money = this.tempFilters.money;
+                this.filters.requestedSkills = this.tempFilters.requestedSkills;
+                this.filters.companyName = this.tempFilters.companyName;
+                this.upload();
+            },
+
+            upload() {
+                let params = new URLSearchParams({
+                    'filters': JSON.stringify(this.filters)
+                });
+                urlPort.get('/vacancies/size', {params}).then(resp => {
+                    this.totalSize = resp.data;
+                    urlPort.get('/vacancies', {params}).then(resp => {
+                        this.vacancies = resp.data;
+                    }).catch(err => {
+
+                    })
+                }).catch(err => {
+                });
+            },
+
+            uploadSkills() {
+                urlPort.get('/skills')
+                    .then(resp => {
+                        this.skills = resp.data;
+                    })
+            },
+
+            uploadCompanyNames() {
+                urlPort.get('/names/companies')
+                    .then(resp => {
+                        this.companyNames = resp.data;
+                    })
+            }
         },
-        rules: {
-          moneyRules: [
-            v => /[0-9]/.test(v) || 'It should be a number',
-          ],
-          requiredRules: [
-            v => !!v || 'Field is required',
-          ],
+
+
+        created() {
+            this.uploadSkills();
+            this.uploadCompanyNames();
         },
-      }
 
-    },
-    methods: {
-      checkNull() {
-        this.tempFilters.money = this.tempFilters.money || 0;
-        this.tempFilters.money = Number.parseInt(this.tempFilters.money);
-      },
+        watch: {
+            dialog(val) {
+                val || this.close()
+            },
+        },
 
-      route(item) {
-        this.$router.push('/vacancies/' + item.id)
-      },
-
-      remove(item) {
-        this.tempFilters.requestedSkills.splice(this.tempFilters.requestedSkills.indexOf(item), 1);
-        this.tempFilters.requestedSkills = [...this.tempFilters.requestedSkills]
-      },
-
-      right() {
-        if ((this.filters.offset + this.filters.limit) < this.totalSize) {
-          this.filters.offset += this.filters.limit;
-          this.upload();
-        } else return false;
-      },
-
-      left() {
-        if ((this.filters.offset - this.filters.limit) >= 0) {
-          this.filters.offset -= this.filters.limit;
-          this.upload();
-        } else return false;
-      },
-
-      applyFilters() {
-        this.filters.vacancyName = this.tempFilters.vacancyName;
-        this.filters.money = this.tempFilters.money;
-        this.filters.requestedSkills = this.tempFilters.requestedSkills;
-        this.filters.companyName = this.tempFilters.companyName;
-        this.upload();
-      },
-
-      upload() {
-        let params = new URLSearchParams({
-          'filters': JSON.stringify(this.filters)
-        });
-        urlPort.get('/vacancies/size', {params}).then(resp => {
-          this.totalSize = resp.data;
-          urlPort.get('/vacancies', {params}).then(resp => {
-            this.vacancies = resp.data;
-          }).catch(err => {
-
-          })
-        }).catch(err => {
-        });
-      },
-
-      uploadSkills() {
-        urlPort.get('/skills')
-          .then(resp => {
-            this.skills = resp.data;
-          })
-      },
-
-      uploadCompanyNames() {
-        urlPort.get('/names/companies')
-          .then(resp => {
-            this.companyNames = resp.data;
-          })
-      }
-    },
-
-
-    created() {
-      this.uploadSkills();
-      this.uploadCompanyNames();
-    },
-
-    watch: {
-      dialog(val) {
-        val || this.close()
-      },
-    },
-
-  }
+    }
 </script>
 
 <style scoped>

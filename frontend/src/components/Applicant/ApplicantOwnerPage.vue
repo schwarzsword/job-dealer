@@ -1,17 +1,17 @@
 <template>
-  <v-app>
-    <div> всякое разное, типа мои резюме, активное резюме, крч разберетесь, кто фронт пилит</div>
-    <v-data-table
-        :headers="headers"
-        :items="responses"
-        class="elevation-1"
-        sort-by="calories"
-    >
-      <template v-slot:top>
-        <v-toolbar color="white" flat>
-          <v-toolbar-title>Responces</v-toolbar-title>
-        </v-toolbar>
-      </template>
+    <v-app>
+        <div> всякое разное, типа мои резюме, активное резюме, крч разберетесь, кто фронт пилит</div>
+        <v-data-table
+                :headers="headers"
+                :items="responses"
+                class="elevation-1"
+                sort-by="calories"
+        >
+            <template v-slot:top>
+                <v-toolbar color="white" flat>
+                    <v-toolbar-title>Responces</v-toolbar-title>
+                </v-toolbar>
+            </template>
 
       <template v-slot:item.action="{ item }">
 
@@ -53,11 +53,11 @@
     },
     methods: {
 
-      route(item) {
-        this.$router.push('/vacancies/' + item.vacancyId);
-      },
-    },
-  }
+            route(item) {
+                this.$router.push('/vacancies/' + item.vacancyId);
+            },
+        },
+    }
 </script>
 
 <style scoped>

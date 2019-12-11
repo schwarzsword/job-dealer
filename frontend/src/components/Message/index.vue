@@ -1,14 +1,30 @@
 <template>
-  <div>
-    <div class="left-sidebar">
-      <router-link class="write" to="/">Write message</router-link>
-      <div class="actions">
-        <router-link class="action active" to="/">Inbox</router-link>
-        <router-link class="action" to="/">Sent</router-link>
-        <router-link class="action" to="/">Archive</router-link>
-        <router-link class="action" to="/">Spam</router-link>
-        <router-link class="action" to="/">Deleted</router-link>
-      </div>
+    <div>
+        <div class="left-sidebar">
+            <router-link class="write" to="/">Write message</router-link>
+            <div class="actions">
+                <router-link class="action active" to="/">Inbox</router-link>
+                <router-link class="action" to="/">Sent</router-link>
+                <router-link class="action" to="/">Archive</router-link>
+                <router-link class="action" to="/">Spam</router-link>
+                <router-link class="action" to="/">Deleted</router-link>
+            </div>
+        </div>
+        <div class="content">
+            <div class="window">
+                <template v-for="(item, index) in items">
+                    <MessageItem
+                            :author="`${item.author}`"
+                            :authorId="`${item.authorId}`"
+                            :avatar="`${item.avatar}`"
+                            :subtitle="`${item.subtitle}`"
+                            :title="`${item.title}`"/>
+                </template>
+            </div>
+        </div>
+        <div class="right-sidebar">
+            <!--RightSidebar/-->
+        </div>
     </div>
     <div class="content">
       <div class="window">

@@ -1,9 +1,67 @@
 <template>
-  <div class="header">
-    <div class="container">
-      <div class="logo">
-        <div class="link">
-          <router-link to="/"></router-link>
+    <div class="header">
+        <div class="container">
+            <div class="logo">
+                <div class="link">
+                    <router-link to="/"></router-link>
+                </div>
+            </div>
+            <div class="find">
+                <form @submit.prevent="handleSubmit" id="search-form">
+                    <label>
+                        <input @change="handleQuery" autocomplete="off" id="find" name="query"
+                               placeholder="Enter job title" type="text"
+                               v-model="query" value=""/>
+                    </label>
+                    <label>
+                        <input class="search" id="search" type="submit" value=""/>
+                    </label>
+                </form>
+                <div class="select" id="select">
+                    <span class="item hideAction" id="i1">vacancies</span>
+                    <a class="item" id="i2">resumes</a>
+                </div>
+                <div class="selected" id="selected">vacancies</div>
+                <div class="histories" id="histories">
+                    <div class="sub">
+                        <a href="#">Advanced search</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu">
+                <router-link title="Vacancies" to="/vacancies">
+                    <v-icon class="elevation-2 m-icon i-vacancy" v-ripple></v-icon>
+                </router-link>
+                <router-link title="Resumes" to="/resumes">
+                    <v-icon class="elevation-2 m-icon i-resume" v-ripple></v-icon>
+                </router-link>
+            </div>
+
+            <!--@click="logout"-->
+            <div class="user">
+                <div @click="logout" class="profile" id="profile" v-if="isAuthenticated">
+                    <v-avatar :size="avatarSize" color="teal">
+                        <span class="white--text headline">K</span>
+                    </v-avatar>
+                    <div class="profile-menu" id="pm">
+                    </div>
+                </div>
+                <div v-if="!isAuthenticated && !authLoading">
+                    <router-link class="sign_in" to="/login">Sign in</router-link>
+                </div>
+            </div>
+
+            <div class="notifications" v-if="isAuthenticated">
+                <router-link style="float: right" to="/my/messages">
+                    <v-icon color="black" large style="font-size: 32px">mdi-email</v-icon>
+                    <v-badge class="m-count" color="green">
+                        <span slot="badge">2</span>
+                    </v-badge>
+                </router-link>
+            </div>
+
+            <!--router-link class="sign_in" to="/logout">Logout</router-link-->
         </div>
       </div>
       <div class="find">
@@ -66,10 +124,10 @@
 
       <!--router-link class="sign_in" to="/logout">Logout</router-link-->
     </div>
-  </div>
 </template>
 
 <script>
+
   import {mapGetters, mapState} from 'vuex'
   import {AUTH_LOGOUT} from '../../store/actions/auth'
 
@@ -191,22 +249,24 @@
             }
           }
 
-          // i1.onclick = function () {
-          //   chooseAction();
-          // };
 
-          i2.onclick = function () {
-            chooseAction();
-            closeSelect();
-          };
+                    // i1.onclick = function () {
+                    //   chooseAction();
+                    // };
 
-        };
-      }
+                    i2.onclick = function () {
+                        chooseAction();
+                        closeSelect();
+                    };
+
+                };
+            }
+        }
     }
-  }
 </script>
 
 <style>
+
   .header {
     display: table;
     width: 100%;
@@ -576,5 +636,6 @@
   .header .container .user .profile .profile-menu a:hover {
     color: #000;
   }
+
 
 </style>
