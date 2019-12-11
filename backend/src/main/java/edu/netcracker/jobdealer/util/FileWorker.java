@@ -16,6 +16,6 @@ public class FileWorker {
         BufferedImage bufferedImage = ImageIO.read(imgPath);
         WritableRaster raster = bufferedImage.getRaster();
         DataBufferByte data = (DataBufferByte) raster.getDataBuffer();
-       return new String(Base64.encode(data.getData()), StandardCharsets.UTF_8);
+        return new String(Base64.encode(data.getData()), StandardCharsets.UTF_8);
     }
 }

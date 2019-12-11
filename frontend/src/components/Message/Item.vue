@@ -1,5 +1,5 @@
 <template>
-  <router-link class="msg" :to="'/my/messages/' + `${authorId}`">
+  <router-link :to="'/my/messages/' + `${authorId}`" class="msg">
     <div class="m-left">
       <img :src="`${avatar}`" alt="avatar">
     </div>
@@ -36,31 +36,37 @@
     width: 100%;
     border-bottom: 1px solid #f0f0f0;
   }
+
   .msg:hover {
     background-color: #f3f3f3;
   }
+
   .msg .m-left {
     display: block;
     float: left;
     width: 48px;
   }
+
   .msg .m-left img {
     border-radius: 50%;
     width: 32px;
     height: 32px;
     margin: 4px 8px;
   }
+
   .msg .m-right {
     display: block;
     float: left;
     width: calc(100% - 48px);
   }
+
   .msg .author {
     display: table;
     padding: 2px 10px;
     font-size: 16px;
     color: #000;
   }
+
   .msg .subtitle {
     display: table;
     padding: 2px 10px;

@@ -12,14 +12,14 @@
     </div>
     <div class="content">
       <div class="window">
-          <template v-for="(item, index) in items">
-            <MessageItem
-                :title="`${item.title}`"
-                :author="`${item.author}`"
-                :authorId="`${item.authorId}`"
-                :subtitle="`${item.subtitle}`"
-                :avatar="`${item.avatar}`"/>
-          </template>
+        <template v-for="(item, index) in items">
+          <MessageItem
+              :author="`${item.author}`"
+              :authorId="`${item.authorId}`"
+              :avatar="`${item.avatar}`"
+              :subtitle="`${item.subtitle}`"
+              :title="`${item.title}`"/>
+        </template>
       </div>
     </div>
     <div class="right-sidebar">
@@ -30,7 +30,6 @@
 
 <script>
   import axios from 'axios';
-  import {urlPort} from "../../tool";
   import MessageItem from "./Item";
 
   export default {
@@ -126,9 +125,11 @@
     font-size: 14px;
     text-align: center;
   }
+
   .left-sidebar .write:hover {
     background-color: #96d350;
   }
+
   .left-sidebar .write:active {
     background-color: #79aa41;
   }
@@ -140,6 +141,7 @@
     border-radius: 5px;
     border: 1px solid #f0f0f0;
   }
+
   .left-sidebar .actions .action {
     display: table;
     padding: 0 10px;
@@ -147,13 +149,16 @@
     width: 100%;
     line-height: 30px;
   }
+
   .left-sidebar .actions .action:hover {
     background-color: #ffff;
   }
+
   .left-sidebar .actions .active {
     background-color: #f0f0f0;
     color: #000;
   }
+
   .left-sidebar .actions .active:hover {
     background-color: #f0f0f0;
     color: #000;
@@ -167,7 +172,13 @@
     min-height: 400px;
     border: 1px solid #f3f3f3;
   }
-  .content .window .header {}
-  .content .window .dialogs {}
-  .content .window .sub-dialog {}
+
+  .content .window .header {
+  }
+
+  .content .window .dialogs {
+  }
+
+  .content .window .sub-dialog {
+  }
 </style>

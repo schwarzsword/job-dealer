@@ -3,7 +3,7 @@
     <div class="left-sidebar" style="text-align: center; margin: 10px 0 0 0;">
       <div>
         <router-link class="my-2" to="/resumes/add">
-          <v-btn large color="primary" outlined>Add resume</v-btn>
+          <v-btn color="primary" large outlined>Add resume</v-btn>
         </router-link>
       </div>
       <div class="link-my-resumes">
@@ -16,10 +16,10 @@
     <div class="content">
       <div v-for="item in this.resumes">
         <ResumeItem
-            :id="`${item.id}`"
-            :title="`${item.name}`"
             :author="`${item.firstName} ${item.lastName}`"
-            :skills="`${item.skills}`"/>
+            :id="`${item.id}`"
+            :skills="`${item.skills}`"
+            :title="`${item.name}`"/>
       </div>
     </div>
 
@@ -33,23 +33,23 @@
                 :items="items"
                 v-model="filters.sortBy"
             />
-            <v-checkbox v-model="filters.descending" label="descending">descending</v-checkbox>
+            <v-checkbox label="descending" v-model="filters.descending">descending</v-checkbox>
           </div>
 
-<!--          <v-select :items="countries" v-model="country" @change="handleCountry" label="Choose country"></v-select>-->
-<!--          <v-select :items="cities" v-model="city" @change="handleCity" label="Choose city"></v-select>-->
+          <!--          <v-select :items="countries" v-model="country" @change="handleCountry" label="Choose country"></v-select>-->
+          <!--          <v-select :items="cities" v-model="city" @change="handleCity" label="Choose city"></v-select>-->
           Salary:
           <div style="display: table; margin-bottom: 20px;">
-            <v-text-field class="salary-input" @change="handleSalary" v-model="price[0]" hide-details single-line
-                          type="number"/>
-            <v-text-field class="salary-input" @change="handleSalary" v-model="price[1]" hide-details single-line
-                          type="number"/>
+            <v-text-field @change="handleSalary" class="salary-input" hide-details single-line type="number"
+                          v-model="price[0]"/>
+            <v-text-field @change="handleSalary" class="salary-input" hide-details single-line type="number"
+                          v-model="price[1]"/>
           </div>
-          <v-range-slider v-model="price" @change="handleSalary" :min="0" :max="5000" :step="100"/>
-<!--          <v-checkbox class="check-box" v-model="experience" @change="handleExperience" label="Experience"/>-->
-<!--          <v-checkbox class="check-box" v-model="driverLicense" @change="handleDriverLicense"-->
-<!--                      label="Driver license"/>-->
-<!--          <v-switch v-model="saveFilter" @change="handleSaveFilter" label="Save filter"/>-->
+          <v-range-slider :max="5000" :min="0" :step="100" @change="handleSalary" v-model="price"/>
+          <!--          <v-checkbox class="check-box" v-model="experience" @change="handleExperience" label="Experience"/>-->
+          <!--          <v-checkbox class="check-box" v-model="driverLicense" @change="handleDriverLicense"-->
+          <!--                      label="Driver license"/>-->
+          <!--          <v-switch v-model="saveFilter" @change="handleSaveFilter" label="Save filter"/>-->
         </v-card-text>
       </v-card>
     </div>

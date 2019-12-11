@@ -3,34 +3,34 @@
     <div class="left-sidebar">
       <div>
         <label>
-          <input name="people-search" type="text" class="people-search" placeholder="Search peoples">
+          <input class="people-search" name="people-search" placeholder="Search peoples" type="text">
         </label>
       </div>
       <template v-for="(item, index) in items">
         <MessageShortItem
-            :title="`${item.title}`"
             :author="`${item.author}`"
             :authorId="`${item.authorId}`"
+            :avatar="`${item.avatar}`"
             :status="`${item.status}`"
-            :avatar="`${item.avatar}`"/>
+            :title="`${item.title}`"/>
       </template>
     </div>
     <div class="content">
 
       <div class="dialog">
-        <div id='messages' class="msg-all">
+        <div class="msg-all" id='messages'>
           <div class="a-msg">
             <div class="text me">
               <b>Pavel Durov</b>:<br> Hello, World!
-<!--              <div class="info">-->
-<!--                <div class="send-ed"></div>-->
-<!--                <div class="date">Time</div>-->
-<!--              </div>-->
+              <!--              <div class="info">-->
+              <!--                <div class="send-ed"></div>-->
+              <!--                <div class="date">Time</div>-->
+              <!--              </div>-->
             </div>
           </div>
         </div>
         <div class="field">
-              <textarea id="text" class="text" name="text" placeholder="Enter your message here...">
+              <textarea class="text" id="text" name="text" placeholder="Enter your message here...">
               </textarea>
           <div class="audio">
             F1
@@ -221,6 +221,7 @@
     background-size: 120px;
     float: right;
   }
+
   .field {
     border-top: 1px solid #f3f3f3;
     width: 460px;
@@ -229,6 +230,7 @@
     bottom: 0;
     position: fixed;
   }
+
   .field .text {
     margin: 10px;
     padding: 15px 20px;
@@ -242,6 +244,7 @@
     float: left;
     box-shadow: inset 0 0 4px 0 rgba(0, 0, 0, 0.1);
   }
+
   .field .smiles {
     display: block;
     margin: 20px 280px;
@@ -255,6 +258,7 @@
     line-height: 32px;
     color: #909090;
   }
+
   .field .audio {
     display: block;
     margin: 20px 320px;
@@ -268,6 +272,7 @@
     line-height: 32px;
     color: #909090;
   }
+
   .send-button {
     padding: 0 20px;
     margin: 21px auto;
@@ -284,10 +289,12 @@
     cursor: pointer;
     transition: .05s;
   }
+
   .send-button:hover {
     background-color: #565cea;
     text-decoration: none;
   }
+
   .send-button:active {
     background-color: #3e449d;
     padding: 0 20px;

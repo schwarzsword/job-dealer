@@ -8,21 +8,21 @@
             :headers="headers"
             :items="vacancies"
             class="elevation-1"
-            disable-pagination
             disable-items-per-page
+            disable-pagination
             disable-sort
             hide-default-footer
         >
           <template v-slot:top>
-            <v-toolbar flat color="white">
+            <v-toolbar color="white" flat>
               <v-toolbar-title>Vacancies</v-toolbar-title>
               <v-spacer/>
             </v-toolbar>
           </template>
           <template v-slot:item.action="{ item }">
             <v-icon
-                class="mr-2"
                 @click="route(item)"
+                class="mr-2"
             >
               mdi-file-document-box
             </v-icon>
@@ -34,16 +34,16 @@
             <span>{{filters.offset}}-{{filters.offset+filters.limit}}</span>
             <span> of {{totalSize}}</span>
             <v-icon
-                large
-                class="mr-2"
                 @click="left()"
+                class="mr-2"
+                large
             >
               mdi-arrow-left-bold-box-outline
             </v-icon>
             <v-icon
-                large
-                class="mr-2"
                 @click="right()"
+                class="mr-2"
+                large
             >
               mdi-arrow-right-bold-box-outline
             </v-icon>
@@ -61,23 +61,23 @@
               Sort by
               <v-select
                   :items="items"
-                  v-model="filters.sortBy"
                   @change="upload"
+                  v-model="filters.sortBy"
               />
-              <v-checkbox v-model="filters.descending" label="descending" @change="upload">descending</v-checkbox>
+              <v-checkbox @change="upload" label="descending" v-model="filters.descending">descending</v-checkbox>
             </div>
 
             <v-text-field
-                v-model="tempFilters.vacancyName"
-                label="Vacancy"/>
+                label="Vacancy"
+                v-model="tempFilters.vacancyName"/>
             <v-text-field
-                type="number"
-                v-model="tempFilters.money"
+                @change="checkNull"
                 label="Minimum salary"
-                @change="checkNull"/>
+                type="number"
+                v-model="tempFilters.money"/>
             <v-autocomplete
-                label="Company"
                 :items="companyNames"
+                label="Company"
                 v-model="tempFilters.companyName"/>
             <v-combobox
                 :items="skills"

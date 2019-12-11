@@ -6,7 +6,7 @@
       <v-card class="mx-auto">
         <v-card-title>
           <router-link to="/resumes">
-            <v-btn icon class="mr-6">
+            <v-btn class="mr-6" icon>
               <v-icon>mdi-chevron-left</v-icon>
             </v-btn>
           </router-link>
@@ -79,11 +79,13 @@
     display: table;
     margin: 20px 0;
   }
+
   .skill {
     display: block;
     float: left;
     margin: 0 5px 0 0;
   }
+
   .salary {
     display: table;
     margin: 10px 0;

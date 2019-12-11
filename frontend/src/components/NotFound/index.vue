@@ -1,11 +1,11 @@
 <template>
-    <h1>Sorry, page not found</h1>
+  <h1>Sorry, page not found</h1>
 </template>
 
 <script>
-    export default {
-        name: "index.js"
-    }
+  export default {
+    name: "index.js"
+  }
 </script>
 
 <style scoped>

@@ -2,9 +2,9 @@ spring:
   profiles:
     active: dev
   datasource:
-    url: jdbc:postgresql://localhost:5432/netcracker
-    username: netcracker
-    password: netcracker
+    url: jdbc:postgresql://localhost:5432/jobdealer
+    username: root
+    password: root
     driver-class-name: org.postgresql.Driver
     initialization-mode: always
     hikari:
@@ -14,12 +14,12 @@ spring:
     properties:
       hibernate:
         hbm2ddl:
-          auto: update
+          auto: create
         dialect: org.hibernate.dialect.PostgreSQL95Dialect
         jdbc:
           lob:
             non_contextual_creation: true
-        ddl-auto: update
+        ddl-auto: create
     generate-ddl: true
     show-sql: false
     open-in-view: false

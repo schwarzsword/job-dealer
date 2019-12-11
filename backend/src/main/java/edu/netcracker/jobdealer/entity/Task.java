@@ -44,7 +44,7 @@ public class Task {
         return vacancy.getId();
     }
 
-    public void addSubmission(Submission submission){
+    public void addSubmission(Submission submission) {
         submissions.add(submission);
     }
 

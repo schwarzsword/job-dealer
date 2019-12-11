@@ -9,6 +9,7 @@ public interface TaskService {
     Task createOrUpdateTask(String taskData, String email, UUID id);
 
     Task getTaskByVacancy(Vacancy vacancy);
+
     Task getTaskByVacancyId(UUID id);
 
     Task getTaskById(UUID taskId);

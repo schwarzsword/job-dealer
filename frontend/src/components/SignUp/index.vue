@@ -4,7 +4,7 @@
 
     <div class="content">
 
-      <v-stepper v-model="e1" style="margin-bottom: 20px">
+      <v-stepper style="margin-bottom: 20px" v-model="e1">
         <v-stepper-header>
           <v-stepper-step :complete="e1 > 1" step="1">Step 1</v-stepper-step>
 
@@ -38,12 +38,12 @@
               />
 
               <v-text-field
+                  :rules="rules.confirmPassRules"
                   :type="show1 ? 'text' : 'password'"
                   @click:append="show2 = !show2"
                   label="Confirm password"
                   required
                   v-model="account.password_confirmation"
-                  :rules="rules.confirmPassRules"
               />
 
               <v-checkbox
@@ -54,30 +54,30 @@
             </div>
 
             <v-btn
+                :disabled="!(account.email && account.password && account.password_confirmation)"
                 @click="this.next"
                 color="primary"
-                :disabled="!(account.email && account.password && account.password_confirmation)"
             >
               Continue
             </v-btn>
 
-            <router-link style="margin-left: 20px;" class="sign_in" to="/login">Cancel</router-link>
+            <router-link class="sign_in" style="margin-left: 20px;" to="/login">Cancel</router-link>
           </v-stepper-content>
 
           <v-stepper-content step="2">
             <div v-if="account.isCompany"
             >
               <v-text-field
+                  :rules="rules.requiredRules"
                   autofocus
                   label="Company name"
-                  :rules="rules.requiredRules"
                   v-model="company.name"
               />
               <div class="error--text" v-if="errors.companyNameError">{{errors.companyNameError}}</div>
               <v-textarea
+                  :rules="rules.requiredRules"
                   label="Company description"
                   name="input-7-1"
-                  :rules="rules.requiredRules"
                   v-model="company.description"
               />
 
@@ -89,55 +89,55 @@
               />
 
               <div style="padding: 5px">
-                  <v-btn
-                      style="margin-right: 10px;"
-                      @click="registerCompany"
-                      color="primary"
-                  >
-                      Sign up
-                  </v-btn>
+                <v-btn
+                    @click="registerCompany"
+                    color="primary"
+                    style="margin-right: 10px;"
+                >
+                  Sign up
+                </v-btn>
 
-                  <v-btn
-                      style="margin-right: 20px;"
-                      @click="e1 = 1"
-                      color="gray"
-                  >
-                      Back
-                  </v-btn>
+                <v-btn
+                    @click="e1 = 1"
+                    color="gray"
+                    style="margin-right: 20px;"
+                >
+                  Back
+                </v-btn>
 
-                  <router-link class="sign_in" to="/login">Cancel</router-link>
+                <router-link class="sign_in" to="/login">Cancel</router-link>
               </div>
             </div>
             <div v-else>
               <v-text-field
+                  :rules="rules.requiredRules"
                   autofocus
                   label="Vacancy you apply"
-                  :rules="rules.requiredRules"
                   v-model="resume.name"
               />
               <v-text-field
+                  :rules="rules.requiredRules"
                   autofocus
                   label="Your name"
-                  :rules="rules.requiredRules"
                   v-model="resume.firstName"
               />
               <v-text-field
+                  :rules="rules.requiredRules"
                   autofocus
                   label="Your last name"
-                  :rules="rules.requiredRules"
                   v-model="resume.lastName"
               />
               <v-text-field
-                  type="number"
                   :rules="rules.salaryRules"
                   autofocus
                   label="Salary you wish"
+                  type="number"
                   v-model="resume.salary"
               />
               <v-textarea
+                  :rules="rules.requiredRules"
                   label="Something about you"
                   name="input-7-1"
-                  :rules="rules.requiredRules"
                   v-model="resume.about"
               />
               <v-file-input
@@ -167,25 +167,25 @@
                 </template>
               </v-combobox>
 
-            <div style="padding: 5px">
-              <v-btn
-                  style="margin-right: 10px;"
-                  @click="registerUser"
-                  color="primary"
-              >
-                Sign up
-              </v-btn>
+              <div style="padding: 5px">
+                <v-btn
+                    @click="registerUser"
+                    color="primary"
+                    style="margin-right: 10px;"
+                >
+                  Sign up
+                </v-btn>
 
-              <v-btn
-                  style="margin-right: 10px;"
-                  @click="e1 = 1"
-                  color="gray"
-              >
-                Back
-              </v-btn>
+                <v-btn
+                    @click="e1 = 1"
+                    color="gray"
+                    style="margin-right: 10px;"
+                >
+                  Back
+                </v-btn>
 
-              <router-link style="margin-left: 20px;" class="sign_in" to="/login">Cancel</router-link>
-            </div>
+                <router-link class="sign_in" style="margin-left: 20px;" to="/login">Cancel</router-link>
+              </div>
             </div>
 
           </v-stepper-content>

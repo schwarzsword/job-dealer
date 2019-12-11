@@ -1,15 +1,15 @@
 <template>
-    <v-app>
-        <div id="app">
-            <navigation/>
-            <div class="wrapper">
-                <div class="container">
-                    <router-view/>
-                </div>
-            </div>
-            <Footer/>
+  <v-app>
+    <div id="app">
+      <navigation/>
+      <div class="wrapper">
+        <div class="container">
+          <router-view/>
         </div>
-    </v-app>
+      </div>
+      <Footer/>
+    </div>
+  </v-app>
 </template>
 
 <script>
@@ -20,145 +20,148 @@
   import RightSidebar from "./components/RightSidebar"
 
   export default {
-        components: {
-            Footer,
-            Navigation,
-            RightSidebar
-        },
-        name: 'app',
-        created: function () {
-            if (this.$store.getters.isAuthenticated) {
-                this.$store.dispatch(USER_REQUEST)
-            }
-        }
+    components: {
+      Footer,
+      Navigation,
+      RightSidebar
+    },
+    name: 'app',
+    created: function () {
+      if (this.$store.getters.isAuthenticated) {
+        this.$store.dispatch(USER_REQUEST)
+      }
     }
+  }
 </script>
 
 <style>
-    html {
-    }
-    body {
-        font-family: "Roboto", sans-serif;
-    }
-    a {
-        color: #3E5F8A;
-        text-decoration: none;
-    }
-    a:hover {
-        color: #5bbaff;
-    }
+  html {
+  }
 
-    /* wrapper */
-    .wrapper {
-        display: table;
-        width: 100%;
-        height: auto;
-        min-height: 500px;
+  body {
+    font-family: "Roboto", sans-serif;
+  }
+
+  a {
+    color: #3E5F8A;
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: #5bbaff;
+  }
+
+  /* wrapper */
+  .wrapper {
+    display: table;
+    width: 100%;
+    height: auto;
+    min-height: 500px;
+  }
+
+  .wrapper .container {
+    display: table;
+    margin: 20px auto 0 auto;
+    width: 1000px;
+    height: auto;
+    padding: 0;
+  }
+
+  .wrapper .container .left-sidebar {
+    display: block;
+    float: left;
+    width: 200px;
+    min-height: 100px;
+    /*background-color: #eee;*/
+  }
+
+  .wrapper .container .content {
+    display: block;
+    float: left;
+    width: 500px;
+    min-height: 100px;
+  }
+
+  .wrapper .container .right-sidebar {
+    display: block;
+    float: left;
+    width: 300px;
+    min-height: 100px;
+    /*background-color: #eee;*/
+  }
+
+  /*Small devices (landscape phones, 0px and up)*/
+  @media (min-width: 0px) {
+    .header .container {
+      width: 100%;
     }
 
     .wrapper .container {
-        display: table;
-        margin: 20px auto 0 auto;
-        width: 1000px;
-        height: auto;
-        padding: 0;
+      width: 100%;
     }
 
-    .wrapper .container .left-sidebar {
-        display: block;
-        float: left;
-        width: 200px;
-        min-height: 100px;
-        /*background-color: #eee;*/
+    .footer .container {
+      width: 100%;
+    }
+  }
+
+  /*Small devices (landscape phones, 576px and up)*/
+  @media (min-width: 576px) {
+    .header .container {
+      width: 100%;
     }
 
-    .wrapper .container .content {
-        display: block;
-        float: left;
-        width: 500px;
-        min-height: 100px;
+    .wrapper .container {
+      width: 100%;
     }
 
-    .wrapper .container .right-sidebar {
-        display: block;
-        float: left;
-        width: 300px;
-        min-height: 100px;
-        /*background-color: #eee;*/
+    .footer .container {
+      width: 100%;
+    }
+  }
+
+  /*Medium devices (tablets, 768px and up)*/
+  @media (min-width: 768px) {
+    .header .container {
+      width: 640px;
     }
 
-    /*Small devices (landscape phones, 0px and up)*/
-    @media (min-width: 0px) {
-        .header .container {
-            width: 100%;
-        }
-
-        .wrapper .container {
-            width: 100%;
-        }
-
-        .footer .container {
-            width: 100%;
-        }
+    .wrapper .container {
+      width: 640px;
     }
 
-    /*Small devices (landscape phones, 576px and up)*/
-    @media (min-width: 576px) {
-        .header .container {
-            width: 100%;
-        }
+    .footer .container {
+      width: 640px;
+    }
+  }
 
-        .wrapper .container {
-            width: 100%;
-        }
-
-        .footer .container {
-            width: 100%;
-        }
+  /*Large devices (desktops, 992px and up)*/
+  @media (min-width: 992px) {
+    .header .container {
+      width: 720px;
     }
 
-    /*Medium devices (tablets, 768px and up)*/
-    @media (min-width: 768px) {
-        .header .container {
-            width: 640px;
-        }
-
-        .wrapper .container {
-            width: 640px;
-        }
-
-        .footer .container {
-            width: 640px;
-        }
+    .wrapper .container {
+      width: 720px;
     }
 
-    /*Large devices (desktops, 992px and up)*/
-    @media (min-width: 992px) {
-        .header .container {
-            width: 720px;
-        }
+    .footer .container {
+      width: 720px;
+    }
+  }
 
-        .wrapper .container {
-            width: 720px;
-        }
-
-        .footer .container {
-            width: 720px;
-        }
+  /*Extra large devices (large desktops, 1200px and up)*/
+  @media (min-width: 1000px) {
+    .header .container {
+      width: 1000px;
     }
 
-    /*Extra large devices (large desktops, 1200px and up)*/
-    @media (min-width: 1000px) {
-        .header .container {
-            width: 1000px;
-        }
-
-        .wrapper .container {
-            width: 1000px;
-        }
-
-        .footer .container {
-            width: 1000px;
-        }
+    .wrapper .container {
+      width: 1000px;
     }
+
+    .footer .container {
+      width: 1000px;
+    }
+  }
 </style>

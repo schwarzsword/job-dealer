@@ -7,13 +7,13 @@
         </div>
       </div>
       <div class="find">
-        <form id="search-form" @submit.prevent="handleSubmit">
+        <form @submit.prevent="handleSubmit" id="search-form">
           <label>
-            <input id="find" value="" v-model="query" name="query" placeholder="Enter job title" type="text"
-                   @change="handleQuery" autocomplete="off"/>
+            <input @change="handleQuery" autocomplete="off" id="find" name="query" placeholder="Enter job title" type="text"
+                   v-model="query" value=""/>
           </label>
           <label>
-            <input id="search" type="submit" value="" class="search"/>
+            <input class="search" id="search" type="submit" value=""/>
           </label>
         </form>
         <div class="select" id="select">
@@ -29,22 +29,22 @@
       </div>
 
       <div class="menu">
-        <router-link to="/vacancies" title="Vacancies">
-          <v-icon v-ripple class="elevation-2 m-icon i-vacancy"></v-icon>
+        <router-link title="Vacancies" to="/vacancies">
+          <v-icon class="elevation-2 m-icon i-vacancy" v-ripple></v-icon>
         </router-link>
-        <router-link to="/resumes" title="Resumes">
-          <v-icon v-ripple class="elevation-2 m-icon i-resume"></v-icon>
+        <router-link title="Resumes" to="/resumes">
+          <v-icon class="elevation-2 m-icon i-resume" v-ripple></v-icon>
         </router-link>
       </div>
 
       <!--@click="logout"-->
       <div class="user">
-        <div id="profile" class="profile" v-if="isAuthenticated">
-          <v-avatar :size="avatarSize" @mouseover="handleMenu" @mouseleave="handleMenuClose" color="teal">
+        <div class="profile" id="profile" v-if="isAuthenticated">
+          <v-avatar :size="avatarSize" @mouseleave="handleMenuClose" @mouseover="handleMenu" color="teal">
             <span class="white--text headline">K</span>
           </v-avatar>
 
-          <div id="pm" class="profile-menu" style="display: none">
+          <div class="profile-menu" id="pm" style="display: none">
             <router-link to="/profile">My profile</router-link>
             <a @click="logout" href="">Logout</a>
           </div>
@@ -57,7 +57,7 @@
 
       <div class="notifications" v-if="isAuthenticated">
         <router-link style="float: right" to="/my/messages">
-          <v-icon large color="black" style="font-size: 32px">mdi-email</v-icon>
+          <v-icon color="black" large style="font-size: 32px">mdi-email</v-icon>
           <v-badge class="m-count" color="green">
             <span slot="badge">2</span>
           </v-badge>
@@ -84,12 +84,12 @@
     },
 
     methods: {
-      handleMenu: function() {
+      handleMenu: function () {
         if (document.getElementById("pm").style.display.toString() === 'none') {
           document.getElementById("pm").style.display = 'block';
         }
       },
-      handleMenuClose: function() {
+      handleMenuClose: function () {
         window.setTimeout(function () {
           document.getElementById("pm").style.display = 'none';
         }, 3000);
@@ -284,6 +284,7 @@
     box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 0px 0px,
     rgba(0, 0, 0, 0.14) 0px 0px 0px 0px, rgba(0, 0, 0, 0.12) 0px 0px 0px 0px !important;
   }
+
   .header .container .menu .m-icon:hover {
     /*background-color: #f5f5f5;*/
   }
@@ -440,6 +441,7 @@
     font-size: 14px;
     opacity: 0.3;
   }
+
   .header .container .find .select .hideAction:hover {
     cursor: text;
     opacity: 0.3;
@@ -559,6 +561,7 @@
     border-radius: 12px;
     z-index: 1;
   }
+
   .header .container .user .profile .profile-menu a {
     display: table;
     width: 100%;
@@ -569,6 +572,7 @@
     padding: 0 20px;
     color: #888;
   }
+
   .header .container .user .profile .profile-menu a:hover {
     color: #000;
   }

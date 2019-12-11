@@ -16,11 +16,11 @@ Vue.component('center-container', Center);
 
 Vue.use(Vuetify);
 new Vue({
-    el: '#app',
-    router,
-    store,
-    template: '<App/>',
-    components: {App},
-    render: h => h(App),
-    vuetify: new Vuetify()
+  el: '#app',
+  router,
+  store,
+  template: '<App/>',
+  components: {App},
+  render: h => h(App),
+  vuetify: new Vuetify()
 }).$mount('#app');
