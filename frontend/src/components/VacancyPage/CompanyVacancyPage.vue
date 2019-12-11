@@ -136,6 +136,7 @@
                 this.fileBytes = this.submissions.find(function (element, index, array) {
                     return element.applicantId === item.applicantId
                 }).fileData;
+		console.log(1);
                 download(atob(this.fileBytes), item.applicantName + "submission.zip", "application/zip")
             }
         },
