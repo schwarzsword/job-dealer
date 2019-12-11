@@ -14,22 +14,18 @@ import java.util.UUID;
 @Entity
 public class Response {
 
+    @ManyToOne
+    @JoinColumn(name = "applicant", referencedColumnName = "id")
+    Applicant applicant;
+    @ManyToOne
+    @JoinColumn(name = "vacancy", referencedColumnName = "id")
+    Vacancy vacancy;
     @Id
     @GeneratedValue
     @Column(name = "id")
     private UUID id;
-
     @Column(name = "status")
     private String status;
-
-    @ManyToOne
-    @JoinColumn(name = "applicant", referencedColumnName = "id")
-    Applicant applicant;
-
-    @ManyToOne
-    @JoinColumn(name = "vacancy", referencedColumnName = "id")
-    Vacancy vacancy;
-
 
     @Mapping(value = "applicantId")
     public UUID getApplicantID() {

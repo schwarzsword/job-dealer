@@ -1,16 +1,16 @@
 <template>
-        <v-card v-if="rating>=lowestRating">
-            <div class="heading">{{sender}}</div>
-            <hr/>
-            <div class="body-1">
-                {{text}}
-            </div>
-            <div class="v-data-footer">
-                <v-icon v-if="showArrows" color="green" @click="up">mdi-chevron-double-up</v-icon>
-                {{ratingLocal}}
-                <v-icon v-if="showArrows" color="red" @click="down">mdi-chevron-double-down</v-icon>
-            </div>
-        </v-card>
+    <v-card v-if="rating>=lowestRating">
+        <div class="heading">{{sender}}</div>
+        <hr/>
+        <div class="body-1">
+            {{text}}
+        </div>
+        <div class="v-data-footer">
+            <v-icon @click="up" color="green" v-if="showArrows">mdi-chevron-double-up</v-icon>
+            {{ratingLocal}}
+            <v-icon @click="down" color="red" v-if="showArrows">mdi-chevron-double-down</v-icon>
+        </div>
+    </v-card>
 </template>
 
 <script>
@@ -20,13 +20,13 @@
         name: "ReviewItem",
         props: ["id", "text", "sender", "rating", "voted", "accountId", "lowestRating"],
         data() {
-            return{
-                ratingLocal : this.rating,
+            return {
+                ratingLocal: this.rating,
                 showArrows: true,
             }
         },
-        created(){
-              this.showArrows = !this.voted.includes(this.accountId);
+        created() {
+            this.showArrows = !this.voted.includes(this.accountId);
         },
         methods: {
             up() {

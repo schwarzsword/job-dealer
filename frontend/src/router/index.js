@@ -114,14 +114,14 @@ export default new Router({
             name: 'resume',
             component: Resume,
             //beforeEnter: ifAuthenticated,
-            props: (route) => ({ query: route.query.q })
+            props: (route) => ({query: route.query.q})
         },
         {
             path: '/resumes/add',
             name: 'addResume',
             component: ResumeAdd,
             beforeEnter: ifAuthenticated,
-            props: (route) => ({ query: route.query.q })
+            props: (route) => ({query: route.query.q})
         },
         {
             path: '/resumes/:id',

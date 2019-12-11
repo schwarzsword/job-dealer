@@ -37,4 +37,6 @@ public interface ReviewRepository extends JpaRepository<Review, UUID> {
     Optional<Review> findByReviewDestEmailAndReviewSourceEmail(String dest, String source);
 
     Optional<Review> findByReviewDestIdAndReviewSourceId(UUID dest, UUID source);
+
+    Optional<Review> findByReviewDestIdAndReviewSourceEmail(UUID dest, String source);
 }
