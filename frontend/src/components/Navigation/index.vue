@@ -9,7 +9,8 @@
             <div class="find">
                 <form @submit.prevent="handleSubmit" id="search-form">
                     <label>
-                        <input @change="handleQuery" autocomplete="off" id="find" name="query" placeholder="Enter job title" type="text"
+                        <input @change="handleQuery" autocomplete="off" id="find" name="query"
+                               placeholder="Enter job title" type="text"
                                v-model="query" value=""/>
                     </label>
                     <label>

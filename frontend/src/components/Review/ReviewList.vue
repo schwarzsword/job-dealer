@@ -15,8 +15,8 @@
             </div>
             <div v-else>
                 <v-textarea
-                        solo
                         label="Write your review here"
+                        solo
                         v-model="yourReview.text"
                 />
                 <v-btn @click="submit">Send</v-btn>

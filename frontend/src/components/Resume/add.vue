@@ -60,11 +60,11 @@
 </template>
 
 <script>
-  import {validationMixin} from 'vuelidate'
-  import {email, maxLength, required} from 'vuelidate/lib/validators'
-  import {urlPort} from "../../tool";
+    import {validationMixin} from 'vuelidate'
+    import {email, maxLength, required} from 'vuelidate/lib/validators'
+    import {urlPort} from "../../tool";
 
-  export default {
+    export default {
         name: 'ResumeAdd',
 
         mixins: [validationMixin],
