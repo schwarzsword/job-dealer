@@ -26,17 +26,14 @@
         <div class="right-sidebar">
             <v-card class="filter-block" outlined>
                 <v-card-text>
-
-                    <div>
-                        Sort by
-                        <v-select
-                                :items="items"
-                                @change="upload"
-                                v-model="filters.sortBy"
-                        />
-                        <v-checkbox @change="upload" label="descending" v-model="filters.descending">descending
-                        </v-checkbox>
-                    </div>
+          <div>
+            Sort by
+            <v-select
+                :items="items"
+                v-model="filters.sortBy"
+            />
+            <v-checkbox v-model="filters.descending" label="descending">descending</v-checkbox>
+          </div>
 
                     <!--          <v-select :items="countries" v-model="country" @change="handleCountry" label="Choose country"></v-select>-->
                     <!--          <v-select :items="cities" v-model="city" @change="handleCity" label="Choose city"></v-select>-->
