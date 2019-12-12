@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -36,12 +37,12 @@ public class ReviewController {
         return ResponseEntity.ok(dtos);
     }
 
+
     @GetMapping(value = "/accounts/{id}/reviews/my")
     public ResponseEntity<?> getOwnedReview(@PathVariable("id") UUID id, @AuthenticationPrincipal User user) {
-        Review ownedReview = reviewService.getOwnedReview(user.getUsername(), id);
-        return ResponseEntity.ok(mapper.map(ownedReview, ReviewDto.class));
+        Optional<Review> ownedReview = reviewService.getOwnedReview(user.getUsername(), id);
+        return ownedReview.isPresent() ? ResponseEntity.noContent().build() : ResponseEntity.ok(mapper.map(ownedReview, ReviewDto.class));
     }
-
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "/accounts/{id}/reviews")

@@ -50,12 +50,12 @@
 </template>
 
 <script>
-    import Router from "../../router"
-    import MessageItem from "./Item";
-    import MessageShortItem from "./shortItem";
-    import {urlPort} from "../../tool";
+  import Router from "../../router"
+  import MessageItem from "./Item";
+  import MessageShortItem from "./shortItem";
+  import {urlPort} from "../../tool";
 
-    export default {
+  export default {
         name: 'MessageDialog',
         components: {MessageShortItem, MessageItem},
         props: [],

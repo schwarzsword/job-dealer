@@ -28,6 +28,7 @@
                 </div>
             </div>
 
+
             <div class="menu">
                 <router-link title="Vacancies" to="/vacancies">
                     <v-icon class="elevation-2 m-icon i-vacancy" v-ripple></v-icon>
@@ -39,12 +40,16 @@
 
             <!--@click="logout"-->
             <div class="user">
-                <div @click="logout" class="profile" id="profile" v-if="isAuthenticated">
-                    <v-avatar :size="avatarSize" color="teal">
+                <div class="profile" id="profile" v-if="isAuthenticated">
+                    <v-avatar :size="avatarSize" @mouseleave="handleMenuClose" @mouseover="handleMenu" color="teal">
                         <span class="white--text headline">K</span>
                     </v-avatar>
-                    <div class="profile-menu" id="pm">
+
+                    <div class="profile-menu" id="pm" style="display: none">
+                        <router-link to="/profile">My profile</router-link>
+                        <a @click="logout" href="">Logout</a>
                     </div>
+
                 </div>
                 <div v-if="!isAuthenticated && !authLoading">
                     <router-link class="sign_in" to="/login">Sign in</router-link>
@@ -66,10 +71,10 @@
 </template>
 
 <script>
-    import {mapGetters, mapState} from 'vuex'
-    import {AUTH_LOGOUT} from '../../store/actions/auth'
+  import {mapGetters, mapState} from 'vuex'
+  import {AUTH_LOGOUT} from '../../store/actions/auth'
 
-    export default {
+  export default {
         name: 'navigation',
 
         data: function () {
@@ -80,6 +85,16 @@
         },
 
         methods: {
+            handleMenu: function () {
+                if (document.getElementById("pm").style.display.toString() === 'none') {
+                    document.getElementById("pm").style.display = 'block';
+                }
+            },
+            handleMenuClose: function () {
+                window.setTimeout(function () {
+                    document.getElementById("pm").style.display = 'none';
+                }, 3000);
+            },
             logout: function () {
                 this.$store.dispatch(AUTH_LOGOUT).then(() => this.$router.push('/'))
             },
@@ -130,15 +145,6 @@
                 let find = document.querySelector('#find');
                 let histories = document.querySelector('#histories');
                 let search_form = document.querySelector('#search-form');
-                let profile = document.querySelector('#profile');
-                let pm = document.querySelector('#pm');
-
-                profile.onmouseover = function () {
-                    if (pm.style.display === 'none') {
-                        pm.style.display = 'block';
-                    }
-                    console.log(1);
-                };
 
                 find.onmouseover = function () {
                     addEventListener('click', function () {
@@ -546,14 +552,30 @@
     }
 
     .header .container .user .profile .profile-menu {
-        display: none;
+        display: block;
         position: absolute;
-        width: 100px;
-        min-height: 30px;
+        width: 140px;
+        min-height: 80px;
         background-color: #fff;
         box-shadow: 0 0 5px 1px rgba(0, 0, 0, .1);
-        margin: -25px 0 0 -50px;
-        border-radius: 3px;
+        margin: -25px 0 0 -100px;
+        border-radius: 12px;
+        z-index: 1;
+    }
+
+    .header .container .user .profile .profile-menu a {
+        display: table;
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+        font-size: 14px;
+        text-align: left;
+        padding: 0 20px;
+        color: #888;
+    }
+
+    .header .container .user .profile .profile-menu a:hover {
+        color: #000;
     }
 
 </style>

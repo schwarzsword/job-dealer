@@ -31,11 +31,9 @@
                         Sort by
                         <v-select
                                 :items="items"
-                                @change="upload"
                                 v-model="filters.sortBy"
                         />
-                        <v-checkbox @change="upload" label="descending" v-model="filters.descending">descending
-                        </v-checkbox>
+                        <v-checkbox label="descending" v-model="filters.descending">descending</v-checkbox>
                     </div>
 
                     <!--          <v-select :items="countries" v-model="country" @change="handleCountry" label="Choose country"></v-select>-->

@@ -2,8 +2,7 @@
     <div>
         <div class="left-sidebar"></div>
         <div class="content">
-            <v-card outlined>
-
+            <v-card style="margin-bottom: 20px">
                 <v-card-title>
                     <router-link to="/resumes">
                         <v-btn
@@ -14,7 +13,7 @@
                         </v-btn>
                     </router-link>
 
-                    <span class="subheading">Resumes</span>
+                    <span class="subheading">Create resume</span>
                 </v-card-title>
 
                 <v-card-text>
@@ -22,7 +21,6 @@
 
                         <v-text-field
                                 :counter="50"
-                                :error-messages="nameErrors"
                                 @blur="$v.name.$touch()"
                                 @input="$v.resume.name.$touch()"
                                 label="Resume name"
@@ -31,14 +29,60 @@
                         />
 
                         <v-text-field
+                                :counter="50"
+                                @blur="$v.name.$touch()"
+                                @input="$v.resume.name.$touch()"
+                                label="First name"
+                                required
+                                v-model="resume.firstName"
+                        />
+
+                        <v-text-field
+                                :counter="50"
+                                @blur="$v.name.$touch()"
+                                @input="$v.resume.name.$touch()"
+                                label="Last name"
+                                required
+                                v-model="resume.lastName"
+                        />
+
+                        <v-text-field
                                 label="Salary"
                                 type="number"
                                 v-model="resume.salary"
                         />
 
-                        <v-text-field
+                        <v-textarea
                                 label="About me"
                                 v-model="resume.about"
+                        />
+
+                        <v-combobox
+                                :items="skills"
+                                chips
+                                clearable
+                                label="Your skills"
+                                multiple
+                                v-model="resume.skills"
+                        >
+                            <template v-slot:selection="{ attrs, item, select, selected }">
+                                <v-chip
+                                        :input-value="selected"
+                                        @click="select"
+                                        @click:close="remove(item)"
+                                        close
+                                        v-bind="attrs"
+                                >
+                                    <strong>{{ item }}</strong>&nbsp;
+                                </v-chip>
+                            </template>
+                        </v-combobox>
+
+                        <v-file-input
+                                @change="onFileChange"
+                                accept="image/*"
+                                label="Select image file..."
+                                v-model="file"
                         />
 
                         <v-checkbox
@@ -60,11 +104,11 @@
 </template>
 
 <script>
-  import {validationMixin} from 'vuelidate'
-  import {email, maxLength, required} from 'vuelidate/lib/validators'
-  import {urlPort} from "../../tool";
+    import {validationMixin} from 'vuelidate'
+    import {email, maxLength, required} from 'vuelidate/lib/validators'
+    import {base64ArrayBuffer, urlPort} from "../../tool";
 
-  export default {
+    export default {
         name: 'ResumeAdd',
 
         mixins: [validationMixin],
@@ -81,6 +125,8 @@
         },
 
         data: () => ({
+            file: null,
+            fileBytes: null,
             checkbox: false,
             resume: {
                 name: "",
@@ -117,6 +163,18 @@
         },
 
         methods: {
+            onFileChange: function () {
+
+                let reader = new FileReader();
+                reader.readAsArrayBuffer(this.file);
+
+                reader.onload = () => {
+                    this.fileBytes = base64ArrayBuffer(reader.result);
+                };
+
+
+            },
+
             submit() {
                 this.$v.$touch();
                 urlPort.get('/who').then(resp => {

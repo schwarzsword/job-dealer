@@ -1,37 +1,52 @@
 <template>
-    <v-form
-            lazy-validation
-            ref="form"
-            v-model="valid"
-    >
-        <div>Login</div>
-        <v-text-field
-                :rules="emailRules"
-                label="E-mail"
-                required
-                v-model="email"
-        />
+    <div>
+        <div class="left-sidebar"></div>
 
-        <v-text-field
-                :type="show1 ? 'text' : 'password'"
-                @click:append="show1 = !show1"
-                label="Password"
-                required
-                v-model="password"
-        />
+        <div class="content">
+            <v-card>
+                <v-card-text>
+                    <v-form
+                            lazy-validation
+                            ref="form"
+                            v-model="valid"
+                    >
+                        <h2 style="margin-bottom: 20px;">Create account</h2>
+                        <v-text-field
+                                :rules="emailRules"
+                                label="E-mail"
+                                required
+                                v-model="email"
+                        />
 
-        <v-btn
-                :disabled="!valid"
-                @click="this.login"
-                class="mr-4"
-                color="green"
-        >
-            Login
-        </v-btn>
-        <div>Have no account? Sign up
-            <router-link class="signup" to="/signup">here</router-link>
+                        <v-text-field
+                                :type="show1 ? 'text' : 'password'"
+                                @click:append="show1 = !show1"
+                                label="Password"
+                                required
+                                v-model="password"
+                        />
+
+                        <v-btn
+                                :disabled="!valid"
+                                @click="this.login"
+                                class="mr-4"
+                                color="primary"
+                        >
+                            Login
+                        </v-btn>
+                        <div style="margin-top: 20px;">Have no account? Sign up
+                            <router-link class="signup" to="/signup">here</router-link>
+                            .
+                        </div>
+                    </v-form>
+                </v-card-text>
+            </v-card>
         </div>
-    </v-form>
+
+        <div class="right-sidebar">
+        </div>
+
+    </div>
 
 </template>
 

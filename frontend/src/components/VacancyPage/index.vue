@@ -20,7 +20,7 @@
         <v-file-input
                 @change="onFileChange"
                 accept="image/*"
-                label="Please, upload zip files"
+                label="Select image file..."
                 v-if="vacancy.withTask"
                 v-model="file"
         />

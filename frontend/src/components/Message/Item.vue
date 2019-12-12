@@ -11,9 +11,9 @@
 </template>
 
 <script>
-    import Router from "../../router"
+  import Router from "../../router"
 
-    export default {
+  export default {
         name: 'MessageItem',
         props: ['id', 'title', 'author', 'authorId', 'subtitle', 'avatar'],
 
