@@ -3,12 +3,11 @@ package edu.netcracker.jobdealer.service;
 import edu.netcracker.jobdealer.entity.Review;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface ReviewService {
     Review sendReview(String text, String srcEmail, UUID receiver);
-
-    Review getOwnedReview(String srcEmail, UUID receiver);
 
     List<Review> getUserReviews(UUID userId);
 
@@ -24,5 +23,5 @@ public interface ReviewService {
 
     boolean canVote(UUID id, String ownerEmail);
 
-
+    Optional<Review> getOwnedReview(String srcEmail, UUID receiver);
 }

@@ -29,10 +29,10 @@
 </template>
 
 <script>
-    import axios from 'axios';
-    import MessageItem from "./Item";
+  import axios from 'axios';
+  import MessageItem from "./Item";
 
-    export default {
+  export default {
         name: 'Message',
         components: {MessageItem},
         data() {

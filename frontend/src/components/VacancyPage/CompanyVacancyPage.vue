@@ -125,7 +125,7 @@
                 this.setStatus(item);
             },
             route(item) {
-                //todo: сделать линкк на резюме пользователя
+                //todo: сделать линк на резюме пользователя
             },
             setStatus(item) {
                 let params = new URLSearchParams();
