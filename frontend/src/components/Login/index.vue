@@ -34,6 +34,7 @@
                         >
                             Login
                         </v-btn>
+                        <div v-model="message" class="error--text"/>
                         <div style="margin-top: 20px;">Have no account? Sign up
                             <router-link class="signup" to="/signup">here</router-link>
                             .
@@ -57,6 +58,7 @@
         name: 'login',
         data() {
             return {
+                message: "",
                 show1: false,
                 valid: true,
                 email: '',
@@ -72,6 +74,8 @@
                 const {email, password} = this;
                 this.$store.dispatch(AUTH_REQUEST, {email, password}).then(() => {
                     this.$router.push('/')
+                }).catch(err => {
+                    this.message = "Invalid login or password";
                 })
             }
         },
