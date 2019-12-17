@@ -1,15 +1,17 @@
 <template>
     <div>
         <div class="left-sidebar" style="text-align: center; margin: 10px 0 0 0;">
-            <div>
-                <router-link class="my-2" to="/vacancies/add">
-                    <v-btn color="primary" large outlined>Add vacancy</v-btn>
-                </router-link>
-            </div>
-            <div class="link-my-resumes">
-                <router-link class="link" to="/my/vacancies">
-                    My vacancies
-                </router-link>
+            <div v-if="isCompany">
+                <div>
+                    <router-link class="my-2" to="/vacancies/add">
+                        <v-btn color="primary" large outlined>Add vacancy</v-btn>
+                    </router-link>
+                </div>
+                <div class="link-my-resumes">
+                    <router-link class="link" to="/my/vacancies">
+                        My vacancies
+                    </router-link>
+                </div>
             </div>
         </div>
 
@@ -46,16 +48,16 @@
                             <span>{{filters.offset}}-{{filters.offset+filters.limit}}</span>
                             <span> of {{totalSize}}</span>
                             <v-icon
-                                @click="left()"
-                                class="mr-2"
-                                large
+                                    @click="left()"
+                                    class="mr-2"
+                                    large
                             >
                                 mdi-arrow-left-bold-box-outline
                             </v-icon>
                             <v-icon
-                                @click="right()"
-                                class="mr-2"
-                                large
+                                    @click="right()"
+                                    class="mr-2"
+                                    large
                             >
                                 mdi-arrow-right-bold-box-outline
                             </v-icon>
@@ -126,6 +128,7 @@
 <script>
 
     import {urlPort} from "../../tool";
+    import {mapGetters} from "vuex";
 
     export default {
         name: "vacancies",
@@ -171,6 +174,10 @@
             }
 
         },
+        computed: {
+            ...mapGetters(['isUser', 'isCompany']),
+        },
+
         methods: {
             checkNull() {
                 this.tempFilters.money = this.tempFilters.money || 0;

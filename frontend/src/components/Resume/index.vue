@@ -1,15 +1,17 @@
 <template>
     <div>
         <div class="left-sidebar" style="text-align: center; margin: 10px 0 0 0;">
-            <div>
-                <router-link class="my-2" to="/resumes/add">
-                    <v-btn color="primary" large outlined>Add resume</v-btn>
-                </router-link>
-            </div>
-            <div class="link-my-resumes">
-                <router-link class="link" to="/my/resumes">
-                    My resumes
-                </router-link>
+            <div v-if="isUser">
+                <div>
+                    <router-link class="my-2" to="/resumes/add">
+                        <v-btn color="primary" large outlined>Add resume</v-btn>
+                    </router-link>
+                </div>
+                <div class="link-my-resumes">
+                    <router-link class="link" to="/my/resumes">
+                        My resumes
+                    </router-link>
+                </div>
             </div>
         </div>
 
@@ -61,6 +63,7 @@
 <script>
     import ResumeItem from "./item";
     import {urlPort} from "../../tool";
+    import {mapGetters} from "vuex";
 
     export default {
         name: 'Resume',
@@ -93,6 +96,11 @@
                     descending: true,
                 },
             }
+        },
+
+        computed: {
+
+            ...mapGetters(['isUser', 'isCompany']),
         },
         methods: {
             handleCountry() {
@@ -140,7 +148,6 @@
                 this.totalSize = resp.data;
                 urlPort.get('/resumes', {params}).then(resp => {
                     this.resumes = resp.data;
-                    console.log(this.resumes)
                 }).catch(err => {
                     console.log(err)
                 })

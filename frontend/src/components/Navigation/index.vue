@@ -9,7 +9,8 @@
             <div class="find">
                 <form @submit.prevent="handleSubmit" id="search-form">
                     <label>
-                        <input @change="handleQuery" autocomplete="off" id="find" name="query" placeholder="Enter job title" type="text"
+                        <input @change="handleQuery" autocomplete="off" id="find" name="query"
+                               placeholder="Enter job title" type="text"
                                v-model="query" value=""/>
                     </label>
                     <label>
@@ -46,7 +47,12 @@
                     </v-avatar>
 
                     <div class="profile-menu" id="pm" style="display: none">
+                        <span v-if="isUser">
                         <router-link to="/profile">My profile</router-link>
+                        </span>
+                        <span v-else>
+                            <router-link to="/my/vacancies">My profile</router-link>
+                        </span>
                         <a @click="logout" href="">Logout</a>
                     </div>
 
@@ -71,10 +77,10 @@
 </template>
 
 <script>
-  import {mapGetters, mapState} from 'vuex'
-  import {AUTH_LOGOUT} from '../../store/actions/auth'
+    import {mapGetters, mapState} from 'vuex'
+    import {AUTH_LOGOUT} from '../../store/actions/auth'
 
-  export default {
+    export default {
         name: 'navigation',
 
         data: function () {

@@ -13,11 +13,11 @@
           <v-toolbar color="white" flat>
             <v-toolbar-title>My vacancies</v-toolbar-title>
             <v-divider
-                class="mx-4"
-                inset
-                vertical
-            ></v-divider>
-            <v-spacer></v-spacer>
+                    class="mx-4"
+                    inset
+                    vertical
+            />
+            <v-spacer/>
             <v-dialog max-width="1100px" v-model="dialog">
               <template v-slot:activator="{ on }">
                 <v-btn class="mb-2" color="primary" dark v-on="on">New Item</v-btn>
@@ -63,7 +63,7 @@
                         </v-chip>
                       </template>
                     </v-combobox>
-                    <v-checkbox label="Add test task?" v-model="editedItem.withTask"></v-checkbox>
+                    <v-checkbox label="Add test task?" v-model="editedItem.withTask"/>
 
                   </v-container>
                   <v-container v-if="editedItem.withTask">
@@ -80,7 +80,7 @@
                 </v-card-text>
 
                 <v-card-actions>
-                  <v-spacer></v-spacer>
+                  <v-spacer/>
                   <v-btn @click="close" color="blue darken-1" text>Cancel</v-btn>
                   <v-btn @click="save" color="blue darken-1" text>Save</v-btn>
                 </v-card-actions>
