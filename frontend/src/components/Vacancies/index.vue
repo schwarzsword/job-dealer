@@ -1,9 +1,20 @@
 <template>
     <div>
-        <div class="left-sidebar"></div>
+        <div class="left-sidebar" style="text-align: center; margin: 10px 0 0 0;">
+            <div>
+                <router-link class="my-2" to="/vacancies/add">
+                    <v-btn color="primary" large outlined>Add vacancy</v-btn>
+                </router-link>
+            </div>
+            <div class="link-my-resumes">
+                <router-link class="link" to="/my/vacancies">
+                    My vacancies
+                </router-link>
+            </div>
+        </div>
 
         <div class="content">
-            <v-card-text>
+            <v-card-text style="margin-top: -25px;">
                 <v-data-table
                         :headers="headers"
                         :items="vacancies"
@@ -31,22 +42,24 @@
                         Please, specify some data
                     </template>
                     <template v-slot:footer>
-                        <span>{{filters.offset}}-{{filters.offset+filters.limit}}</span>
-                        <span> of {{totalSize}}</span>
-                        <v-icon
+                        <div style="padding: 10px;">
+                            <span>{{filters.offset}}-{{filters.offset+filters.limit}}</span>
+                            <span> of {{totalSize}}</span>
+                            <v-icon
                                 @click="left()"
                                 class="mr-2"
                                 large
-                        >
-                            mdi-arrow-left-bold-box-outline
-                        </v-icon>
-                        <v-icon
+                            >
+                                mdi-arrow-left-bold-box-outline
+                            </v-icon>
+                            <v-icon
                                 @click="right()"
                                 class="mr-2"
                                 large
-                        >
-                            mdi-arrow-right-bold-box-outline
-                        </v-icon>
+                            >
+                                mdi-arrow-right-bold-box-outline
+                            </v-icon>
+                        </div>
                     </template>
                 </v-data-table>
             </v-card-text>
@@ -203,6 +216,7 @@
                     this.totalSize = resp.data;
                     urlPort.get('/vacancies', {params}).then(resp => {
                         this.vacancies = resp.data;
+                        console.log(this.vacancies);
                     }).catch(err => {
 
                     })
@@ -225,8 +239,8 @@
             }
         },
 
-
         created() {
+            this.upload();
             this.uploadSkills();
             this.uploadCompanyNames();
         },
