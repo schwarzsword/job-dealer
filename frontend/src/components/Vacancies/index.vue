@@ -245,6 +245,7 @@
             this.uploadCompanyNames();
         },
 
+
         watch: {
             dialog(val) {
                 val || this.close()

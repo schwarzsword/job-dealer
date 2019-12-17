@@ -32,6 +32,7 @@
         </v-card>
 
         <v-file-input
+
             @change="onFileChange"
             accept="image/*"
             label="Select image file..."
@@ -40,6 +41,7 @@
         />
         <v-btn :disabled="vacancy.withTask && !fileBytes" @click="apply" v-if="!isApplied">
           Apply
+
         </v-btn>
       </div>
       <div class="right-sidebar">

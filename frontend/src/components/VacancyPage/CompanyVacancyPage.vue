@@ -21,6 +21,7 @@
         </v-card>
 
         <v-data-table
+
             :headers="headers"
             :items="responses"
             class="elevation-1"
@@ -33,11 +34,13 @@
           </template>
           <template v-slot:item.action="{ item }">
 
+
             <v-icon
                 @click="downloadSubmission(item)"
             >
               mdi-cloud-download-outline
             </v-icon>
+
 
             <v-icon @click="accept(item)"
                     v-if="item.status === 'APPLIED'"
@@ -60,6 +63,7 @@
           <template v-slot:no-data>
             You have no active responses
           </template>
+
         </v-data-table>
       </div>
       <div class="right-sidebar">
@@ -73,6 +77,7 @@
   import Router from "../../router"
   import {urlPort} from "../../tool";
   import download from "downloadjs"
+
 
   export default {
     name: "companyVacancyPage",
@@ -88,10 +93,12 @@
           requestedSkills: [],
           withTask: null,
         },
+
         task: {
           id: null,
           name: "",
           description: "",
+
         },
         responses: [],
         submissions: [],

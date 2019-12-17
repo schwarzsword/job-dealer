@@ -27,6 +27,7 @@
                   <span class="headline">{{ formTitle }}</span>
                 </v-card-title>
 
+
                 <v-card-text>
                   <v-container>
 
@@ -116,6 +117,7 @@
     <div class="right-sidebar">
     </div>
   </div>
+
 </template>
 
 <script>
