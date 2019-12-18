@@ -62,14 +62,14 @@
                 </div>
             </div>
 
-            <div class="notifications" v-if="isAuthenticated">
-                <router-link style="float: right" to="/my/messages">
-                    <v-icon color="black" large style="font-size: 32px">mdi-email</v-icon>
-                    <v-badge class="m-count" color="green">
-                        <span slot="badge">2</span>
-                    </v-badge>
-                </router-link>
-            </div>
+<!--            <div class="notifications" v-if="isAuthenticated">-->
+<!--                <router-link style="float: right" to="/my/messages">-->
+<!--                    <v-icon color="black" large style="font-size: 32px">mdi-email</v-icon>-->
+<!--                    <v-badge class="m-count" color="green">-->
+<!--                        <span slot="badge">2</span>-->
+<!--                    </v-badge>-->
+<!--                </router-link>-->
+<!--            </div>-->
 
             <!--router-link class="sign_in" to="/logout">Logout</router-link-->
         </div>
