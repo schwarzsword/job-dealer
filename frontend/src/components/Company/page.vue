@@ -1,11 +1,11 @@
 <template>
   <div>
     <div class="left-sidebar" style="text-align: center; margin: 10px 0 0 0;">
+      <img style="border-radius: 50%; margin: 25px; width: 150px; height: 150px;" width="200px" height="200px" v-bind:src="'data:image/jpeg;base64,'+company.fileData" v-if="company.fileData"/>
     </div>
     <div class="content">
       <v-card>
         <v-card-text>
-          <img v-bind:src="'data:image/jpeg;base64,'+company.fileData" v-if="company.fileData"/>
           <h1>{{ company.name }} <span class="verified" v-if="company.verified === true"></span></h1>
           <div>
             {{company.description}}

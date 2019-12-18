@@ -5,19 +5,37 @@
       </div>
       <div class="content">
         <v-card>
-          {{vacancy.name}}
-          {{vacancy.description}}
-          {{vacancy.money}}
-          {{vacancy.ownerName}}
-          <ul>
-            <li v-for="skill in vacancy.requestedSkills">
-              {{ skill }}
-            </li>
-          </ul>
+          <v-card-title>
+            <router-link to="/my/vacancies">
+              <v-btn class="mr-6" icon>
+                <v-icon>mdi-chevron-left</v-icon>
+              </v-btn>
+            </router-link>
+
+            <span class="subheading">{{ vacancy.name }}</span>
+          </v-card-title>
+          <v-card-text>
+            <div>{{vacancy.description}}</div>
+            <div>{{vacancy.money}}</div>
+            <div>{{vacancy.ownerName}}</div>
+          </v-card-text>
+
+          <div class="skills" style="padding: 10px">
+            <div class="skill" v-for="skill in vacancy.requestedSkills">
+              <v-chip outlined>
+                {{ skill }}
+              </v-chip>
+            </div>
+          </div>
         </v-card>
+
         <v-card v-if="task.name">
-          {{task.name}}
-          {{task.description}}
+          <v-card-title>
+            {{task.name}}
+          </v-card-title>
+          <v-card-text>
+            {{task.description}}
+          </v-card-text>
         </v-card>
 
         <v-data-table

@@ -3,7 +3,7 @@
         <div class="left-sidebar" style="text-align: center; margin: 10px 0 0 0;">
             <div v-if="isCompany">
                 <div>
-                    <router-link class="my-2" to="/vacancies/add">
+                    <router-link class="my-2" to="/my/vacancies">
                         <v-btn color="primary" large outlined>Add vacancy</v-btn>
                     </router-link>
                 </div>
