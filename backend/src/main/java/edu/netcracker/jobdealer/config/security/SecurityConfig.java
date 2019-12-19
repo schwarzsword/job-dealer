@@ -37,11 +37,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final
     CustomEntryPoint entryPoint;
     private final
-    SuccessLoginHandler successLoginHandler;
+    MyAuthenticationSuccessHandler successLoginHandler;
 
     public SecurityConfig(MyUserDetailsService userDetailsService,
                           DataSource dataSource, CustomEntryPoint entryPoint,
-                          SuccessLoginHandler successLoginHandler) {
+                          MyAuthenticationSuccessHandler successLoginHandler) {
         this.userDetailsService = userDetailsService;
         this.dataSource = dataSource;
         this.entryPoint = entryPoint;
@@ -82,12 +82,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationProvider(authenticationProvider())
 
                 .rememberMe()
-//                .authenticationSuccessHandler(myAuthenticationSuccessHandler)
                 .rememberMeCookieName("remember-me-token")
                 .userDetailsService(userDetailsService)
                 .tokenRepository(persistentTokenRepository())
                 .key("job-dealer")
-                .tokenValiditySeconds(60 * 60 * 4)
+                .tokenValiditySeconds(60*60*4)
                 .alwaysRemember(true);
     }
 
