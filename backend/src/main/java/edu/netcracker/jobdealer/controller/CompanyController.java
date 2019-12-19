@@ -7,6 +7,7 @@ import edu.netcracker.jobdealer.service.CompanyService;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -59,18 +60,4 @@ public class CompanyController {
         return ResponseEntity.ok(company);
     }
 
-    //TODO испрвить
-//    @PutMapping(value = "/companies")
-//    public ResponseEntity<?> updateCompany(@RequestParam UUID id, @RequestParam String name,
-//                                           @RequestParam Boolean isVerified, @RequestParam String description,
-//                                           @RequestParam String avatarUrl,
-//                                           @RequestParam UUID accountId) {
-//        try {
-//            CompanyDto company = mapper.map(
-//                    companyService.updateCompany(id, name, isVerified, description, avatarUrl, accountId), CompanyDto.class);
-//            return new ResponseEntity<>(company, HttpStatus.OK);
-//        } catch (AccountIdExistsException e) {
-//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-//        }
-//    }
 }

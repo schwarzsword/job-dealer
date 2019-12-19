@@ -37,11 +37,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final
     CustomEntryPoint entryPoint;
     private final
-    MyAuthenticationSuccessHandler successLoginHandler;
+    SuccessLoginHandler successLoginHandler;
 
     public SecurityConfig(MyUserDetailsService userDetailsService,
                           DataSource dataSource, CustomEntryPoint entryPoint,
-                          MyAuthenticationSuccessHandler successLoginHandler) {
+                          SuccessLoginHandler successLoginHandler) {
         this.userDetailsService = userDetailsService;
         this.dataSource = dataSource;
         this.entryPoint = entryPoint;
@@ -86,7 +86,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .userDetailsService(userDetailsService)
                 .tokenRepository(persistentTokenRepository())
                 .key("job-dealer")
-                .tokenValiditySeconds(60*60*4)
+                .tokenValiditySeconds(60 * 60 * 4)
                 .alwaysRemember(true);
     }
 
