@@ -34,7 +34,7 @@
                 <router-link title="Vacancies" to="/vacancies">
                     <v-icon class="elevation-2 m-icon i-vacancy" v-ripple/>
                 </router-link>
-                <router-link v-if="isCompany" title="Resumes" to="/resumes">
+                <router-link title="Resumes" to="/resumes">
                     <v-icon class="elevation-2 m-icon i-resume" v-ripple/>
                 </router-link>
             </div>
