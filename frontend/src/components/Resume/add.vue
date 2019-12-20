@@ -177,12 +177,12 @@
 
             submit() {
                 this.$v.$touch();
-                urlPort.get('/who').then(resp => {
+                urlPort.get('/applicants/me').then(resp => {
                     this.resume.applicantId = resp.data;
                     let params = new URLSearchParams();
                     params.append('resumeData', JSON.stringify(this.resume));
 
-                    urlPort.post('/my/resumes', params, {
+                    urlPort.post('/resumes/my', params, {
                         headers: {ContentType: 'multipart/form-data'}
                     })
                 })

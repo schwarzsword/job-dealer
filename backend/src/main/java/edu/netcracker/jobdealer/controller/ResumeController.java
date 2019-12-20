@@ -39,14 +39,14 @@ public class ResumeController {
     }
 
     @Secured("ROLE_USER")
-    @PostMapping(value = "/my/resumes")
+    @PostMapping(value = "/resumes/my")
     public ResponseEntity<?> createResume(@RequestParam String resumeData) {
         Resume add = resumeService.addOrUpdate(resumeData);
         return ResponseEntity.ok(mapper.map(add, ResumeDto.class));
     }
 
     @Secured("ROLE_USER")
-    @GetMapping(value = "/my/resumes")
+    @GetMapping(value = "/resumes/my")
     public ResponseEntity<?> getOwnedResumes(@AuthenticationPrincipal User user) {
         List<Resume> ownedResumes = resumeService.getOwnedResumes(user.getUsername());
         return ResponseEntity.ok(ownedResumes.stream()
@@ -54,7 +54,7 @@ public class ResumeController {
     }
 
     @Secured("ROLE_USER")
-    @DeleteMapping(value = "/my/resumes/{id}")
+    @DeleteMapping(value = "/resumes/{id}")
     public ResponseEntity<?> deleteResume(@PathVariable UUID id, @AuthenticationPrincipal User user) {
         resumeService.deleteResume(id, user.getUsername());
         return ResponseEntity.noContent().build();
@@ -66,16 +66,16 @@ public class ResumeController {
         return ResponseEntity.ok(mapper.map(resume, ResumeDto.class));
     }
 
-    //@Secured("ROLE_COMPANY")
+    @Secured("ROLE_COMPANY")
     @GetMapping(value = "/resumes")
-    public ResponseEntity<?> getVacancies(@RequestParam String filters) {
-        List<Resume> vacancies = resumeService.sortAndReturn(filters);
-        return ResponseEntity.ok(vacancies.stream()
+    public ResponseEntity<?> getResumes(@RequestParam String filters) {
+        List<Resume> resumes = resumeService.sortAndReturn(filters);
+        return ResponseEntity.ok(resumes.stream()
                 .map(e -> mapper.map(e, ResumeDto.class))
                 .collect(Collectors.toList()));
     }
 
-    //@Secured("ROLE_COMPANY")
+    @Secured("ROLE_COMPANY")
     @GetMapping(value = "/resumes/size")
     public ResponseEntity<?> getSize(@RequestParam String filters) {
         return ResponseEntity.ok(resumeService.getSize(filters));

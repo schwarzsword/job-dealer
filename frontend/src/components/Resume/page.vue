@@ -17,7 +17,7 @@
 
                 <v-card-text>
 
-                    <router-link class="invite" to="">Send invite</router-link>
+<!--                    <router-link class="invite" to="">Send invite</router-link>-->
 
                     <div class="salary">
                         {{ resume.salary }}

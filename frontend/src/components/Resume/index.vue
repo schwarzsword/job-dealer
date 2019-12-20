@@ -16,7 +16,7 @@
         </div>
 
         <div class="content">
-            <div v-for="item in this.resumes">
+            <div v-for="item in this.resumes" style="margin: 5px auto">
                 <ResumeItem
                         :author="`${item.firstName} ${item.lastName}`"
                         :id="`${item.id}`"
@@ -35,7 +35,7 @@
                                 :items="items"
                                 v-model="filters.sortBy"
                         />
-                        <v-checkbox label="descending" v-model="filters.descending">descending</v-checkbox>
+                        <v-checkbox label="descending" v-model="filters.descending" @change="load">descending</v-checkbox>
                     </div>
 
                     <!--          <v-select :items="countries" v-model="country" @change="handleCountry" label="Choose country"></v-select>-->
@@ -55,6 +55,8 @@
                     <!--                      label="Driver license"/>-->
                     <!--          <v-switch v-model="saveFilter" @change="handleSaveFilter" label="Save filter"/>-->
                 </v-card-text>
+
+                <v-btn @click="load" class="primary" style="margin-bottom: 25px; margin-left: 35px">Apply filters</v-btn>
             </v-card>
         </div>
     </div>
@@ -90,7 +92,7 @@
                     limit: 20,
                     offset: 0,
                     minSalary: 0,
-                    maxSalary: 500,
+                    maxSalary: 5000,
                     skills: [],
                     sortBy: "Name",
                     descending: true,
@@ -103,36 +105,25 @@
             ...mapGetters(['isUser', 'isCompany']),
         },
         methods: {
-            handleCountry() {
-                let urlParams = new URLSearchParams(window.location.search);
-                urlParams.set("country", this.country);
-                this.$router.push('/resumes/?' + urlParams.toString());
-            },
-            handleCity() {
-                let urlParams = new URLSearchParams(window.location.search);
-                urlParams.set("city", this.city);
-                this.$router.push('/resumes/?' + urlParams.toString());
-            },
             handleSalary() {
-                let urlParams = new URLSearchParams(window.location.search);
-                urlParams.set("salaryMin", this.price[0]);
-                urlParams.set("salaryMax", this.price[1]);
-                this.$router.push('/resumes/?' + urlParams.toString());
+                this.filters.minSalary = this.price[0];
+                this.filters.maxSalary = this.price[1];
             },
-            handleExperience() {
-                let urlParams = new URLSearchParams(window.location.search);
-                urlParams.set("experience", this.experience);
-                this.$router.push('/resumes/?' + urlParams.toString());
-            },
-            handleDriverLicense() {
-                let urlParams = new URLSearchParams(window.location.search);
-                urlParams.set("driverLicense", this.driverLicense);
-                this.$router.push('/resumes/?' + urlParams.toString());
-            },
-            handleSaveFilter() {
-                let urlParams = new URLSearchParams(window.location.search);
-                urlParams.set("saveFilter", this.saveFilter);
-                this.$router.push('/resumes/?' + urlParams.toString());
+
+            load() {
+                let params = new URLSearchParams({
+                    'filters': JSON.stringify(this.filters)
+                });
+                urlPort.get('/resumes/size', {params}).then(resp => {
+                    this.totalSize = resp.data;
+                    urlPort.get('/resumes', {params}).then(resp => {
+                        this.resumes = resp.data;
+                    }).catch(err => {
+                        console.log(err)
+                    })
+                }).catch(err => {
+                    console.log(err)  // тут status: 304
+                });
             },
         },
 
@@ -140,21 +131,8 @@
             const app = document.createElement('div');
             app.setAttribute('data-app', true);
             document.body.append(app);
+            this.load();
 
-            let params = new URLSearchParams({
-                'filters': JSON.stringify(this.filters)
-            });
-            urlPort.get('/resumes/size', {params}).then(resp => {
-                this.totalSize = resp.data;
-                urlPort.get('/resumes', {params}).then(resp => {
-                    this.resumes = resp.data;
-                }).catch(err => {
-                    console.log(err)
-                })
-            }).catch(err => {
-                console.log(err)  // тут status: 304
-            });
-            //console.log(this.$store.state.profile);
         },
     }
 </script>

@@ -32,7 +32,7 @@ public class AccountController {
 
 
     @GetMapping(value = "/accounts/{id}")
-    public ResponseEntity<?> getAccountById(@PathVariable("id") String id) {
+    public ResponseEntity<?> getAccountById(@PathVariable("id") UUID id) {
         try {
             return ResponseEntity.ok(mapper.map(accountService.getAccount(id), AccountDto.class));
         } catch (UsernameNotFoundException e) {
@@ -41,9 +41,9 @@ public class AccountController {
     }
 
     @PostMapping(value = "/accounts")
-    public ResponseEntity signUpAccount(@RequestParam("email") String email,
-                                        @RequestParam("password") String password,
-                                        @RequestParam("isCompany") boolean isCompany) {
+    public ResponseEntity<?> signUpAccount(@RequestParam("email") String email,
+                                           @RequestParam("password") String password,
+                                           @RequestParam("isCompany") boolean isCompany) {
         try {
             String role = isCompany ? "ROLE_COMPANY" : "ROLE_USER";
             AccountDto account = mapper.map(accountService.addAccount(email, password, role),
@@ -54,29 +54,16 @@ public class AccountController {
         }
     }
 
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    @PutMapping
-    public ResponseEntity updateAccount(@RequestParam UUID id,
-                                        @RequestParam String email, @RequestParam String password) {
-        try {
-            AccountDto account = mapper.map(accountService.updateAccount(id, email, password),
-                    AccountDto.class);
-            //TODO испрвить на на билдер
-            return new ResponseEntity<>(account, HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_MODIFIED);
-        }
-    }
 
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    @DeleteMapping
-    public ResponseEntity deleteAccountById(@PathVariable String id) {
+    @DeleteMapping(value = "/accounts/{id}")
+    public ResponseEntity<?> deleteAccountById(@PathVariable String id) {
         accountService.deleteAccount(UUID.fromString(id));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/my/accounts")
+    @GetMapping("/accounts/my")
     public ResponseEntity<?> getProfile(@AuthenticationPrincipal User user) {
         Account byEmail = accountService.getByEmail(user.getUsername());
         return ResponseEntity.ok(mapper.map(byEmail, AccountDto.class));

@@ -22,17 +22,11 @@ import java.util.UUID;
 @Transactional
 public class AccountServiceImpl implements AccountService {
 
-    // TODO: посмотреть изменения
-
-    private final ApplicantRepository applicantRepository;
-    private final CompanyRepository companyRepository;
     private final AccountRepository accountRepository;
     private String salt = BCrypt.gensalt();
 
     @Autowired
-    public AccountServiceImpl(ApplicantRepository applicantRepository, CompanyRepository companyRepository, AccountRepository accountRepository) {
-        this.applicantRepository = applicantRepository;
-        this.companyRepository = companyRepository;
+    public AccountServiceImpl(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
     }
 
@@ -72,21 +66,9 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
-    public Account getAccount(String id) {
-        Optional<Account> account;
-
-        try {
-            UUID uuid = UUID.fromString(id);
-            account = accountRepository.findById(uuid);
-        } catch (IllegalArgumentException exception) {
-            account = accountRepository.findByEmail(id);
-        }
-
-        if (account.isPresent() && accountRepository.existsById(account.get().getId())) {
-            return account.get();
-        } else {
-            throw new AccountNotFoundException("Account not found");
-        }
+    @Override
+    public Account getAccount(UUID id) {
+       return accountRepository.findById(id).orElseThrow(AccountNotFoundException::new);
     }
 
     @Override

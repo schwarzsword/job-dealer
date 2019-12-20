@@ -30,7 +30,6 @@ import static edu.netcracker.jobdealer.util.FileWorker.extractBytes;
 public class CompanyServiceImpl implements CompanyService {
 
     private final CompanyRepository companyRepository;
-    private final AccountRepository accountRepository;
     private final AccountService accountService;
     private final JsonService jsonService;
 
@@ -38,10 +37,9 @@ public class CompanyServiceImpl implements CompanyService {
     private String path;
 
     @Autowired
-    public CompanyServiceImpl(CompanyRepository companyRepository, AccountRepository accountRepository,
+    public CompanyServiceImpl(CompanyRepository companyRepository,
                               AccountService accountService, JsonService jsonService) {
         this.companyRepository = companyRepository;
-        this.accountRepository = accountRepository;
         this.accountService = accountService;
         this.jsonService = jsonService;
     }
@@ -91,25 +89,6 @@ public class CompanyServiceImpl implements CompanyService {
         throw new NotImplementedMethodException("");
     }
 
-
-    //TODO исправить
-//    @Override
-//    public Company updateCompany(UUID id, String name, Boolean isVerified, String description, String avatarUrl,
-//                                 UUID accountId) {
-//        if (companyRepository.existsByAccount_Id(accountId)) {
-//            return companyRepository.save(new Company(id, name, isVerified, description, avatarUrl, accountId));
-//        } else {
-//            throw new AccountIdExistsException("Account id is already exists");
-//        }
-//    }
-
-
-    //TODO удаление должно быть на уровне аккаунта
-//    @Override
-//    public void deleteCompany(UUID id) throws CompanyNotFoundException {
-//        Company company = companyRepository.findById().orElseThrow(CompanyNotFoundException::new);
-//        companyRepository.de
-//    }
 
     @Override
     public Company getByAccount(Account accountByEmail) throws CompanyNotFoundException {

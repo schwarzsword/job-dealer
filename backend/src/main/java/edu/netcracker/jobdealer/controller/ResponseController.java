@@ -47,7 +47,7 @@ public class ResponseController {
     }
 
     @Secured("ROLE_COMPANY")
-    @GetMapping("/my/vacancies/{id}")
+    @GetMapping("/vacancies/{id}/responses")
     public ResponseEntity<?> getRespondents(@AuthenticationPrincipal User user, @PathVariable UUID id) {
         List<Response> responses = responseService.getRespondents(id, user.getUsername());
         return ResponseEntity.ok(responses.stream()
@@ -56,7 +56,7 @@ public class ResponseController {
     }
 
     @Secured("ROLE_USER")
-    @GetMapping("/my/responses")
+    @GetMapping("/responses/my")
     public ResponseEntity<?> getRespondents(@AuthenticationPrincipal User user) {
         List<Response> responses = responseService.getResponses(user.getUsername());
         return ResponseEntity.ok(responses.stream()

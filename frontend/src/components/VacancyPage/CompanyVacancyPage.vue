@@ -131,7 +131,7 @@
       urlPort.get("/vacancies/" + this.vacancy.id)
         .then(resp => {
           this.vacancy = resp.data;
-          urlPort.get("/my/vacancies/" + this.vacancy.id)
+          urlPort.get("/vacancies/" + this.vacancy.id + "/responses")
             .then(resp => {
               this.responses = resp.data
             });

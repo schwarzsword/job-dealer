@@ -82,7 +82,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationProvider(authenticationProvider())
 
                 .rememberMe()
-//                .authenticationSuccessHandler(myAuthenticationSuccessHandler)
                 .rememberMeCookieName("remember-me-token")
                 .userDetailsService(userDetailsService)
                 .tokenRepository(persistentTokenRepository())
