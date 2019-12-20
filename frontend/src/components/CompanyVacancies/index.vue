@@ -200,7 +200,7 @@
 
     methods: {
       initialize() {
-        urlPort.get("/my/vacancies").then(resp => {
+        urlPort.get("/vacancies/my").then(resp => {
           this.vacancies = resp.data;
         })
       },

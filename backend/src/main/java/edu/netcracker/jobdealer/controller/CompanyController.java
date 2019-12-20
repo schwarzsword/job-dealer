@@ -41,7 +41,7 @@ public class CompanyController {
         }
     }
 
-    @GetMapping(value = "/names/companies")
+    @GetMapping(value = "/companies/names")
     public ResponseEntity<?> getCompanies() {
         return ResponseEntity.ok(companyService.getCompanyNames());
     }

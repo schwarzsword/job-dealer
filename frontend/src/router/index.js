@@ -16,7 +16,6 @@ import Vacancies from "../components/Vacancies"
 import Resume from "../components/Resume/index";
 import ResumeAdd from "../components/Resume/add";
 import ResumePage from "../components/Resume/page";
-import ResumeForm from "../components/Resume/resumeForm";
 import CompanyVacancies from "../components/CompanyVacancies"
 import VacancyPage from "../components/VacancyPage"
 import CompanyVacancyPage from "../components/VacancyPage/CompanyVacancyPage";
@@ -127,12 +126,6 @@ export default new Router({
             path: '/resumes/:id',
             name: 'resumePage',
             component: ResumePage,
-        },
-        {
-            path: '/resumeForm',
-            name: 'resumeForm',
-            component: ResumeForm,
-            //beforeEnter: ifAuthenticated
         },
         {
             path: '/vacancies',

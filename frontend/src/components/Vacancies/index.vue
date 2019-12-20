@@ -239,7 +239,7 @@
             },
 
             uploadCompanyNames() {
-                urlPort.get('/names/companies')
+                urlPort.get('/companies/names')
                     .then(resp => {
                         this.companyNames = resp.data;
                     })

@@ -51,7 +51,7 @@
       }
     },
     created() {
-      urlPort.get("/my/responses/")
+      urlPort.get("/responses/my")
         .then(resp => {
           this.responses = resp.data
         });

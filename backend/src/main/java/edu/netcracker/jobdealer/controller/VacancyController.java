@@ -47,7 +47,7 @@ public class VacancyController {
 
 
     @Secured("ROLE_COMPANY")
-    @GetMapping("/my/vacancies")
+    @GetMapping("/vacancies/my")
     public ResponseEntity<?> getAllCompanyVacancies(@AuthenticationPrincipal User user) {
         List<VacancyDto> vacancies = vacancyService.getVacanciesByCompanyEmail(user.getUsername())
                 .stream()

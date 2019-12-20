@@ -32,7 +32,7 @@ public class ApplicantController {
         return ResponseEntity.ok(mapper.map(applicant, ApplicantDto.class));
     }
 
-    @GetMapping(value = "/who")
+    @GetMapping(value = "/applicants/me")
     @Secured("ROLE_USER")
     public ResponseEntity<?> who(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok(applicantService.who(user.getUsername()).getId());

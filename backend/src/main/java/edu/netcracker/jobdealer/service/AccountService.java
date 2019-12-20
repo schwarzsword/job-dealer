@@ -17,7 +17,7 @@ public interface AccountService {
 
     Account changePassword(String email, String newPass);
 
-    Account getAccount(String id);
+    Account getAccount(UUID id);
 
     Account addAccount(String email, String password, String role);
 

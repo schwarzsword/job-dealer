@@ -32,23 +32,23 @@
 
             <div class="menu">
                 <router-link title="Vacancies" to="/vacancies">
-                    <v-icon class="elevation-2 m-icon i-vacancy" v-ripple></v-icon>
+                    <v-icon class="elevation-2 m-icon i-vacancy" v-ripple/>
                 </router-link>
-                <router-link title="Resumes" to="/resumes">
-                    <v-icon class="elevation-2 m-icon i-resume" v-ripple></v-icon>
+                <router-link v-if="isCompany" title="Resumes" to="/resumes">
+                    <v-icon class="elevation-2 m-icon i-resume" v-ripple/>
                 </router-link>
             </div>
 
             <!--@click="logout"-->
             <div class="user">
                 <div class="profile" id="profile" v-if="isAuthenticated">
-                    <v-avatar :size="avatarSize" @mouseleave="handleMenuClose" @mouseover="handleMenu" color="teal">
+                    <v-avatar :size="avatarSize" @mouseleave="handleMenuClose" @mouseover="handleMenu" color="black">
                         <span class="white--text headline">K</span>
                     </v-avatar>
 
                     <div class="profile-menu" id="pm" style="display: none">
                         <span v-if="isUser">
-                        <router-link to="/profile">My profile</router-link>
+                            <router-link to="/profile">My profile</router-link>
                         </span>
                         <span v-else>
                             <router-link to="/my/vacancies">My profile</router-link>
@@ -62,14 +62,14 @@
                 </div>
             </div>
 
-<!--            <div class="notifications" v-if="isAuthenticated">-->
-<!--                <router-link style="float: right" to="/my/messages">-->
-<!--                    <v-icon color="black" large style="font-size: 32px">mdi-email</v-icon>-->
-<!--                    <v-badge class="m-count" color="green">-->
-<!--                        <span slot="badge">2</span>-->
-<!--                    </v-badge>-->
-<!--                </router-link>-->
-<!--            </div>-->
+            <!--            <div class="notifications" v-if="isAuthenticated">-->
+            <!--                <router-link style="float: right" to="/my/messages">-->
+            <!--                    <v-icon color="black" large style="font-size: 32px">mdi-email</v-icon>-->
+            <!--                    <v-badge class="m-count" color="green">-->
+            <!--                        <span slot="badge">2</span>-->
+            <!--                    </v-badge>-->
+            <!--                </router-link>-->
+            <!--            </div>-->
 
             <!--router-link class="sign_in" to="/logout">Logout</router-link-->
         </div>
@@ -127,7 +127,7 @@
 
         computed: {
 
-            ...mapGetters(['getProfile', 'isAuthenticated', 'isUser', 'isCompany', 'profile']),
+            ...mapGetters(['isAuthenticated', 'isUser', 'isCompany', 'profile']),
             ...mapState({
                 authLoading: state => state.auth.status === 'loading',
             })
