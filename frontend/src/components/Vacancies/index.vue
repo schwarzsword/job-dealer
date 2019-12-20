@@ -45,7 +45,7 @@
                     </template>
                     <template v-slot:footer>
                         <div style="padding: 10px;">
-                            <span>{{filters.offset}}-{{filters.offset+filters.limit}}</span>
+                            <span>{{filters.offset}}-{{secondNumber}}</span>
                             <span> of {{totalSize}}</span>
                             <v-icon
                                     @click="left()"
@@ -138,6 +138,7 @@
                 skills: [],
                 companyNames: [],
                 dialog: false,
+                secondNumber: 0,
                 totalSize: 0,
                 vacancies: [],
                 message: "",
@@ -221,6 +222,7 @@
                 });
                 urlPort.get('/vacancies/size', {params}).then(resp => {
                     this.totalSize = resp.data;
+                    this.secondNumber = this.totalSize > (this.filters.offset + this.filters.limit) ? this.filters.offset + this.filters.limit : this.totalSize;
                     urlPort.get('/vacancies', {params}).then(resp => {
                         this.vacancies = resp.data;
                         console.log(this.vacancies);

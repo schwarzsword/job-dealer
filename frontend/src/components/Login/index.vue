@@ -10,7 +10,7 @@
                             ref="form"
                             v-model="valid"
                     >
-                        <h2 style="margin-bottom: 20px;">Create account</h2>
+                        <h2 style="margin-bottom: 20px;">Log in</h2>
                         <v-text-field
                                 :rules="emailRules"
                                 label="E-mail"

@@ -39,12 +39,12 @@ public class Message {
     private Account receiver;
 
     @Mapping("senderId")
-    public UUID getSenderId() {
+    public UUID getSenderID() {
         return sender.getId();
     }
 
     @Mapping("receiverId")
-    public UUID getReceiverId() {
+    public UUID getReceiverID() {
         return receiver.getId();
     }
 }

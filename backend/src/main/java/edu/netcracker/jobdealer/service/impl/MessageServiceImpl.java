@@ -76,8 +76,8 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public Message sendMessage(Message message) throws AccountNotFoundException, IllegalArgumentException {
-        Account sender = accountRepository.findById(message.getSenderId()).orElseThrow(AccountNotFoundException::new);
-        Account receiver = accountRepository.findById(message.getReceiverId()).orElseThrow(AccountNotFoundException::new);
+        Account sender = accountRepository.findById(message.getSenderID()).orElseThrow(AccountNotFoundException::new);
+        Account receiver = accountRepository.findById(message.getReceiverID()).orElseThrow(AccountNotFoundException::new);
         if (message.getText() == null || message.getText().equals("")) {
             throw new IllegalArgumentException();
         } else {
