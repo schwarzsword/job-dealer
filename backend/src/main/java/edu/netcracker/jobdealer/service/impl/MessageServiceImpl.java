@@ -14,9 +14,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.sql.Timestamp;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -55,28 +54,21 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public Message getMessage(UUID id) {
-        Optional<Message> message = messageRepository.findById(id);
-        if (message.isPresent()) {
-            return message.get();
-        } else {
-            throw new MessageNotFoundException("Message by id=" + id + " not found");
-        }
+        return messageRepository.findById(id).orElseThrow(MessageNotFoundException::new);
     }
 
     @Override
     public Message sendMessage(String text, UUID senderId, UUID receiverId) {
-        if (!accountRepository.existsById(senderId)) {
-            throw new AccountNotFoundException("Sender by id=" + senderId + " not found");
-        } else if (!accountRepository.existsById(receiverId)) {
-            throw new AccountNotFoundException("Receiver by id=" + receiverId + " not found");
-        } else if (text == null || text.equals("")) {
+        Account sender = accountRepository.findById(senderId).orElseThrow(AccountNotFoundException::new);
+        Account receiver = accountRepository.findById(receiverId).orElseThrow(AccountNotFoundException::new);
+        if (text == null || text.equals("")) {
             throw new IllegalArgumentException();
         } else {
             Message message = new Message();
             message.setText(text);
-            message.setSender(new Account(senderId, null, null, null));
-            message.setReceiver(new Account(receiverId, null, null, null));
-            message.setDate(new Date());
+            message.setSender(sender);
+            message.setReceiver(receiver);
+            message.setDate(new Timestamp(System.currentTimeMillis()));
             messageRepository.save(message);
             return message;
         }
@@ -84,18 +76,16 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public Message sendMessage(Message message) throws AccountNotFoundException, IllegalArgumentException {
-        if (!accountRepository.existsById(message.getSender())) {
-            throw new AccountNotFoundException("Sender by id=" + message.getSender() + " not found");
-        } else if (!accountRepository.existsById(message.getReceiver())) {
-            throw new AccountNotFoundException("Receiver account by id=" + message.getReceiver() + " not found");
-        } else if (message.getText() == null || message.getText().equals("")) {
+        Account sender = accountRepository.findById(message.getSenderId()).orElseThrow(AccountNotFoundException::new);
+        Account receiver = accountRepository.findById(message.getReceiverId()).orElseThrow(AccountNotFoundException::new);
+        if (message.getText() == null || message.getText().equals("")) {
             throw new IllegalArgumentException();
         } else {
             Message senderMessage = new Message();
             senderMessage.setText(message.getText());
-            senderMessage.setSender(new Account(message.getSender(), null, null, null));
-            senderMessage.setReceiver(new Account(message.getReceiver(), null, null, null));
-            senderMessage.setDate(new Date());
+            senderMessage.setSender(sender);
+            senderMessage.setReceiver(receiver);
+            senderMessage.setDate(new Timestamp(System.currentTimeMillis()));
             messageRepository.save(senderMessage);
             return senderMessage;
         }
@@ -106,14 +96,17 @@ public class MessageServiceImpl implements MessageService {
         if (text == null || text.equals("")) {
             throw new IllegalArgumentException();
         } else {
-            Optional<Message> message = messageRepository.findById(id);
-            if (message.isPresent()) {
-                message.get().setText(text);
-                return message.get();
-            } else {
-                throw new MessageNotFoundException("Message by id=" + id + " not found");
-            }
+            Message message = messageRepository.findById(id).orElseThrow(MessageNotFoundException::new);
+            message.setText(text);
+            return message;
         }
+    }
+
+    @Override
+    public Message changeStatus(UUID id, String status) {
+        Message message = messageRepository.findById(id).orElseThrow(MessageNotFoundException::new);
+        message.setStatus(status);
+        return message;
     }
 
     @Override

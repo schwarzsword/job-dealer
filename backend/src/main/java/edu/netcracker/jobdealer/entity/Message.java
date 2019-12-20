@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import org.dozer.Mapping;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.sql.Timestamp;
 import java.util.UUID;
 
 @Entity
@@ -24,8 +24,11 @@ public class Message {
     @Column(name = "text")
     private String text;
 
+    @Column(name = "status")
+    private String status;
+
     @Column(name = "date")
-    private Date date;
+    private Timestamp date;
 
     @ManyToOne
     @JoinColumn(name = "senderId", referencedColumnName = "id")
@@ -36,12 +39,12 @@ public class Message {
     private Account receiver;
 
     @Mapping("senderId")
-    public UUID getSender() {
+    public UUID getSenderId() {
         return sender.getId();
     }
 
-    @Mapping("ReceiverId")
-    public UUID getReceiver() {
+    @Mapping("receiverId")
+    public UUID getReceiverId() {
         return receiver.getId();
     }
 }

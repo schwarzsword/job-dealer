@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.sql.Timestamp;
 import java.util.UUID;
 
 @Data
@@ -14,7 +14,8 @@ public class MessageDto {
 
     private UUID id;
     private String text;
-    private Date date;
+    private Timestamp date;
+    private String status;
     private UUID senderId;
     private UUID receiverId;
 }

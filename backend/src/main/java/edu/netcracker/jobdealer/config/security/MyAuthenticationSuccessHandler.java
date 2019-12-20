@@ -1,6 +1,5 @@
 package edu.netcracker.jobdealer.config.security;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
