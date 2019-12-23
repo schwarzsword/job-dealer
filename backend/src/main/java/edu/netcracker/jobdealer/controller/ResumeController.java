@@ -66,7 +66,6 @@ public class ResumeController {
         return ResponseEntity.ok(mapper.map(resume, ResumeDto.class));
     }
 
-    @Secured("ROLE_COMPANY")
     @GetMapping(value = "/resumes")
     public ResponseEntity<?> getResumes(@RequestParam String filters) {
         List<Resume> resumes = resumeService.sortAndReturn(filters);
@@ -75,7 +74,6 @@ public class ResumeController {
                 .collect(Collectors.toList()));
     }
 
-    @Secured("ROLE_COMPANY")
     @GetMapping(value = "/resumes/size")
     public ResponseEntity<?> getSize(@RequestParam String filters) {
         return ResponseEntity.ok(resumeService.getSize(filters));
