@@ -145,7 +145,7 @@
                 headers: [
                     {text: 'Vacancy name', sortable: false, value: 'name',},
                     {text: 'Salary', value: 'money', sortable: false,},
-                    {text: 'Company name', value: 'ownerName', sortable: false,},
+                    {text: 'Company name', value: 'ownerName', sortable: false},
                     {text: 'Actions', value: 'action', sortable: false},
                 ],
                 tempFilters: {

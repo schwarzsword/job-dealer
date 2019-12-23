@@ -17,8 +17,8 @@
                     </v-card-title>
                     <v-card-text>
                         <div>{{vacancy.money}}</div>
-                        <div>{{vacancy.ownerName}}</div>
                     </v-card-text>
+                    <div style="color: #3e449d" @click="route(vacancy)">{{vacancy.ownerName}}</div>
                     <ul>
                         <li v-for="skill in vacancy.requestedSkills">
                             {{ skill }}
@@ -100,6 +100,10 @@
             ...mapGetters(['isUser', 'isCompany']),
         },
         methods: {
+
+            route(item){
+              this.$router.push('/companies/'+item.companyId);
+            },
 
             onFileChange: function () {
                 let reader = new FileReader();

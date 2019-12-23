@@ -56,6 +56,11 @@ public class Vacancy {
         return owner.getName();
     }
 
+    @Mapping("companyId")
+    public UUID getOwnerID() {
+        return owner.getId();
+    }
+
     @Mapping("requestedSkills")
     public List<String> getRequestedSkillsNames() {
         return requestedSkills.stream().map(Skills::getName).collect(Collectors.toList());
