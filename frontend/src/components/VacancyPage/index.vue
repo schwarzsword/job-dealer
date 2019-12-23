@@ -37,7 +37,7 @@
 
                 <v-file-input
                         @change="onFileChange"
-                        accept="image/*"
+                        accept="application/zip"
                         label="Upload your zip here"
                         v-if="vacancy.withTask && !isApplied && isUser"
                         v-model="file"
@@ -57,7 +57,7 @@
 <script>
     import Router from "../../router"
     import {base64ArrayBuffer, urlPort} from "../../tool";
-    import {mapGetters, mapState} from "vuex";
+    import {mapGetters} from "vuex";
 
     export default {
         name: "vacancyPage",
@@ -97,8 +97,7 @@
             this.checkApplied();
         },
         computed: {
-
-            ...mapGetters('isUser', 'isCompany'),
+            ...mapGetters(['isUser', 'isCompany']),
         },
         methods: {
 

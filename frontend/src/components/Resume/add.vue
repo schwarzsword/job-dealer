@@ -184,7 +184,9 @@
 
                     urlPort.post('/resumes/my', params, {
                         headers: {ContentType: 'multipart/form-data'}
-                    })
+                    }).then(resp => {
+                        this.$router.push("/resumes")
+                    }).catch()
                 })
             },
         },

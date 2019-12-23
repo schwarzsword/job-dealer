@@ -39,7 +39,7 @@ public class Resume {
     @Lob
     @Column(name = "fileData")
     private String fileData;
-    @Column(name = "about")
+    @Column(name = "about", length = 1000)
     private String about;
     @ManyToOne
     @JoinColumn(name = "applicantId", referencedColumnName = "id")

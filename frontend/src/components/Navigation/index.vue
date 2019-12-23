@@ -1,6 +1,6 @@
 <template>
     <div class="header">
-        <div class="container">
+        <div class="container" style="width:1100px">
             <div class="logo">
                 <div class="link">
                     <router-link to="/"></router-link>
@@ -29,13 +29,18 @@
                 </div>
             </div>
 
-
             <div class="menu">
-                <router-link title="Vacancies" to="/vacancies">
-                    <v-icon class="elevation-2 m-icon i-vacancy" v-ripple/>
+                <router-link class="menu-block" title="Vacancies" to="/vacancies">
+                    <div class="menu-item">
+                        <v-icon class="elevation-2 m-icon i-vacancy"/>
+                        Vacancies
+                    </div>
                 </router-link>
-                <router-link title="Resumes" to="/resumes">
-                    <v-icon class="elevation-2 m-icon i-resume" v-ripple/>
+                <router-link class="menu-block" title="Resumes" to="/resumes">
+                   <div class="menu-item">
+                       <v-icon class="elevation-2 m-icon i-resume"/>
+                       Resumes
+                   </div>
                 </router-link>
             </div>
 
@@ -581,6 +586,21 @@
     }
 
     .header .container .user .profile .profile-menu a:hover {
+        color: #000;
+    }
+
+    .header .container .menu .menu-block {
+        display: block;
+        float: left;
+        text-align: center;
+    }
+
+    .header .container .menu .menu-item {
+        float: left;
+        color: #000;
+    }
+
+    .header .container .menu .menu-item a {
         color: #000;
     }
 

@@ -57,10 +57,19 @@ public class MessageController {
         return message;
     }
 
+
     @PreAuthorize("isAuthenticated()")
     @PutMapping("/message")
     public MessageDto updateMessage(@RequestParam UUID id, @RequestParam String text) {
         MessageDto message = mapper.map(messageService.updateMessage(id, text), MessageDto.class);
+        log.debug("{}", message);
+        return message;
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PatchMapping("/message")
+    public MessageDto changeStatus(@RequestParam UUID id, @RequestParam String status) {
+        MessageDto message = mapper.map(messageService.changeStatus(id, status), MessageDto.class);
         log.debug("{}", message);
         return message;
     }

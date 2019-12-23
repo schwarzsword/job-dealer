@@ -25,7 +25,7 @@ public class Company {
     @Column(name = "isVerified")
     private Boolean verified;
 
-    @Column(name = "description")
+    @Column(name = "description", length = 1000)
     private String description;
     @Lob
     @Column(name = "fileData")

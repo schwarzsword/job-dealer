@@ -10,7 +10,7 @@
                             ref="form"
                             v-model="valid"
                     >
-                        <h2 style="margin-bottom: 20px;">Create account</h2>
+                        <h2 style="margin-bottom: 20px;">Log in</h2>
                         <v-text-field
                                 :rules="emailRules"
                                 label="E-mail"
@@ -36,8 +36,7 @@
                         </v-btn>
                         <div v-model="message" class="error--text"/>
                         <div style="margin-top: 20px;">Have no account? Sign up
-                            <router-link class="signup" to="/signup">here</router-link>
-                            .
+                            <router-link class="signup" to="/signup">here.</router-link>
                         </div>
                     </v-form>
                 </v-card-text>

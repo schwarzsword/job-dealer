@@ -6,8 +6,6 @@ import edu.netcracker.jobdealer.exceptions.AccountByIdNotFoundException;
 import edu.netcracker.jobdealer.exceptions.AccountNotFoundException;
 import edu.netcracker.jobdealer.exceptions.EmailExistsException;
 import edu.netcracker.jobdealer.repository.AccountRepository;
-import edu.netcracker.jobdealer.repository.ApplicantRepository;
-import edu.netcracker.jobdealer.repository.CompanyRepository;
 import edu.netcracker.jobdealer.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -68,7 +66,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account getAccount(UUID id) {
-       return accountRepository.findById(id).orElseThrow(AccountNotFoundException::new);
+        return accountRepository.findById(id).orElseThrow(AccountNotFoundException::new);
     }
 
     @Override

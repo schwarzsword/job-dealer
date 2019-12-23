@@ -67,6 +67,8 @@ public interface MessageService {
      */
     Message updateMessage(UUID id, String text);
 
+    Message changeStatus(UUID id, String status);
+
     /**
      * Deletes the message by identifier
      *

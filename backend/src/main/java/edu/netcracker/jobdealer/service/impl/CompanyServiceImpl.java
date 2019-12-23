@@ -4,7 +4,6 @@ import edu.netcracker.jobdealer.dto.CompanyDto;
 import edu.netcracker.jobdealer.entity.Account;
 import edu.netcracker.jobdealer.entity.Company;
 import edu.netcracker.jobdealer.exceptions.*;
-import edu.netcracker.jobdealer.repository.AccountRepository;
 import edu.netcracker.jobdealer.repository.CompanyRepository;
 import edu.netcracker.jobdealer.service.AccountService;
 import edu.netcracker.jobdealer.service.CompanyService;

@@ -29,8 +29,8 @@
 </template>
 
 <script>
-  import axios from 'axios';
   import MessageItem from "./Item";
+  import {urlPort} from "../../tool";
 
   export default {
         name: 'Message',
@@ -78,7 +78,7 @@
             }
         },
         created() {
-            axios.get("http://127.0.0.1:8080/messages")
+            urlPort("/messages")
                 .then(response => {
                     this.companies = response.data;
                 })
