@@ -22,7 +22,7 @@ public class Review {
     @GeneratedValue
     private UUID id;
 
-    @Column(name = "description")
+    @Column(name = "description", length = 1000)
     private String text;
 
     @Column(name = "rating")

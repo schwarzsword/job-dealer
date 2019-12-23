@@ -36,8 +36,7 @@
                         </v-btn>
                         <div v-model="message" class="error--text"/>
                         <div style="margin-top: 20px;">Have no account? Sign up
-                            <router-link class="signup" to="/signup">here</router-link>
-                            .
+                            <router-link class="signup" to="/signup">here.</router-link>
                         </div>
                     </v-form>
                 </v-card-text>
